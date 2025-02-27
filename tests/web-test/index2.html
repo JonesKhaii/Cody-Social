@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Health Community | Home</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        />
+        <style>
+            body {
+                background-color: #f4f4f4;
+            }
+            .navbar.bg-primary {
+                background-color: #2377b3 !important; /* Màu cam tùy chỉnh */
+            }
+            .navbar-brand {
+                font-weight: bold;
+                color: #28a745;
+            }
+            body {
+                background-color: #f4f4f4;
+                font-family: Arial, sans-serif;
+            }
+            .navbar-brand {
+                font-weight: bold;
+                color: #1877f2;
+            }
+
+            /* Căn chỉnh phần logo */
+            .logo-container {
+                display: flex;
+                align-items: center;
+                flex-shrink: 0;
+            }
+
+            /* Logo sẽ có kích thước vừa đủ và cách văn bản một chút */
+            .logo {
+                width: 60px;
+                height: 60px;
+                border-radius: 50px;
+                object-fit: cover; /* Đảm bảo logo không bị méo */
+            }
+
+            /* Tăng kích thước của logo và khoảng cách khi màn hình nhỏ */
+            @media (max-width: 768px) {
+                .logo {
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+
+            /* Navbar và tìm kiếm */
+            .navbar-nav {
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            /* Đảm bảo các nút menu có khoảng cách đều */
+            .navbar-nav .nav-item {
+                margin-left: 15px;
+            }
+
+            .navbar-toggler {
+                border: none;
+            }
+
+            /* Tạo hiệu ứng hover cho các link */
+            .navbar-nav .nav-link:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+                border-radius: 5px;
+            }
+
+            .post {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+                border: 1px solid #ddd;
+            }
+            .post-header,
+            .comment-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+            .post-header-left,
+            .comment-header-left {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .post-header-left img,
+            .comment-header-left img {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+            }
+            .post-header-right,
+            .comment-header-right {
+                display: flex;
+                gap: 10px;
+            }
+            .post-content {
+                margin-top: 10px;
+                line-height: 1.5;
+            }
+            .actions {
+                display: flex;
+                gap: 15px;
+                margin-top: 10px;
+                align-items: center;
+            }
+            .actions button {
+                border: none;
+                background: none;
+                cursor: pointer;
+                font-size: 16px;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+            .like {
+                background-color: #fff;
+                border: none;
+                color: green;
+            }
+            .dislike {
+                background-color: #fff;
+                border: none;
+                color: red;
+            }
+            .comment-section {
+                margin-top: 15px;
+                margin-left: 40px;
+                padding-top: 10px;
+                border-top: 1px solid #ddd;
+            }
+            .comment {
+                margin-top: 10px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+            .comment-input {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+            /* Style for the floating chat box */
+            .chat-box {
+                position: fixed;
+                bottom: 0;
+                right: 0;
+                width: 300px;
+                z-index: 1050;
+                display: none;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                border-radius: 10px 10px 0 0;
+            }
+            .chat-box.open {
+                display: block;
+            }
+            .chat-header {
+                background-color: #28a745;
+                color: white;
+                padding: 10px;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+            }
+            .chat-body {
+                height: 200px;
+                overflow-y: auto;
+                padding: 10px;
+            }
+            .chat-footer {
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-bottom-left-radius: 10px;
+                border-bottom-right-radius: 10px;
+            }
+            .btn-close-white {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+            }
+            /* Right sidebarsidebar */
+            .navbar-brand {
+                font-weight: bold;
+                color: #1877f2;
+            }
+            .sidebar-card {
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+                border: 1px solid #ddd;
+            }
+            .sidebar-card h5 {
+                font-weight: bold;
+                margin-bottom: 15px;
+            }
+            .doctor-card {
+                display: flex;
+                align-items: center;
+                background: #f8f9fa;
+                padding: 12px;
+                border-radius: 8px;
+                margin-bottom: 12px;
+                border: 1px solid #ddd;
+                transition: all 0.3s ease-in-out;
+            }
+            .doctor-card:hover {
+                transform: scale(1.03);
+                box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
+            }
+            .doctor-card img {
+                width: 55px;
+                height: 55px;
+                border-radius: 50%;
+                margin-right: 12px;
+            }
+            .doctor-info {
+                flex-grow: 1;
+            }
+            .doctor-card .btn {
+                font-size: 14px;
+                padding: 6px 10px;
+            }
+            .upcoming-appointments {
+                text-align: center;
+                font-size: 14px;
+                color: #555;
+            }
+
+            .post-content {
+                background: #f8f8f8;
+                border-radius: 4px;
+                width: 100%;
+                border: 1px solid #f1f2f2;
+                margin-bottom: 20px;
+                overflow: hidden;
+                position: relative;
+            }
+
+            .post-content img.post-image,
+            video.post-video,
+            .google-maps {
+                width: 100%;
+                height: auto;
+            }
+
+            .post-content .google-maps .map {
+                height: 300px;
+            }
+
+            .post-content .post-container {
+                padding: 20px;
+            }
+
+            .post-content .post-container .post-detail {
+                margin-left: 65px;
+                position: relative;
+            }
+
+            .post-content .post-container .post-detail .post-text {
+                line-height: 24px;
+                margin: 0;
+            }
+
+            .post-content .post-container .post-detail .reaction {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+
+            .post-content .post-container .post-detail .post-comment {
+                display: inline-flex;
+                margin: 10px auto;
+                width: 100%;
+            }
+
+            .post-content
+                .post-container
+                .post-detail
+                .post-comment
+                img.profile-photo-sm {
+                margin-right: 10px;
+            }
+
+            .post-content
+                .post-container
+                .post-detail
+                .post-comment
+                .form-control {
+                height: 30px;
+                border: 1px solid #ccc;
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+                margin: 7px 0;
+                min-width: 0;
+            }
+            .post-content {
+                background-color: white;
+                padding: 15px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+            }
+
+            .img-responsive {
+                width: 100%;
+                height: auto;
+                border-radius: 5px;
+            }
+
+            .post-container {
+                display: flex;
+                flex-direction: row;
+                margin-top: 15px;
+            }
+
+            .profile-photo-md {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+            .post-detail {
+                flex: 1;
+            }
+
+            .user-info h5 {
+                margin: 0;
+                font-size: 16px;
+            }
+
+            .user-info .following {
+                font-size: 14px;
+                color: #888;
+            }
+
+            .reaction a {
+                margin-right: 15px;
+                text-decoration: none;
+                font-size: 14px;
+            }
+
+            .reaction .text-green {
+                color: #4caf50;
+            }
+
+            .reaction .text-red {
+                color: #f44336;
+            }
+
+            .post-text p {
+                margin: 10px 0;
+                font-size: 14px;
+                color: #555;
+            }
+
+            .line-divider {
+                border-top: 1px solid #ddd;
+                margin: 10px 0;
+            }
+
+            .post-comment {
+                display: flex;
+                align-items: center;
+                margin-top: 10px;
+            }
+
+            .profile-photo-sm {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+            .post-comment input {
+                flex: 1;
+                padding: 5px;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                font-size: 14px;
+            }
+
+            .post-comment p {
+                font-size: 14px;
+                color: #555;
+            }
+
+            .profile-link {
+                color: #007bff;
+                text-decoration: none;
+            }
+            .views-answers {
+                font-size: 14px;
+                color: #777;
+                display: flex;
+                justify-content: flex-end;
+                margin-top: 10px;
+            }
+
+            .views-answers span {
+                font-weight: bold;
+            }
+            /* Modal for post details */
+            .post-details-modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                background-color: rgba(
+                    0,
+                    0,
+                    0,
+                    0.7
+                ); /* Black with transparency */
+                overflow: auto;
+                padding-top: 60px;
+            }
+
+            /* Modal content */
+            .post-details-content {
+                background-color: #fefefe;
+                margin: 5% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%;
+                max-width: 600px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                border-radius: 10px;
+            }
+
+            /* Comment section */
+            .post-comments {
+                margin-top: 20px;
+                font-size: 14px;
+            }
+
+            .comment {
+                display: flex;
+                margin-bottom: 10px;
+            }
+
+            .profile-photo-sm {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+            .comment-input input {
+                width: 100%;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                margin-top: 10px;
+                font-size: 14px;
+            }
+
+            .btn-info {
+                background-color: #007bff;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 5px;
+                border: none;
+                cursor: pointer;
+            }
+
+            .btn-info:hover {
+                background-color: #0056b3;
+            }
+            /* Modal for post details */
+            .post-comments {
+                margin-top: 20px;
+                font-size: 14px;
+                color: #555;
+            }
+
+            /* Comment section */
+            .comment {
+                display: flex;
+                margin-bottom: 10px;
+            }
+
+            .profile-photo-sm {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+            .comment-input input {
+                width: 100%;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                margin-top: 10px;
+                font-size: 14px;
+            }
+
+            .reaction {
+                margin-top: 10px;
+            }
+
+            .line-divider {
+                border-top: 1px solid #ddd;
+                margin: 10px 0;
+            }
+
+            /* Post content - cursor pointer */
+            .post-container {
+                cursor: pointer;
+            }
+
+            /* Views and Answers */
+            .views-answers {
+                font-size: 14px;
+                color: #777;
+                margin-top: 10px;
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            .views-answers span {
+                font-weight: bold;
+            }
+
+            /* Tags styling */
+            .tags {
+                display: flex;
+                flex-wrap: wrap;
+                margin-top: 10px;
+            }
+
+            .tag {
+                background-color: #f1f1f1;
+                color: #007bff;
+                border-radius: 3px;
+                padding: 5px 10px;
+                margin-right: 10px;
+                margin-bottom: 5px;
+                font-size: 14px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .tag:hover {
+                background-color: #2377b3;
+                color: white;
+            }
+
+            .profile-photo {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+            }
+
+            .banner {
+                background: #2377b3;
+                color: white;
+                padding: 20px 20px 20px 10px;
+                text-align: center;
+                border-radius: 4px;
+                margin-bottom: 20px;
+            }
+            .banner h3 {
+                margin: 0;
+            }
+            .article-card {
+                background: white;
+                padding: 10px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+            }
+            .article-card img {
+                width: 80px;
+                height: 80px;
+                border-radius: 8px;
+                margin-right: 15px;
+            }
+            .article-content h5 {
+                margin: 0;
+                font-size: 18px;
+            }
+            .article-content p {
+                margin: 5px 0 0;
+                font-size: 14px;
+                color: #555;
+            }
+            .article-content-link {
+                text-decoration: none;
+            }
+
+            a {
+                text-decoration: none;
+            }
+
+            /* .left-sidebar {
+                position: fixed;
+            } */
+        </style>
+    </head>
+    <body>
+        <!-- Navbar -->
+        <header
+            class="navbar navbar-expand-lg navbar-light bg-primary shadow-sm"
+        >
+            <div class="container">
+                <div class="logo-container d-flex align-items-center">
+                    <img
+                        src="asset/images/logo.png"
+                        alt="Logo"
+                        class="logo me-2"
+                    />
+                    <!-- Thêm logo ở đây -->
+                    <a class="navbar-brand fs-2 text-white" href="#"
+                        >Health Cody</a
+                    >
+                </div>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <form class="d-flex flex-grow-1 me-auto ms-3">
+                        <input
+                            class="form-control me-2 w-75"
+                            type="search"
+                            placeholder="Tìm kiếm bác sĩ, bài viết..."
+                            aria-label="Search"
+                        />
+                        <button class="btn btn-light" type="submit">
+                            Tìm kiếm
+                        </button>
+                    </form>
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#"
+                                >Trang Chủ</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="doctors.html"
+                                >Bác Sĩ</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#">Hỏi Đáp</a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link text-white"
+                                href="appointment.html"
+                                >Lịch Khám</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="blog.html"
+                                >Bài Viết</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#">Hồ Sơ</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="container mt-4">
+            <div class="row">
+                <!-- Left Sidebar -->
+                <div class="col-md-3">
+                    <div
+                        class="post-box text-center"
+                        style="
+                            background: linear-gradient(
+                                to bottom,
+                                #1e90ff,
+                                #87ceeb
+                            );
+                            color: white;
+                            padding: 20px;
+                            border-radius: 4px;
+                        "
+                    >
+                        <img
+                            src="asset/images/users/user1.jpg"
+                            alt="user"
+                            class="profile-photo-md"
+                        />
+                        <h5>DKhai</h5>
+                        <p>
+                            <i class="fas fa-user-friends"></i> 1,299 followers
+                        </p>
+                    </div>
+                    <div class="post-box">
+                        <ul class="list-unstyled">
+                            <li>
+                                <i class="fas fa-newspaper text-success"></i>
+                                <a href="#" class="text-dark">My Newsfeed</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-users text-primary"></i>
+                                <a href="#" class="text-dark">People Nearby</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-user-friends text-danger"></i>
+                                <a href="#" class="text-dark">Friends</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-comments text-warning"></i>
+                                <a href="#" class="text-dark">Messages</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-images text-info"></i>
+                                <a href="#" class="text-dark">Images</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-video text-danger"></i>
+                                <a href="#" class="text-dark">Videos</a>
+                            </li>
+                        </ul>
+                        <button class="btn btn-success w-100" id="openChatBtn">
+                            Chat online
+                        </button>
+                    </div>
+                    <div class="container mt-3">
+                        <div class="post-box card p-3 shadow-sm rounded">
+                            <h5 class="mb-3">Popular Health Topics</h5>
+                            <ul class="list-unstyled">
+                                <li class="d-flex align-items-center mb-2">
+                                    <img
+                                        src="asset/images/category/top1.jpg"
+                                        class="me-2"
+                                        style="
+                                            width: 40px;
+                                            height: 40px;
+                                            border-radius: 5px;
+                                        "
+                                    />
+                                    <a href="#">Heart Disease</a>
+                                </li>
+                                <li class="d-flex align-items-center mb-2">
+                                    <img
+                                        src="asset/images/category/top2.jpg"
+                                        class="me-2"
+                                        style="
+                                            width: 40px;
+                                            height: 40px;
+                                            border-radius: 5px;
+                                        "
+                                    />
+                                    <a href="#">Mental Health</a>
+                                </li>
+                                <li class="d-flex align-items-center mb-2">
+                                    <img
+                                        src="asset/images/category/top3.jpg"
+                                        class="me-2"
+                                        style="
+                                            width: 40px;
+                                            height: 40px;
+                                            border-radius: 5px;
+                                        "
+                                    />
+                                    <a href="#">Diabetes Management</a>
+                                </li>
+                                <li class="d-flex align-items-center mb-2">
+                                    <img
+                                        src="asset/images/category/top4.jpg"
+                                        class="me-2"
+                                        style="
+                                            width: 40px;
+                                            height: 40px;
+                                            border-radius: 5px;
+                                        "
+                                    />
+                                    <a href="#">Nutrition</a>
+                                </li>
+                                <li class="d-flex align-items-center">
+                                    <img
+                                        src="asset/images/category/top5.jpg"
+                                        class="me-2"
+                                        style="
+                                            width: 40px;
+                                            height: 40px;
+                                            border-radius: 5px;
+                                        "
+                                    />
+                                    <a href="#">Exercise & Fitness</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Feed -->
+                <div class="col-md-6">
+                    <div class="banner text-start mt-3">
+                        <h3>Bài viết mới nhất về sức khỏe</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="article-card">
+                                <img
+                                    src="asset/images/posts/post2.webp"
+                                    alt="article image"
+                                />
+                                <div class="article-content">
+                                    <h5>
+                                        <a href="#" class="article-content-link"
+                                            >Lợi ích của việc tập thể dục hàng
+                                            ngày</a
+                                        >
+                                    </h5>
+                                    <p>
+                                        Tập thể dục thường xuyên giúp tăng cường
+                                        sức khỏe tim mạch...
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="article-card">
+                                <img
+                                    src="asset/images/posts/post1.webp"
+                                    alt="article image"
+                                />
+                                <div class="article-content">
+                                    <h5>
+                                        <a href="#" class="article-content-link"
+                                            >Chế độ ăn uống lành mạnh</a
+                                        >
+                                    </h5>
+                                    <p>
+                                        Những thực phẩm nào giúp duy trì một cơ
+                                        thể khỏe mạnh?
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-box">
+                        <h5>Share Your Health Tips</h5>
+                        <textarea
+                            class="form-control"
+                            placeholder="Write something..."
+                            rows="3"
+                        ></textarea>
+                        <div class="mt-2">
+                            <input
+                                type="file"
+                                class="form-control mb-2"
+                                accept="image/*,video/*"
+                            />
+                        </div>
+                        <button class="btn btn-success mt-2 w-100">Post</button>
+                    </div>
+
+                    <!-- Example Post -->
+                    <div class="post-content">
+                        <!-- Image of the post -->
+                        <img
+                            src="asset/images/posts/post1.webp"
+                            alt="post-image"
+                            class="img-responsive"
+                            onclick="togglePostDetails(this)"
+                        />
+
+                        <!-- Post content -->
+                        <div
+                            class="post-container"
+                            onclick="togglePostDetails(this)"
+                        >
+                            <!-- Profile of the user -->
+                            <img
+                                src="asset/images/users/doctor1.jpeg"
+                                alt="user"
+                                class="profile-photo-md"
+                            />
+                            <div class="post-detail">
+                                <div class="user-info">
+                                    <h5>
+                                        <a
+                                            href="timeline.html"
+                                            class="profile-link"
+                                            >Alexis Clark</a
+                                        >
+                                        <span class="following">following</span>
+                                    </h5>
+                                    <p class="text-muted">
+                                        Published a photo about 3 mins ago
+                                    </p>
+                                </div>
+
+                                <!-- Reactions -->
+                                <div class="reaction">
+                                    <a class="btn text-green">
+                                        <i class="fa fa-thumbs-up"></i> 13
+                                    </a>
+                                    <a class="btn text-red">
+                                        <i class="fa fa-thumbs-down"></i> 0
+                                    </a>
+                                </div>
+
+                                <!-- Post text -->
+                                <div class="line-divider"></div>
+                                <div class="post-text">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit, sed do eiusmod tempor
+                                        incididunt ut labore et dolore magna
+                                        aliqua. Ut enim ad minim veniam, quis
+                                        nostrud exercitation ullamco laboris
+                                        nisi ut aliquip ex ea commodo consequat.
+                                    </p>
+                                </div>
+
+                                <!-- Views and Answers -->
+                                <div class="line-divider"></div>
+                                <div class="views-answers">
+                                    <span><strong>9k views</strong></span> |
+                                    <span><strong>6 answers</strong></span>
+                                </div>
+
+                                <!-- Tags section -->
+                                <div class="line-divider"></div>
+                                <div class="tags">
+                                    <span class="tag">Health</span>
+                                    <span class="tag">Fitness</span>
+                                    <span class="tag">Nutrition</span>
+                                </div>
+
+                                <!-- Comments section -->
+                                <!-- <div class="line-divider"></div> -->
+                                <div
+                                    class="post-comments"
+                                    style="display: none"
+                                >
+                                    <div class="comment">
+                                        <img
+                                            src="asset/images/users/user1.jpg"
+                                            alt="user"
+                                            class="profile-photo-sm"
+                                        />
+                                        <p>
+                                            <a
+                                                href="timeline.html"
+                                                class="profile-link"
+                                                >Diana</a
+                                            >
+                                            Lorem ipsum dolor sit amet,
+                                            consectetur adipiscing elit.
+                                        </p>
+                                    </div>
+                                    <div class="comment">
+                                        <img
+                                            src="asset/images/users/user1.jpg"
+                                            alt="user"
+                                            class="profile-photo-sm"
+                                        />
+                                        <p>
+                                            <a
+                                                href="timeline.html"
+                                                class="profile-link"
+                                                >John</a
+                                            >
+                                            Lorem ipsum dolor sit amet,
+                                            consectetur adipiscing elit.
+                                        </p>
+                                    </div>
+                                    <div class="comment-input">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="Add a comment"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="post-content">
+                        <!-- Image of the post -->
+                        <img
+                            src="images/post-images/1.jpg"
+                            alt="post-image"
+                            class="img-responsive"
+                            onclick="togglePostDetails(this)"
+                        />
+
+                        <!-- Post content -->
+                        <div
+                            class="post-container"
+                            onclick="togglePostDetails(this)"
+                        >
+                            <!-- Profile of the user -->
+                            <img
+                                src="images/users/user-5.jpg"
+                                alt="user"
+                                class="profile-photo-md"
+                            />
+                            <div class="post-detail">
+                                <div class="user-info">
+                                    <h5>
+                                        <a
+                                            href="timeline.html"
+                                            class="profile-link"
+                                            >Alexis Clark</a
+                                        >
+                                        <span class="following">following</span>
+                                    </h5>
+                                    <p class="text-muted">
+                                        Published a photo about 3 mins ago
+                                    </p>
+                                </div>
+
+                                <!-- Reactions -->
+                                <div class="reaction">
+                                    <a class="btn text-green">
+                                        <i class="fa fa-thumbs-up"></i> 13
+                                    </a>
+                                    <a class="btn text-red">
+                                        <i class="fa fa-thumbs-down"></i> 0
+                                    </a>
+                                </div>
+
+                                <!-- Post text -->
+                                <div class="line-divider"></div>
+                                <div class="post-text">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit, sed do eiusmod tempor
+                                        incididunt ut labore et dolore magna
+                                        aliqua. Ut enim ad minim veniam, quis
+                                        nostrud exercitation ullamco laboris
+                                        nisi ut aliquip ex ea commodo consequat.
+                                    </p>
+                                </div>
+
+                                <!-- Views and Answers -->
+                                <div class="line-divider"></div>
+                                <div class="views-answers">
+                                    <span><strong>9k views</strong></span> |
+                                    <span><strong>6 answers</strong></span>
+                                </div>
+
+                                <!-- Comments section -->
+                                <!-- <div class="line-divider"></div> -->
+                                <div
+                                    class="post-comments"
+                                    style="display: none"
+                                >
+                                    <div class="comment">
+                                        <img
+                                            src="images/users/user-11.jpg"
+                                            alt="user"
+                                            class="profile-photo-sm"
+                                        />
+                                        <p>
+                                            <a
+                                                href="timeline.html"
+                                                class="profile-link"
+                                                >Diana</a
+                                            >
+                                            Lorem ipsum dolor sit amet,
+                                            consectetur adipiscing elit.
+                                        </p>
+                                    </div>
+                                    <div class="comment">
+                                        <img
+                                            src="images/users/user-4.jpg"
+                                            alt="user"
+                                            class="profile-photo-sm"
+                                        />
+                                        <p>
+                                            <a
+                                                href="timeline.html"
+                                                class="profile-link"
+                                                >John</a
+                                            >
+                                            Lorem ipsum dolor sit amet,
+                                            consectetur adipiscing elit.
+                                        </p>
+                                    </div>
+                                    <div class="comment-input">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="Add a comment"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <!-- Image of the post -->
+                        <img
+                            src="images/post-images/1.jpg"
+                            alt="post-image"
+                            class="img-responsive"
+                            onclick="togglePostDetails(this)"
+                        />
+
+                        <!-- Post content -->
+                        <div
+                            class="post-container"
+                            onclick="togglePostDetails(this)"
+                        >
+                            <!-- Profile of the user -->
+                            <img
+                                src="images/users/user-5.jpg"
+                                alt="user"
+                                class="profile-photo-md"
+                            />
+                            <div class="post-detail">
+                                <div class="user-info">
+                                    <h5>
+                                        <a
+                                            href="timeline.html"
+                                            class="profile-link"
+                                            >Alexis Clark</a
+                                        >
+                                        <span class="following">following</span>
+                                    </h5>
+                                    <p class="text-muted">
+                                        Published a photo about 3 mins ago
+                                    </p>
+                                </div>
+
+                                <!-- Reactions -->
+                                <div class="reaction">
+                                    <a class="btn text-green">
+                                        <i class="fa fa-thumbs-up"></i> 13
+                                    </a>
+                                    <a class="btn text-red">
+                                        <i class="fa fa-thumbs-down"></i> 0
+                                    </a>
+                                </div>
+
+                                <!-- Post text -->
+                                <div class="line-divider"></div>
+                                <div class="post-text">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit, sed do eiusmod tempor
+                                        incididunt ut labore et dolore magna
+                                        aliqua. Ut enim ad minim veniam, quis
+                                        nostrud exercitation ullamco laboris
+                                        nisi ut aliquip ex ea commodo consequat.
+                                    </p>
+                                </div>
+
+                                <!-- Views and Answers -->
+                                <div class="line-divider"></div>
+                                <div class="views-answers">
+                                    <span><strong>9k views</strong></span> |
+                                    <span><strong>6 answers</strong></span>
+                                </div>
+
+                                <!-- Comments section -->
+                                <!-- <div class="line-divider"></div> -->
+                                <div
+                                    class="post-comments"
+                                    style="display: none"
+                                >
+                                    <div class="comment">
+                                        <img
+                                            src="images/users/user-11.jpg"
+                                            alt="user"
+                                            class="profile-photo-sm"
+                                        />
+                                        <p>
+                                            <a
+                                                href="timeline.html"
+                                                class="profile-link"
+                                                >Diana</a
+                                            >
+                                            Lorem ipsum dolor sit amet,
+                                            consectetur adipiscing elit.
+                                        </p>
+                                    </div>
+                                    <div class="comment">
+                                        <img
+                                            src="images/users/user-4.jpg"
+                                            alt="user"
+                                            class="profile-photo-sm"
+                                        />
+                                        <p>
+                                            <a
+                                                href="timeline.html"
+                                                class="profile-link"
+                                                >John</a
+                                            >
+                                            Lorem ipsum dolor sit amet,
+                                            consectetur adipiscing elit.
+                                        </p>
+                                    </div>
+                                    <div class="comment-input">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="Add a comment"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="col-md-3 static">
+                    <div class="suggestions" id="sticky-sidebar">
+                        <h4 class="grey text-center">Bác sĩ hàng đầu</h4>
+                        <div class="container mt-3">
+                            <div
+                                class="follow-user card p-3 mb-3 shadow rounded d-flex flex-row justify-content-between align-items-center"
+                            >
+                                <img
+                                    src="asset/images/users/doctor1.jpeg"
+                                    class="profile-photo rounded-circle ms-4"
+                                    style="
+                                        width: 60px;
+                                        height: 60px;
+                                        object-fit: cover;
+                                    "
+                                />
+                                <div class="doctor-info">
+                                    <h5 class="mb-1">
+                                        <a href="#" class="text-primary"
+                                            >Bác sĩ Dương Khải</a
+                                        >
+                                    </h5>
+                                    <p class="small text-muted">
+                                        Chuyên khoa Tim mạch
+                                    </p>
+                                    <a
+                                        href="doctor-profile.html"
+                                        class="btn btn-sm btn-outline-success"
+                                        >Xem hồ sơ</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="bg-light text-center p-3 mt-4">
+            <p>&copy; 2025 Health Community. All Rights Reserved.</p>
+        </footer>
+
+        <!-- Chat Box -->
+        <div id="chatBox" class="chat-box">
+            <div class="card">
+                <div class="card-header chat-header">
+                    Chat Box
+                    <button
+                        type="button"
+                        class="btn-close btn-close-white float-end"
+                        id="closeChatBtn"
+                    ></button>
+                </div>
+                <div class="card-body chat-body">
+                    <p>
+                        <strong>Dr. James:</strong> Hello, how can I help you?
+                    </p>
+                </div>
+                <div class="card-footer chat-footer">
+                    <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Type a message..."
+                    />
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Open Chat Box
+            document
+                .getElementById("openChatBtn")
+                .addEventListener("click", function () {
+                    document.getElementById("chatBox").classList.add("open");
+                });
+
+            // Close Chat Box
+            document
+                .getElementById("closeChatBtn")
+                .addEventListener("click", function () {
+                    document.getElementById("chatBox").classList.remove("open");
+                });
+
+            // Function to toggle post details
+            function togglePostDetails(element) {
+                // Find the post comments section within the clicked post
+                var postComments = element.querySelector(".post-comments");
+
+                // If the post comments section is found, toggle its visibility
+                if (postComments) {
+                    // Toggle between hidden and visible
+                    if (
+                        postComments.style.display === "none" ||
+                        postComments.style.display === ""
+                    ) {
+                        postComments.style.display = "block"; // Show the comments
+                    } else {
+                        postComments.style.display = "none"; // Hide the comments
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>

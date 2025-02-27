@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Book an Appointment | Health Community</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        />
+        <style>
+            body {
+                background-color: #f4f4f4;
+            }
+            .appointment-card {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="#">Health Community</a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index2.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="doctors.html">Doctors</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Q&A</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="appointment.html"
+                                >Appointments</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">My Profile</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container mt-4">
+            <h3 class="text-center mb-4">Book an Appointment</h3>
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="appointment-card">
+                        <h5>Select Doctor</h5>
+                        <select class="form-select mb-3">
+                            <option>Dr. Anna Nguyen - Cardiologist</option>
+                            <option>Dr. James Lee - Neurologist</option>
+                            <option>Dr. Emily Carter - Nutritionist</option>
+                        </select>
+
+                        <h5>Choose Date & Time</h5>
+                        <input type="date" class="form-control mb-3" />
+                        <input type="time" class="form-control mb-3" />
+
+                        <h5>Your Details</h5>
+                        <input
+                            type="text"
+                            class="form-control mb-3"
+                            placeholder="Full Name"
+                        />
+                        <input
+                            type="email"
+                            class="form-control mb-3"
+                            placeholder="Email"
+                        />
+                        <input
+                            type="tel"
+                            class="form-control mb-3"
+                            placeholder="Phone Number"
+                        />
+
+                        <button class="btn btn-primary w-100">
+                            Confirm Appointment
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="bg-light text-center p-3 mt-4">
+            <p>&copy; 2025 Health Community. All Rights Reserved.</p>
+        </footer>
+    </body>
+</html>

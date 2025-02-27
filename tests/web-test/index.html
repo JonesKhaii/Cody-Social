@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <title>Bài Viết Y Tế - Trang Chủ</title>
+        <meta charset="UTF-8" />
+        <meta name="author" content="Felipe E. Cassimiro" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="asset/css/mystyle.css" />
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+        <link rel="icon" href="Images/logo.png" />
+    </head>
+
+    <body>
+        <header
+            class="navbar navbar-expand-lg navbar-light bg-primary shadow-sm"
+        >
+            <div class="container">
+                <!-- Logo và tên thương hiệu -->
+                <div class="logo-container d-flex align-items-center">
+                    <img
+                        src="asset/images/logo.png"
+                        alt="Logo"
+                        class="logo me-2"
+                        style="height: 50px; border-radius: 50px"
+                    />
+                    <a class="navbar-brand fs-2 text-white" href="#">
+                        CodyHealth</a
+                    >
+                </div>
+
+                <!-- Nút Toggle cho Mobile -->
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Menu chính -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#"
+                                >Trang Chủ</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="introduce.html"
+                                >Về chúng tôi</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="doctors.html"
+                                >Bác Sĩ</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#">Hỏi Đáp</a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link text-white"
+                                href="appointment.html"
+                                >Lịch Khám</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="blog.html"
+                                >Bài Viết</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="account.html"
+                                >Hồ Sơ</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <div class="container-fluid mt-4">
+            <div class="container">
+                <!-- Banner -->
+                <div class="row text-center mb-3" id="bannerRow">
+                    <div class="col-md-3">
+                        <img
+                            src="asset/images/banners/banner1.webp"
+                            class="small-banner"
+                            alt="Khuyến mãi dịch vụ y tế"
+                        />
+                    </div>
+                    <div class="col-md-3">
+                        <img
+                            src="asset/images/banners/banner2.webp"
+                            class="small-banner"
+                            alt="Tư vấn sức khỏe miễn phí"
+                        />
+                    </div>
+                    <div class="col-md-3">
+                        <img
+                            src="asset/images/banners/banner3.webp"
+                            class="small-banner"
+                            alt="Lịch khám ưu đãi tháng này"
+                        />
+                    </div>
+                    <div class="col-md-3">
+                        <img
+                            src="asset/images/banners/banner4.webp"
+                            class="small-banner"
+                            alt="Tầm soát bệnh lý sớm"
+                        />
+                    </div>
+                </div>
+                <!-- Thanh tìm kiếm -->
+                <form class="nosubmit">
+                    <div class="row">
+                        <input
+                            class="nosubmit form-control"
+                            type="text"
+                            id="Pesquisar"
+                            placeholder="Tìm kiếm bài viết..."
+                            autocomplete="off"
+                        />
+                    </div>
+                </form>
+
+                <!-- Tiêu đề và bộ lọc -->
+                <div class="row mt-3">
+                    <div class="col-6">
+                        <h1>Bài Viết Y Tế Nổi Bật</h1>
+                    </div>
+                    <div class="col-6 text-end">
+                        <select class="btn btn-light" id="Genero">
+                            <option>Tất cả</option>
+                            <option>Sức khỏe tổng quát</option>
+                            <option>Tim mạch</option>
+                            <option>Dinh dưỡng</option>
+                            <option>Bệnh lý & Điều trị</option>
+                            <option>Sức khỏe tinh thần</option>
+                            <option>Chăm sóc người cao tuổi</option>
+                            <option>Sức khỏe phụ nữ</option>
+                            <option>Sức khỏe nam giới</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Danh sách bài viết -->
+                <div class="row mt-3" id="Articles">
+                    <!-- Bài viết sẽ được tải động vào đây -->
+                </div>
+
+                <!-- Nút tải thêm bài viết -->
+
+                <div class="text-center mt-3">
+                    <button
+                        type="button"
+                        class="btn btn-dark"
+                        id="PlusArticles"
+                    >
+                        + Tải thêm bài viết
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="CollapseArticles"
+                        style="display: none"
+                    >
+                        - Thu gọn bài viết
+                    </button>
+                </div>
+
+                <!-- Danh mục phổ biến -->
+                <div class="container-fluid mt-5">
+                    <div class="container">
+                        <h1 class="mb-4 text-center">Danh Mục Phổ Biến</h1>
+                        <div class="row" id="PopularCategories">
+                            <div class="col-md-3 category-item">
+                                <div
+                                    class="category-card"
+                                    data-category="Sức khỏe tổng quát"
+                                >
+                                    <img
+                                        src="asset/images/categories/health.jpg"
+                                        alt="Sức khỏe tổng quát"
+                                    />
+                                    <h5>Sức khỏe tổng quát</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 category-item">
+                                <div
+                                    class="category-card"
+                                    data-category="Tim mạch"
+                                >
+                                    <img
+                                        src="asset/images/categories/heart.jpg"
+                                        alt="Tim mạch"
+                                    />
+                                    <h5>Tim mạch</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 category-item">
+                                <div
+                                    class="category-card"
+                                    data-category="Dinh dưỡng"
+                                >
+                                    <img
+                                        src="asset/images/categories/nutrition.jpg"
+                                        alt="Dinh dưỡng"
+                                    />
+                                    <h5>Dinh dưỡng</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 category-item">
+                                <div
+                                    class="category-card"
+                                    data-category="Sức khỏe tinh thần"
+                                >
+                                    <img
+                                        src="asset/images/categories/mental.jpg"
+                                        alt="Sức khỏe tinh thần"
+                                    />
+                                    <h5>Sức khỏe tinh thần</h5>
+                                </div>
+                            </div>
+
+                            <!-- Danh mục ẩn ban đầu -->
+                            <div class="col-md-3 category-item hidden">
+                                <div
+                                    class="category-card"
+                                    data-category="Bệnh lý & Điều trị"
+                                >
+                                    <img
+                                        src="asset/images/categories/disease.jpg"
+                                        alt="Bệnh lý & Điều trị"
+                                    />
+                                    <h5>Bệnh lý & Điều trị</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 category-item hidden">
+                                <div
+                                    class="category-card"
+                                    data-category="Chăm sóc người cao tuổi"
+                                >
+                                    <img
+                                        src="asset/images/categories/elderly.jpg"
+                                        alt="Chăm sóc người cao tuổi"
+                                    />
+                                    <h5>Chăm sóc người cao tuổi</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 category-item hidden">
+                                <div
+                                    class="category-card"
+                                    data-category="Sức khỏe phụ nữ"
+                                >
+                                    <img
+                                        src="asset/images/categories/women.jpg"
+                                        alt="Sức khỏe phụ nữ"
+                                    />
+                                    <h5>Sức khỏe phụ nữ</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-3 category-item hidden">
+                                <div
+                                    class="category-card"
+                                    data-category="Sức khỏe nam giới"
+                                >
+                                    <img
+                                        src="asset/images/categories/men.jpg"
+                                        alt="Sức khỏe nam giới"
+                                    />
+                                    <h5>Sức khỏe nam giới</h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nút điều khiển -->
+                        <div class="text-center mt-3">
+                            <button id="showAllCategories" class="btn btn-dark">
+                                Xem toàn bộ
+                            </button>
+                            <button
+                                id="hideCategories"
+                                class="btn btn-secondary"
+                                style="display: none"
+                            >
+                                Thu gọn
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container-fluid mt-5">
+                    <div class="container">
+                        <!-- Tiêu đề -->
+                        <h1 class="mb-4 text-center">Tác Giả Nổi Bật</h1>
+
+                        <!-- Danh sách tác giả -->
+                        <div class="row" id="PopularAuthors">
+                            <!-- Tác giả sẽ được tải động vào đây -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer text-white">
+            <div class="container">
+                <div class="row">
+                    <!-- Giới thiệu -->
+                    <div class="col-md-6">
+                        <h4>Về Cody Health</h4>
+                        <p>
+                            Cody Health cung cấp các giải pháp y tế chuyên
+                            nghiệp, hỗ trợ sức khỏe toàn diện cho cộng đồng.
+                        </p>
+                        <p><b>Email:</b> contact@codyhealth.com</p>
+                        <p>
+                            <b>Địa chỉ:</b> 123 Đường Sức Khỏe, Quận 1, TP.HCM
+                        </p>
+                    </div>
+
+                    <!-- Mạng xã hội -->
+                    <div class="col-md-6 text-md-end">
+                        <h4>Kết nối với chúng tôi</h4>
+                        <div class="social-icons">
+                            <a href="#"
+                                ><img
+                                    src="asset/images/icon/facebook.png"
+                                    alt="Facebook"
+                            /></a>
+                            <a href="#"
+                                ><img
+                                    src="asset/images/icon/linkedin.png"
+                                    alt="Linkedin"
+                            /></a>
+                            <a href="#"
+                                ><img
+                                    src="asset/images/icon/instagram.png"
+                                    alt="Instagram"
+                            /></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="copyright text-center mt-3">
+                <p>© 2025 Cody Health. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </footer>
+
+        <!-- Script -->
+        <script src="asset/js/main.js"></script>
+    </body>
+</html>

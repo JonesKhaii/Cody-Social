@@ -1,0 +1,124 @@
+/* Header Styling */
+header > .navbar {
+    padding: 0px;
+    border-top: 10px solid #747474;
+    border-bottom: 10px solid #747474;
+}
+
+.Header {
+    background-color: #747474;
+    padding: 0px;
+    margin: 0px;
+}
+
+#navbarSupportedContent {
+    flex-grow: 0;
+}
+
+.navbar-toggler {
+    margin-right: 12px;
+    float: right;
+}
+
+header .navbar-brand {
+    font-weight: 700;
+    margin-left: 12px;
+    width: 40px;
+}
+
+/* Logo Container */
+.logo-container {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+/* Navbar Collapse */
+.navbar-collapse {
+    display: flex !important;
+    flex-grow: 1;
+    justify-content: flex-end; /* Đẩy navbar về phía bên phải */
+}
+
+/* Navbar Toggler */
+.navbar-toggler {
+    border-color: #fff;
+    background-color: transparent;
+    border: none;
+    padding: 5px;
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
+/* Navbar Brand */
+header .navbar-brand {
+    font-weight: 700;
+    margin-left: 12px;
+    font-size: 2rem;
+    color: #fff;
+    transition: color 0.3s ease-in-out;
+    text-decoration: none;
+    margin-right: 30px;
+}
+
+header .navbar-brand:hover {
+    color: #e0e0e0;
+}
+
+/* Navbar Links */
+.navbar-nav {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-left: auto;
+}
+
+.navbar-nav .nav-item {
+    margin-left: 15px;
+}
+
+.navbar-nav .nav-link {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #fff !important;
+    transition: color 0.3s ease-in-out;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.navbar-nav .nav-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #f1f1f1 !important;
+    text-decoration: none;
+}
+
+/* Responsive Navbar */
+@media (max-width: 992px) {
+    .container-header {
+        flex-direction: row;
+        align-items: center;
+    }
+    .navbar-collapse {
+        text-align: center;
+        width: 100%;
+    }
+    .navbar-nav {
+        text-align: center;
+        flex-direction: column;
+        width: 100%;
+    }
+    .navbar-nav .nav-item {
+        margin: 5px 0;
+    }
+    .navbar-toggler {
+        display: block;
+    }
+    .navbar-toggler:focus,
+    .navbar-toggler:active {
+        outline: none;
+        box-shadow: none;
+    }
+}

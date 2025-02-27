@@ -1,0 +1,137 @@
+[
+    {
+        "id": 1,
+        "title": "Tầm quan trọng của kiểm tra sức khỏe định kỳ",
+        "category": "Sức khỏe tổng quát",
+        "content": "Kiểm tra sức khỏe định kỳ giúp phát hiện sớm bệnh lý và nâng cao chất lượng cuộc sống.",
+        "author": "Bác sĩ Nguyễn Văn A",
+        "published_date": "2024-02-05",
+        "image": "asset/images/posts/post1.webp"
+    },
+    {
+        "id": 2,
+        "title": "Cách phòng tránh bệnh tim mạch hiệu quả",
+        "category": "Tim mạch",
+        "content": "Duy trì lối sống lành mạnh, ăn uống hợp lý và tập thể dục giúp giảm nguy cơ mắc bệnh tim.",
+        "author": "Bác sĩ Trần Thị B",
+        "published_date": "2024-02-07",
+        "image": "asset/images/posts/post2.webp"
+    },
+    {
+        "id": 3,
+        "title": "Dinh dưỡng hợp lý cho người bị tiểu đường",
+        "category": "Dinh dưỡng",
+        "content": "Người bị tiểu đường nên ăn nhiều rau xanh, hạn chế đường và chất béo để kiểm soát đường huyết.",
+        "author": "Chuyên gia dinh dưỡng Lê C",
+        "published_date": "2024-02-08",
+        "image": "asset/images/posts/post3.jpg"
+    },
+    {
+        "id": 4,
+        "title": "Triệu chứng và cách điều trị bệnh loãng xương",
+        "category": "Bệnh lý & Điều trị",
+        "content": "Loãng xương thường gặp ở người cao tuổi, làm tăng nguy cơ gãy xương và suy giảm vận động.",
+        "author": "Bác sĩ Nguyễn Văn D",
+        "published_date": "2024-02-10",
+        "image": "asset/images/posts/post4.jpg"
+    },
+    {
+        "id": 5,
+        "title": "Căng thẳng kéo dài có thể gây hại như thế nào?",
+        "category": "Sức khỏe tinh thần",
+        "content": "Căng thẳng có thể gây ảnh hưởng đến sức khỏe tâm lý và thể chất nếu không được kiểm soát tốt.",
+        "author": "Chuyên gia tâm lý Trần Thị E",
+        "published_date": "2024-02-12",
+        "image": "asset/images/posts/post5.jpg"
+    },
+    {
+        "id": 6,
+        "title": "Cách chăm sóc người cao tuổi tại nhà",
+        "category": "Chăm sóc người cao tuổi",
+        "content": "Chăm sóc người cao tuổi đòi hỏi sự kiên nhẫn, tình yêu thương và hiểu biết về các vấn đề sức khỏe của họ.",
+        "author": "Điều dưỡng viên Hoàng Văn F",
+        "published_date": "2024-02-15",
+        "image": "asset/images/posts/post6.jpg"
+    },
+    {
+        "id": 7,
+        "title": "Dấu hiệu sớm của ung thư vú cần lưu ý",
+        "category": "Sức khỏe phụ nữ",
+        "content": "Phát hiện sớm ung thư vú giúp nâng cao hiệu quả điều trị và giảm nguy cơ biến chứng.",
+        "author": "Bác sĩ Lê Hồng G",
+        "published_date": "2024-02-18",
+        "image": "asset/images/post/article7.jpg"
+    },
+    {
+        "id": 8,
+        "title": "Cách tăng cường sức khỏe sinh sản cho nam giới",
+        "category": "Sức khỏe nam giới",
+        "content": "Dinh dưỡng và lối sống lành mạnh giúp cải thiện sức khỏe sinh sản ở nam giới.",
+        "author": "Bác sĩ Nguyễn Hoàng H",
+        "published_date": "2024-02-20",
+        "image": "asset/images/post/article8.jpg"
+    },
+    {
+        "id": 9,
+        "title": "Những thực phẩm tốt cho hệ tiêu hóa",
+        "category": "Dinh dưỡng",
+        "content": "Một số loại thực phẩm giúp cải thiện hệ tiêu hóa, giảm táo bón và tăng cường sức khỏe đường ruột.",
+        "author": "Chuyên gia dinh dưỡng Trần Minh I",
+        "published_date": "2024-02-22",
+        "image": "asset/images/post/article9.jpg"
+    },
+    {
+        "id": 10,
+        "title": "Bí quyết duy trì huyết áp ổn định",
+        "category": "Tim mạch",
+        "content": "Hạn chế muối, ăn nhiều rau xanh và tập thể dục giúp kiểm soát huyết áp hiệu quả.",
+        "author": "Bác sĩ Nguyễn Anh J",
+        "published_date": "2024-02-25",
+        "image": "asset/images/post/article10.jpg"
+    },
+    {
+        "id": 11,
+        "title": "Tập thể dục buổi sáng có lợi ích gì?",
+        "category": "Sức khỏe tổng quát",
+        "content": "Tập thể dục buổi sáng giúp cải thiện tuần hoàn máu, tăng cường năng lượng và tinh thần.",
+        "author": "Huấn luyện viên thể dục Hoàng Văn K",
+        "published_date": "2024-02-27",
+        "image": "asset/images/post/article11.jpg"
+    },
+    {
+        "id": 12,
+        "title": "Cách nhận biết dấu hiệu đột quỵ sớm",
+        "category": "Bệnh lý & Điều trị",
+        "content": "Nhận biết sớm dấu hiệu đột quỵ giúp tăng khả năng cứu sống và phục hồi nhanh hơn.",
+        "author": "Bác sĩ Phạm Thị L",
+        "published_date": "2024-03-01",
+        "image": "asset/images/post/article12.jpg"
+    },
+    {
+        "id": 13,
+        "title": "Tác hại của thiếu ngủ đối với sức khỏe",
+        "category": "Sức khỏe tinh thần",
+        "content": "Thiếu ngủ kéo dài có thể làm suy giảm trí nhớ, gây béo phì và tăng nguy cơ bệnh tim mạch.",
+        "author": "Bác sĩ Nguyễn Hoàng M",
+        "published_date": "2024-03-03",
+        "image": "asset/images/post/article13.jpg"
+    },
+    {
+        "id": 14,
+        "title": "Hướng dẫn chế độ ăn kiêng lành mạnh",
+        "category": "Dinh dưỡng",
+        "content": "Một chế độ ăn kiêng lành mạnh giúp duy trì cân nặng và bảo vệ sức khỏe tim mạch.",
+        "author": "Chuyên gia dinh dưỡng Lê Minh N",
+        "published_date": "2024-03-05",
+        "image": "asset/images/post/article14.jpg"
+    },
+    {
+        "id": 15,
+        "title": "Những điều cần biết về tiêm chủng cho trẻ em",
+        "category": "Sức khỏe tổng quát",
+        "content": "Tiêm chủng giúp bảo vệ trẻ khỏi các bệnh truyền nhiễm nguy hiểm.",
+        "author": "Bác sĩ Nhi khoa Phạm Thị O",
+        "published_date": "2024-03-07",
+        "image": "asset/images/post/article15.jpg"
+    }
+]

@@ -1,0 +1,410 @@
+.btn-primary {
+    background-color: #2377b3 !important;
+}
+header.bg-primary {
+    background-color: #2377b3 !important;
+}
+.navbar-toggler {
+    border-color: #fff; /* Đổi màu viền thành trắng */
+}
+
+.navbar-toggler-icon {
+    filter: invert(1); /* Đảo màu từ đen sang trắng */
+}
+
+/*General*/
+h1 {
+    color: #05223c;
+    font-weight: bold;
+}
+
+h4 {
+    color: #05223c;
+    font-weight: bold;
+}
+
+.container-fluid {
+    margin-top: 4%;
+    margin-bottom: 2%;
+}
+
+.col-4 > p {
+    margin-top: 3%;
+    margin-bottom: 1%;
+}
+
+.col-4 > p > ol {
+    margin-bottom: 1%;
+}
+
+.row {
+    margin-top: 2% !important;
+}
+
+.col-12 > h1 {
+    text-align: center;
+}
+/*End General*/
+
+/*Header*/
+header > .navbar {
+    padding: 0px;
+    border-top: 10px solid #747474;
+    border-bottom: 10px solid #747474;
+}
+
+.Header {
+    background-color: #747474;
+    padding: 0px;
+    margin: 0px;
+}
+
+#navbarSupportedContent {
+    flex-grow: 0;
+}
+
+.navbar-toggler {
+    margin-right: 12px;
+    float: right;
+}
+header .navbar-brand {
+    font-weight: 700;
+    margin-left: 12px;
+    width: 40px;
+}
+/*End Header*/
+
+/* Dãy banner nhỏ */
+.small-banner {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.small-banner:hover {
+    transform: scale(1.05);
+}
+
+/*Body*/
+form.nosubmit {
+    border: none;
+    padding: 0;
+}
+
+input.nosubmit {
+    border-radius: 10px;
+    width: 98%;
+    border: 1px solid #555;
+    display: block;
+    padding: 9px 4px 9px 40px;
+    background: transparent
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E")
+        no-repeat 13px center;
+}
+
+#Ordem > option,
+#Genero > option {
+    text-align: left;
+}
+
+#Ordem,
+#Genero {
+    margin-right: 4%;
+    float: right;
+    border: 1px solid black;
+    color: #5b5b5b;
+    font-weight: bold;
+}
+
+#Games > div > img {
+    width: 100%;
+    height: 250px;
+}
+
+#Games > div {
+    margin-top: 2%;
+}
+
+#Games > div > a {
+    margin-top: 1.5%;
+    color: black;
+    text-decoration: none;
+    font-size: 1.25rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+#Games > div > a:hover {
+    color: gray;
+}
+
+#Publisher > div > img {
+    width: 100%;
+    height: 250px;
+}
+
+#Desc > img {
+    height: 450px;
+}
+
+/* Ảnh của bài viếtviết */
+
+.card {
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Tác giả nổi bật */
+#PopularAuthors {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.author-card {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    margin: 10px;
+    transition: transform 0.3s ease-in-out;
+    width: 220px;
+}
+
+.author-card:hover {
+    transform: scale(1.05);
+}
+
+.author-card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.author-card h5 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.author-card p {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+/*Footer*----------------------------------------------------------------------------------------------------------/
+/* Footer */
+.footer {
+    background-color: #2377b3; /* Màu xanh chủ đạo */
+    padding: 30px 0;
+    font-size: 16px;
+}
+
+/* Tiêu đề */
+.footer h4 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Mạng xã hội */
+.social-icons a {
+    display: inline-block;
+    margin: 0 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.social-icons img {
+    width: 30px;
+    height: 30px;
+}
+
+.social-icons a:hover {
+    transform: scale(1.2);
+}
+
+/* Bản quyền */
+.copyright {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 15px;
+    font-size: 14px;
+}
+
+/* Hồ sơ bác sĩ */
+.profile-card {
+    border-radius: 10px;
+    background-color: #f8f9fa;
+}
+.profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 4px solid #ddd;
+}
+
+/* Bài viết đã đăng */
+/* Hồ sơ bác sĩ */
+.profile-card {
+    border-radius: 10px;
+    background-color: #f8f9fa;
+}
+.profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 4px solid #ddd;
+}
+
+/* Thống kê nhanh */
+.stat-card {
+    border-radius: 10px;
+    background-color: #f8f9fa;
+}
+.stat-card h4 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #2377b3;
+}
+
+/* Hiệu ứng card */
+.card {
+    transition: transform 0.3s ease-in-out;
+}
+.card:hover {
+    transform: scale(1.03);
+}
+
+/* Danh mục phổ biến */
+.category-card {
+    text-align: center;
+    cursor: pointer;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.category-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.category-card h5 {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.category-card:hover {
+    transform: scale(1.05);
+    background: #e9ecef;
+}
+
+/* Ẩn danh mục ban đầu */
+.hidden {
+    display: none;
+}
+
+/* RESPONSIVE ----------------------------------------------------------------------------------------------------------------*/
+@media (max-width: 1200px) {
+    #Games > div > img {
+        height: 180px;
+    }
+    #Publisher > div > img {
+        height: 180px;
+    }
+}
+
+@media (max-width: 1065px) {
+    #Desc > img {
+        height: 450px;
+    }
+}
+
+@media (max-width: 990px) {
+    #Desc > img {
+        height: 370px;
+    }
+}
+
+@media (max-width: 768px) {
+    #Games > div > img {
+        height: 250px;
+    }
+    #Publisher > div > img {
+        height: 250px;
+    }
+    #Desc > img {
+        height: 270px;
+    }
+}
+
+@media (max-width: 610px) {
+    #Desc > img {
+        height: 230px;
+    }
+}
+
+@media (max-width: 450px) {
+    #Games > div > img {
+        height: 180px;
+    }
+    #Publisher > div > img {
+        height: 180px;
+    }
+    #Desc > img {
+        height: 180px;
+    }
+}
+
+@media (max-width: 350px) {
+    #Desc > img {
+        height: 140px;
+    }
+}
+
+@media (max-width: 990px) {
+    #About > div > div > div > #Ico {
+        width: 6%;
+    }
+    #About > div > div > div > #Social {
+        width: 8%;
+    }
+}
+
+@media (max-width: 760px) {
+    #About > div > div > div > #Ico {
+        width: 8%;
+    }
+    #About > div > div > div > #Social {
+        width: 10%;
+    }
+}
+
+footer {
+    background-color: #b2b2b2;
+    font-size: small;
+    width: 100%;
+}
+
+footer > div > img {
+    float: right;
+    padding-right: 15px;
+}
+/*Fim Footer*/
