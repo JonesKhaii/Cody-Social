@@ -1,0 +1,42 @@
+.scroll-top_btn-scrollUp__AOYXp {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 0;
+    height: 0;
+    opacity: 1;
+    float: right;
+    z-index: 10000;
+    transition: all 0.3s;
+}
+
+.scroll-top_btn-scrollUp__AOYXp button {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(
+        315deg,
+        var(--blue-500) 14.64%,
+        var(--blue-400) 85.36%
+    );
+    border-radius: 2.4rem;
+    position: relative;
+}
+
+.scroll-top_btn-scrollUp__AOYXp button > span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.scroll-top_btn-scrollUp__AOYXp button svg {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .scroll-top_btn-scrollUp__AOYXp {
+        display: none;
+    }
+}

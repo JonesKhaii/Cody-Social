@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Phòng bệnh & Sống khỏe</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+            .container {
+                max-width: 900px;
+                margin: auto;
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 20px;
+                font-weight: bold;
+                color: #0a58ca;
+            }
+            .categories {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-top: 10px;
+                font-size: 14px;
+                color: gray;
+            }
+            .articles {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 15px;
+                margin-top: 20px;
+            }
+            .article {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 8px;
+            }
+            .article img {
+                width: 100%;
+                height: auto;
+                border-radius: 8px;
+            }
+            .badge {
+                background: #dee2e6;
+                padding: 5px 10px;
+                font-size: 12px;
+                border-radius: 15px;
+                align-self: start;
+            }
+            .article h3 {
+                font-size: 16px;
+                margin: 0;
+            }
+            .article p {
+                font-size: 14px;
+                color: gray;
+                margin: 0;
+            }
+            .first-row {
+                grid-column: span 2;
+                display: flex;
+                gap: 15px;
+            }
+            .first-row img {
+                width: 300px;
+                border-radius: 8px;
+            }
+            .first-row .text-content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            @media (max-width: 768px) {
+                .articles {
+                    grid-template-columns: 1fr;
+                }
+                .first-row {
+                    flex-direction: column;
+                }
+                .first-row img {
+                    width: 100%;
+                }
+                .article {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <span>Phòng bệnh & Sống khỏe</span>
+                <span>Xem tất cả →</span>
+            </div>
+            <div class="categories">
+                <span>Kiến thức y khoa</span>
+                <span>Y học cổ truyền</span>
+                <span>Sức khỏe gia đình</span>
+                <span>Tiêm chủng</span>
+                <span>Tâm lý - Tâm thần</span>
+            </div>
+            <div class="articles">
+                <div class="first-row">
+                    <img src="mosquito.jpg" alt="Sốt xuất huyết" />
+                    <div class="text-content">
+                        <span class="badge">Phòng bệnh & Sống khỏe</span>
+                        <h3>
+                            Tiêm vắc xin sốt xuất huyết ở đâu tại quận Gò Vấp?
+                            Địa chỉ, giá tiêm phòng như thế nào?
+                        </h3>
+                        <p>
+                            Sốt xuất huyết là một trong những bệnh truyền nhiễm
+                            phổ biến và nguy hiểm...
+                        </p>
+                    </div>
+                </div>
+                <div class="article">
+                    <span class="badge">Phòng bệnh & Sống khỏe</span>
+                    <h3>
+                        Các bệnh lây truyền qua đường tình dục và cách phòng
+                        ngừa hiệu quả
+                    </h3>
+                    <p>
+                        Số người mắc các bệnh lây truyền qua đường tình dục đang
+                        gia tăng đáng báo động...
+                    </p>
+                </div>
+                <div class="article">
+                    <span class="badge">Phòng bệnh & Sống khỏe</span>
+                    <h3>
+                        Cá lóc - loại cá nên tránh nếu không muốn axit uric tăng
+                        cao
+                    </h3>
+                </div>
+                <div class="article">
+                    <span class="badge">Phòng bệnh & Sống khỏe</span>
+                    <h3>
+                        Rối loạn tiêu hóa ở trẻ là gì? Những thông tin cần biết
+                    </h3>
+                </div>
+                <div class="article">
+                    <span class="badge">Phòng bệnh & Sống khỏe</span>
+                    <h3>
+                        Sốt siêu vi ở trẻ: Nguyên nhân, biểu hiện và biện pháp
+                        phòng ngừa
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -11,21 +11,22 @@ class ImageController extends Controller
 {
     public function uploadImage(Request $request)
     {
+        // dd('uploadImage() đã được gọi');
         // Kiểm tra nếu file có được chọn và validate
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate ảnh
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate ảnh
         ]);
 
         // Lấy file ảnh từ request
-        $image = $request->file('image');
+        $image = $request->file('photo');
 
         // Tạo tên file WebP (hoặc có thể dùng tên gốc của file)
         $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
         $fileExtension = $image->getClientOriginalExtension();
-        $webpFileName = $fileName . '.' . $fileExtension; // Hoặc đổi sang .webp nếu cần
+        $uniqueFileName = $fileName . '_' . time() . '.' . $fileExtension;
 
         // Lưu ảnh lên S3 với tên rõ ràng
-        $path = $image->storeAs('images', $webpFileName, 's3'); // Lưu vào thư mục 'images'
+        $path = $image->storeAs('images', $uniqueFileName, 's3'); // Lưu vào thư mục 'images'
 
         // Đảm bảo rằng ảnh được lưu với visibility public
         Storage::disk('s3')->setVisibility($path, 'public');

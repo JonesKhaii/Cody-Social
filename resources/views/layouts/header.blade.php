@@ -16,14 +16,16 @@
 
 <header class="navbar navbar-expand-lg navbar-light bg-primary shadow-sm">
     <div class="container">
+        <!-- Logo -->
         <div class="logo-container d-flex align-items-center">
             <img src="{{ asset('asset/images/logo.png') }}" alt="Logo" class="logo me-2"
                 style="height: 50px; border-radius: 50px" />
-            <a class="navbar-brand fs-2 text-white" href="{{ url('/') }}">CodyHealth</a>
+            <a class="navbar-brand fs-2 text-white" href="{{ route('home') }}">CodyHealth</a>
         </div>
 
         <!-- Nút Toggle cho Mobile -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -34,17 +36,18 @@
                 <li class="nav-item"><a class="nav-link text-white" href="{{ route('about') }}">Về chúng tôi</a></li>
                 <li class="nav-item"><a class="nav-link text-white" href="{{ route('doctors.list') }}">Bác Sĩ</a></li>
                 <li class="nav-item"><a class="nav-link text-white" href="#">Hỏi Đáp</a></li>
-                <li class="nav-item">
-                    @if ($role === 'doctor')
-                        <a class="nav-link text-white" href="{{ route('doctor.appointments') }}">Lịch Khám</a>
-                    @elseif ($role === 'user')
-                        <a class="nav-link text-white" href="{{ route('user.appointments') }}">Lịch Khám</a>
-                    @else
-                        <a class="nav-link text-white" href="{{ route('login') }}">Lịch Khám</a>
-                    @endif
-                </li>
 
-                {{-- Kiểm tra vai trò từ session để hiển thị đúng menu --}}
+                <!-- Ẩn mục Lịch Khám nếu là bác sĩ -->
+                @if ($role !== 'doctor')
+                    <li class="nav-item">
+                        @if ($role === 'user')
+                            <a class="nav-link text-white" href="{{ route('user.appointments') }}">Lịch Khám</a>
+                        @else
+                            <a class="nav-link login text-white" href="{{ route('login') }}">Lịch Khám</a>
+                        @endif
+                    </li>
+                @endif
+
                 @if ($role === 'doctor')
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{{ route('doctor.profile') }}">
@@ -58,8 +61,10 @@
                         </a>
                     </li>
                 @else
-                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('login') }}">Đăng Nhập</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('register') }}">Đăng Ký</a></li>
+                    <li class="nav-item"><a class="nav-link login text-white" href="{{ route('login') }}">Đăng Nhập</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link register text-white" href="{{ route('register') }}">Đăng
+                            Ký</a></li>
                 @endif
 
                 {{-- Đăng xuất --}}
@@ -68,15 +73,7 @@
                         <a class="nav-link text-white" href="{{ route('logout') }}">Đăng Xuất</a>
                     </li>
                 @endif
-
             </ul>
         </div>
     </div>
-
-    <!-- Debugging -->
-    <script>
-        console.log("Session role: {{ session('role') }}");
-        console.log("Auth guard web: {{ Auth::guard('web')->check() ? 'Đang đăng nhập' : 'Chưa đăng nhập' }}");
-        console.log("Auth guard doctor: {{ Auth::guard('doctor')->check() ? 'Đang đăng nhập' : 'Chưa đăng nhập' }}");
-    </script>
 </header>

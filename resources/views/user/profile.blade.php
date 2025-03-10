@@ -3,8 +3,17 @@
 @section('title', 'Hồ Sơ Của Tôi')
 
 @section('main-content')
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JS và Popper.js (bắt buộc cho Bootstrap 5) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/users.css') }}">
+
     <!-- Breadcrumbs -->
-    <div class="breadcrumbs bg-light py-3">
+    <div class="breadcrumbs bg-light py-2">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -29,89 +38,96 @@
     <!-- End Breadcrumbs -->
 
     <!-- User Profile Section -->
-    <section class="user-profile section py-5">
+    <section class="user-profile section py-4">
         <div class="container">
-            <div class="row">
+            <div class="row g-4">
                 <div class="col-lg-3">
-                    <!-- Sidebar -->
-                    <div class="card mb-4 shadow-sm">
-                        <div class="card-body text-center">
-                            <img src="{{ $user->photo ? asset($user->photo) : 'https://via.placeholder.com/150' }}"
-                                alt="User Avatar" class="profile-photo rounded-circle">
-                            <h3 class="profile-name mt-3">{{ $user->name }}</h3>
-                            <p class="profile-role">{{ ucfirst($user->role) }}</p>
+                    <!-- Profile Card -->
+                    <div class="card profile-card mb-4 shadow-sm">
+                        <div class="card-body p-4 text-center">
+                            <div class="avatar-container mb-3">
+                                <img src="{{ $user->photo ? asset($user->photo) : 'https://via.placeholder.com/150' }}"
+                                    alt="User Avatar" class="profile-photo">
+                            </div>
+                            <h3 class="profile-name">{{ $user->name }}</h3>
+                            <p class="profile-role mb-2">{{ ucfirst($user->role) }}</p>
                             <span class="status-badge {{ $user->status ? 'status-active' : 'status-inactive' }}">
                                 {{ $user->status ? 'Đang hoạt động' : 'Tài khoản bị khóa' }}
                             </span>
                         </div>
                     </div>
 
-                    <!-- Menu -->
+                    <!-- Navigation Menu -->
                     <div class="card shadow-sm">
-                        <div class="list-group list-group-flush">
-                            <a href="#" class="list-group-item list-group-item-action active">
-                                <i class="fas fa-user-circle me-2"></i> Thông tin cá nhân
+                        <div class="list-group list-group-flush rounded-3">
+                            <a href="#" class="list-group-item list-group-item-action active py-3">
+                                <i class="fas fa-user-circle fs-5 me-2"></i> Thông tin cá nhân
                             </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <i class="fas fa-key me-2"></i> Đổi mật khẩu
+                            <a href="#" class="list-group-item list-group-item-action py-3">
+                                <i class="fas fa-key fs-5 me-2"></i> Đổi mật khẩu
                             </a>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-9">
+                    <!-- User Info Card -->
                     <div class="card shadow-sm">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h2 class="card-title">Thông tin cá nhân</h2>
-                            <div class="card-header-actions">
-                                <button class="btn-icon edit-btn" id="edit-info-btn" title="Chỉnh sửa thông tin">
-                                    <i class="fas fa-edit"></i>
+                        <div class="card-header d-flex justify-content-between align-items-center bg-white py-3">
+                            <h5 class="card-title fw-bold mb-0">Thông tin cá nhân</h5>
+                            <div class="card-actions">
+                                <button class="btn btn-sm btn-primary me-2" id="edit-info-btn">
+                                    <i class="fas fa-edit fs-5 me-1"></i> Chỉnh sửa
                                 </button>
-                                <button class="btn-icon refresh-btn" title="Làm mới">
-                                    <i class="fas fa-sync-alt"></i>
+                                <button class="btn btn-sm btn-light">
+                                    <i class="fas fa-sync-alt fs-5"></i>
                                 </button>
                             </div>
                         </div>
 
-                        <div class="card-body">
-                            <!-- Thông tin cá nhân -->
-                            <div class="user-info-grid">
-                                <div class="info-item">
-                                    <i class="fas fa-envelope info-icon"></i>
-                                    <div class="info-content">
-                                        <span class="info-label">Email</span>
+                        <div class="card-body p-4">
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <div class="info-field">
+                                        <label class="info-label">
+                                            <i class="fas fa-envelope text-primary fa-lg me-2"></i> Email
+                                        </label>
                                         <p class="info-value">{{ $user->email }}</p>
                                     </div>
                                 </div>
 
-                                <div class="info-item">
-                                    <i class="fas fa-phone info-icon"></i>
-                                    <div class="info-content">
-                                        <span class="info-label">Số điện thoại</span>
+                                <div class="col-md-6 mb-4">
+                                    <div class="info-field">
+                                        <label class="info-label">
+                                            <i class="fas fa-phone text-primary fa-lg me-2"></i> Số điện thoại
+                                        </label>
                                         <p class="info-value">{{ $user->phone ?: 'Chưa cập nhật' }}</p>
                                     </div>
                                 </div>
 
-                                <div class="info-item">
-                                    <i class="fas fa-map-marker-alt info-icon"></i>
-                                    <div class="info-content">
-                                        <span class="info-label">Địa chỉ</span>
+                                <div class="col-md-6 mb-4">
+                                    <div class="info-field">
+                                        <label class="info-label">
+                                            <i class="fas fa-map-marker-alt text-primary fa-lg me-2"></i> Địa chỉ
+                                        </label>
                                         <p class="info-value">{{ $user->address ?: 'Chưa cập nhật' }}</p>
                                     </div>
                                 </div>
 
-                                <div class="info-item">
-                                    <i class="fas fa-city info-icon"></i>
-                                    <div class="info-content">
-                                        <span class="info-label">Tỉnh/Thành phố</span>
+                                <div class="col-md-6 mb-4">
+                                    <div class="info-field">
+                                        <label class="info-label">
+                                            <i class="fas fa-city text-primary fa-lg me-2"></i> Tỉnh/Thành phố
+                                        </label>
                                         <p class="info-value">{{ $user->province ?: 'Chưa cập nhật' }}</p>
                                     </div>
                                 </div>
 
-                                <div class="info-item">
-                                    <i class="fas fa-calendar-alt info-icon"></i>
-                                    <div class="info-content">
-                                        <span class="info-label">Ngày đăng ký</span>
+                                <div class="col-md-6 mb-4">
+                                    <div class="info-field">
+                                        <label class="info-label">
+                                            <i class="fas fa-calendar-alt text-primary fa-lg me-2"></i> Ngày đăng ký
+                                        </label>
                                         <p class="info-value">
                                             {{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }}</p>
                                     </div>
@@ -125,11 +141,12 @@
     </section>
     <!-- End User Profile Section -->
 
+    <!-- Edit Profile Modal -->
     <div class="modal fade" id="editProfileModal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Chỉnh sửa thông tin</h5>
+                    <h5 class="modal-title fw-bold">Chỉnh sửa thông tin</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form id="updateProfileForm" action="{{ route('profile.update', $user->id) }}" method="POST"
@@ -139,8 +156,20 @@
 
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">Ảnh đại diện</label>
-                            <input type="file" class="form-control" name="photo" id="photo">
+                            <div class="d-flex align-items-center justify-content-center mb-3">
+                                <div class="position-relative">
+                                    <img id="preview-photo"
+                                        src="{{ $user->photo ? asset($user->photo) : 'https://via.placeholder.com/150' }}"
+                                        class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                                    <div class="upload-btn-wrapper">
+                                        <button class="btn btn-sm btn-light position-absolute bottom-0 end-0">
+                                            <i class="fas fa-camera"></i>
+                                        </button>
+                                        <input type="file" name="photo" id="photo"
+                                            onchange="previewImage(this)">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Họ và tên</label>
@@ -165,7 +194,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
                         <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                     </div>
                 </form>
@@ -182,165 +211,76 @@
                 editModal.show();
             });
         });
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    document.getElementById('preview-photo').setAttribute('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
 @endsection
 
-<style>
-    .profile-photo {
-        width: 120px;
-        height: 120px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 3px solid #f8f9fc;
+{{-- <style>
+    /* Thiết lập chung */
+    body {
+        background-color: #f9fafb;
     }
 
-    .profile-name {
-        font-size: 22px;
-        font-weight: 700;
-        color: #344767;
-    }
-
-    .profile-role {
-        font-size: 14px;
-        color: #64748b;
-        margin-bottom: 5px;
-    }
-
-    .status-badge {
-        display: inline-block;
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-    }
-
-    .status-active {
-        background-color: rgba(25, 135, 84, 0.1);
-        color: #198754;
-    }
-
-    .status-inactive {
-        background-color: rgba(220, 53, 69, 0.1);
-        color: #dc3545;
-    }
-
-    .user-info-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 15px;
-        padding: 20px;
-    }
-
-    /* Cân bằng và căn chỉnh icon trong phần hồ sơ */
-    .info-item {
-        display: flex;
-        align-items: center;
-        padding: 12px;
-        background: #f9fafb;
-        border-radius: 8px;
-        transition: all 0.2s ease;
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    .info-item:hover {
-        background: #eef1f5;
-    }
-
-    .info-icon {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        background: #e3e6f0;
-        color: #4e73df;
-        margin-right: 15px;
-        box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .info-content {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .info-label {
-        font-size: 13px;
-        color: #6c757d;
-        margin-bottom: 2px;
-        font-weight: 500;
-    }
-
-    .info-value {
-        font-size: 16px;
-        font-weight: 600;
-        color: #344767;
-        margin: 0;
-    }
-
-    /* Cải thiện các nút chức năng */
-    .btn-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .card {
         border: none;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background 0.2s ease, transform 0.2s ease;
+        border-radius: 10px;
+        overflow: hidden;
     }
 
-    .btn-icon i {
-        font-size: 18px;
+    /* Profile Card */
+    .profile-card {
+        background: white;
+        transition: transform 0.2s ease;
     }
 
-    .edit-btn {
-        background-color: #4e73df;
-        color: white;
+    .profile-card:hover {
+        transform: translateY(-5px);
     }
 
-    .refresh-btn {
-        background-color: #f8f9fa;
-        color: #4e73df;
+    .avatar-container {
+        position: relative;
+        display: inline-block;
     }
 
-    .edit-btn:hover,
-    .refresh-btn:hover {
-        opacity: 0.8;
-        transform: scale(1.1);
-    }
-
-    /* Căn chỉnh lại phần ảnh đại diện */
     .profile-photo {
         width: 130px;
         height: 130px;
         object-fit: cover;
         border-radius: 50%;
-        border: 4px solid #f8f9fc;
-        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.15);
+        border: 3px solid #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     .profile-name {
-        font-size: 22px;
-        font-weight: 700;
-        color: #344767;
+        font-size: 20px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 5px;
     }
 
     .profile-role {
         font-size: 14px;
-        color: #64748b;
-        margin-bottom: 5px;
+        color: #6c757d;
+        margin-bottom: 8px;
     }
 
     .status-badge {
         display: inline-block;
-        padding: 6px 14px;
+        padding: 5px 12px;
         border-radius: 20px;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 500;
     }
 
     .status-active {
@@ -352,4 +292,161 @@
         background-color: rgba(220, 53, 69, 0.1);
         color: #dc3545;
     }
-</style>
+
+    /* Navigation Menu */
+    .list-group-item {
+        border-left: none;
+        border-right: none;
+        padding: 12px 20px;
+        font-weight: 500;
+    }
+
+    .list-group-item.active {
+        background-color: #4361ee;
+        border-color: #4361ee;
+    }
+
+    .list-group-item:first-child {
+        border-top: none;
+    }
+
+    /* User Info Display */
+    .info-field {
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        height: 100%;
+    }
+
+    .info-label {
+        font-size: 14px;
+        color: #6c757d;
+        font-weight: 500;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+    }
+
+    .info-value {
+        font-size: 16px;
+        font-weight: 600;
+        color: #343a40;
+        margin-bottom: 0;
+        padding-left: 28px;
+    }
+
+    /* Form Controls */
+    .form-control {
+        padding: 10px 15px;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        height: 45px;
+    }
+
+    .form-control:focus {
+        box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+        border-color: #4361ee;
+    }
+
+    /* Button Styles */
+    .btn-primary {
+        background-color: #4361ee;
+        border-color: #4361ee;
+        padding: 8px 16px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #3a56d9;
+        border-color: #3a56d9;
+    }
+
+    .btn-sm {
+        padding: 7px 14px;
+        font-size: 14px;
+    }
+
+    /* Upload Button */
+    .upload-btn-wrapper {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .upload-btn-wrapper input[type=file] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    /* Modal Styling */
+    #editProfileModal .modal-dialog {
+        max-width: 500px;
+    }
+
+    #editProfileModal .modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    #editProfileModal .modal-header {
+        border-bottom: none;
+        padding: 20px 20px 10px;
+    }
+
+    #editProfileModal .modal-title {
+        font-size: 20px;
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    #editProfileModal .modal-body {
+        padding: 0 20px 20px;
+    }
+
+    #editProfileModal #preview-photo {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #f0f0f0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #editProfileModal .form-label {
+        font-weight: 500;
+        color: #2c3e50;
+        margin-bottom: 8px;
+    }
+
+    #editProfileModal .form-control {
+        transition: all 0.3s ease;
+    }
+
+    #editProfileModal .modal-footer {
+        border-top: none;
+        padding: 15px 20px;
+        background-color: #f9fafb;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .row.g-4 {
+            --bs-gutter-y: 1.5rem;
+        }
+
+        .card-actions .btn {
+            padding: 6px 12px;
+        }
+
+        #editProfileModal .modal-dialog {
+            margin: 1.75rem 10px;
+            max-width: calc(100% - 20px);
+        }
+    }
+</style> --}}

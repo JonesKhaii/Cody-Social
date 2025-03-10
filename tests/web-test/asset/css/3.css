@@ -1,0 +1,30 @@
+.AppModal_modalBase__5Jntw {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    border-radius: 0.75rem;
+}
+
+.AppModal_overlayBase__4BsLc {
+    background-color: rgba(2, 11, 39, 0.5);
+    visibility: hidden;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    opacity: 0;
+    transition-property: all;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    animation-duration: 0.3s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.AppModal_overlayAfterOpen__fgDcB {
+    visibility: visible;
+    opacity: 1;
+}
+
+.AppModal_overlayBeforeClose__Qpk_F {
+    visibility: hidden;
+    opacity: 0;
+}

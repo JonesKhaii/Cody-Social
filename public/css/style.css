@@ -24,7 +24,7 @@ h4 {
 }
 
 .container-fluid {
-    margin-top: 4%;
+    /* margin-top: 4%; */
     margin-bottom: 2%;
 }
 
@@ -151,7 +151,7 @@ input.nosubmit {
     height: 450px;
 }
 
-/* Ảnh của bài viếtviết */
+/* Ảnh của bài viết */
 
 .card {
     border-radius: 10px;
@@ -159,7 +159,7 @@ input.nosubmit {
 }
 
 .card:hover {
-    transform: scale(1.03);
+    /* transform: scale(1.03); */
 }
 
 .card-img-top {
@@ -286,7 +286,7 @@ input.nosubmit {
     transition: transform 0.3s ease-in-out;
 }
 .card:hover {
-    transform: scale(1.03);
+    /* transform: scale(1.03); */
 }
 
 /* Danh mục phổ biến */
@@ -319,6 +319,116 @@ input.nosubmit {
 /* Ẩn danh mục ban đầu */
 .hidden {
     display: none;
+}
+
+/* Navbar */
+.navbar {
+    background: #2377b3;
+    padding: 12px 20px;
+    transition: background 0.3s ease-in-out;
+}
+
+/* Hiệu ứng hover trên menu */
+.navbar-nav .nav-link {
+    position: relative;
+    transition: color 0.3s ease-in-out;
+    padding-bottom: 5px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #f8f9fa !important;
+}
+
+/* Thanh gạch chân dưới menu khi hover */
+.navbar-nav .nav-link::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 3px;
+    background: #f8f9fa;
+    transition: width 0.3s ease-in-out;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -5px;
+}
+
+.navbar-nav .nav-link:hover::after {
+    width: 100%;
+}
+
+/* Hiệu ứng mở rộng menu */
+.navbar-collapse {
+    transition: all 0.4s ease-in-out;
+}
+
+/* Menu trên mobile trượt xuống mượt */
+.navbar-toggler {
+    border: none;
+    outline: none;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.navbar-toggler-icon {
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+    transform: rotate(90deg);
+}
+
+/* Hiển thị menu theo trạng thái */
+.navbar-nav .nav-item .active {
+    color: #f8f9fa !important;
+    font-weight: bold;
+}
+
+/* Nút đăng nhập, đăng ký nổi bật */
+.navbar-nav .nav-link.login,
+.navbar-nav .nav-link.register {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link.login:hover,
+.navbar-nav .nav-link.register:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Hiệu ứng fade-in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.navbar {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+.pagination .page-item .page-link {
+    background-color: #2377b3 !important;
+    color: white !important;
+    border: none !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #185a8e !important; /* Màu đậm hơn cho trang đang active */
+    color: white !important;
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #1c6399 !important; /* Màu hover */
 }
 
 /* RESPONSIVE ----------------------------------------------------------------------------------------------------------------*/

@@ -61,7 +61,7 @@
 
 
             <!-- Danh mục phổ biến -->
-            <div class="container-fluid mt-5">
+            {{-- <div class="container-fluid mt-5">
                 <div class="container">
                     <h1 class="mb-4 text-center">Danh Mục Phổ Biến</h1>
                     <div class="row" id="PopularCategories">
@@ -76,10 +76,125 @@
                         @endforeach
                     </div>
                 </div>
-            </div>
+            </div> --}}
+            {{-- <div class="category-container">
+                <div class="category-header">
+                    <span>Phòng bệnh & Sống khỏe</span>
+                    <span>Xem tất cả →</span>
+                </div>
+                <div class="categories">
+                    <span>Kiến thức y khoa</span>
+                    <span>Y học cổ truyền</span>
+                    <span>Sức khỏe gia đình</span>
+                    <span>Tiêm chủng</span>
+                    <span>Tâm lý - Tâm thần</span>
+                </div>
+                <div class="articles">
+                    <div class="first-row">
+                        <img src="mosquito.jpg" alt="Sốt xuất huyết" />
+                        <div class="text-content">
+                            <span class="badge">Phòng bệnh & Sống khỏe</span>
+                            <h3>
+                                Tiêm vắc xin sốt xuất huyết ở đâu tại quận Gò Vấp?
+                                Địa chỉ, giá tiêm phòng như thế nào?
+                            </h3>
+                            <p>
+                                Sốt xuất huyết là một trong những bệnh truyền nhiễm
+                                phổ biến và nguy hiểm...
+                            </p>
+                        </div>
+                    </div>
+                    <div class="article">
+                        <span class="badge">Phòng bệnh & Sống khỏe</span>
+                        <h3>
+                            Các bệnh lây truyền qua đường tình dục và cách phòng
+                            ngừa hiệu quả
+                        </h3>
+                        <p>
+                            Số người mắc các bệnh lây truyền qua đường tình dục đang
+                            gia tăng đáng báo động...
+                        </p>
+                    </div>
+                    <div class="article">
+
+                        <span class="badge">Phòng bệnh & Sống khỏe</span>
+                        <h3>
+                            Cá lóc - loại cá nên tránh nếu không muốn axit uric tăng
+                            cao
+                        </h3>
+                        <p>
+                            Cá lóc là món ăn phổ biến nhưng có thể gây tăng axit
+                            uric...
+                        </p>
+                    </div>
+                    <div class="article">
+
+                        <span class="badge">Phòng bệnh & Sống khỏe</span>
+                        <h3>
+                            Rối loạn tiêu hóa ở trẻ là gì? Những thông tin cần biết
+                        </h3>
+                        <p>Rối loạn tiêu hóa là vấn đề thường gặp ở trẻ nhỏ...</p>
+                    </div>
+                    <div class="article">
+
+                        <span class="badge">Phòng bệnh & Sống khỏe</span>
+                        <h3>
+                            Sốt siêu vi ở trẻ: Nguyên nhân, biểu hiện và biện pháp
+                            phòng ngừa
+                        </h3>
+                        <p>
+                            Sốt siêu vi là tình trạng sốt do virus gây ra ở trẻ
+                            em...
+                        </p>
+                    </div>
+                </div>
+            </div> --}}
+            @foreach ($popularCategories as $category)
+                <div class="category-container">
+                    <div class="category-header">
+                        <span>{{ $category->title }}</span>
+                        @if ($category && $category->slug)
+                            <a href="{{ route('category.show', ['slug' => $category->slug]) }}"><span>Xem tất cả
+                                    -></span></a>
+                        @endif
+                    </div>
+
+                    <div class="categories">
+                        {{-- @foreach ($category->subcategories->take(5) as $subcategory)
+                            <span>{{ $subcategory->title }}</span>
+                        @endforeach --}}
+                    </div>
+
+                    <div class="articles">
+                        @php
+                            $posts = $category->posts()->latest()->take(5)->get();
+                            $firstPost = $posts->shift();
+                        @endphp
+
+                        @if ($firstPost)
+                            <div class="first-row">
+                                <img src="{{ asset($firstPost->photo) }}" alt="{{ $firstPost->title }}" />
+                                <div class="text-content">
+                                    <span class="badge">{{ $category->title }}</span>
+                                    <h3>{{ $firstPost->title }}</h3>
+                                    <p>{{ Str::limit($firstPost->summary, 100) }}</p>
+                                </div>
+                            </div>
+                        @endif
+
+                        @foreach ($posts as $post)
+                            <div class="article">
+                                <span class="badge">{{ $category->title }}</span>
+                                <h3>{{ $post->title }}</h3>
+                                <p>{{ Str::limit($post->summary, 100) }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
 
 
-            <div class="container mt-5">
+            <div class="doctor-category container mt-5">
                 <h2 class="section-title mt-5 text-center">Bác Sĩ Nổi Bật</h2>
                 <div class="row mt-4">
                     @foreach ($topDoctors as $doctor)
@@ -267,6 +382,11 @@
 @endsection
 
 <style>
+    .doctor-category {
+        background-color: #fff;
+        border-radius: 8px;
+    }
+
     .doctor-card {
         border: none;
         border-radius: 15px;
@@ -328,5 +448,187 @@
         font-weight: bold;
         padding: 10px;
         background-color: #eee;
+    }
+
+    .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .category-header a {
+        text-decoration: none;
+    }
+
+    .category-header span {
+        font-size: 20px;
+        font-weight: bold;
+        color: #0a58ca;
+    }
+
+    .category-container {
+        width: 100%;
+        padding: 15px;
+        background-color: #fff;
+        padding-right: calc(var(--bs-gutter-x)* .5);
+        padding-left: calc(var(--bs-gutter-x)* .5);
+        margin-right: auto;
+        margin-left: auto;
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+
+    .categories {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-bottom: 20px;
+    }
+
+    .categories span {
+        font-size: 14px;
+        color: #666;
+        white-space: nowrap;
+        padding: 3px 0;
+    }
+
+    .articles {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .article {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+    }
+
+    .article:hover {
+        transform: translateY(-3px);
+    }
+
+    .article img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .badge {
+        background: #2377b3;
+        padding: 5px 10px;
+        font-size: 12px;
+        border-radius: 15px;
+        align-self: flex-start;
+        color: #ffff;
+    }
+
+    .article h3 {
+        font-size: 16px;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    .article p {
+        font-size: 14px;
+        color: #6c757d;
+        margin: 0;
+    }
+
+    .first-row {
+        grid-column: span 2;
+        display: flex;
+        gap: 20px;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .first-row img {
+        width: 45%;
+        max-width: 300px;
+        height: auto;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .first-row .text-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    /* Responsive cho tablet */
+    @media (max-width: 992px) {
+        .articles {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .first-row {
+            grid-column: span 2;
+        }
+    }
+
+    /* Responsive cho điện thoại */
+    @media (max-width: 768px) {
+        .category-header {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .categories {
+            justify-content: center;
+        }
+
+        .articles {
+            grid-template-columns: 1fr;
+        }
+
+        .first-row {
+            grid-column: span 1;
+            flex-direction: column;
+        }
+
+        .first-row img {
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+
+    /* Responsive cho điện thoại nhỏ */
+    @media (max-width: 480px) {
+        .category-header span {
+            font-size: 18px;
+        }
+
+        .categories span {
+            font-size: 13px;
+        }
+
+        .article {
+            padding: 12px;
+        }
+
+        .article h3 {
+            font-size: 15px;
+        }
+
+        .article p {
+            font-size: 13px;
+        }
     }
 </style>

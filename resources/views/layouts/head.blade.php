@@ -18,5 +18,5 @@
 
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 <link rel="stylesheet" href="{{ asset('css/about-us.css') }}">
-<link rel="stylesheet" href="{{ asset('css/doctors.css') }}">
+{{-- <link rel="stylesheet" href="{{ asset('css/doctors.css') }}"> --}}
 <link rel="stylesheet" href="{{ asset('css/login.css') }}">

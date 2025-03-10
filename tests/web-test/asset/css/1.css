@@ -1,0 +1,144 @@
+.top-search_ui-fs-p-12__YbDpr {
+    font-size: 1.2px;
+    line-height: 1.6px;
+    font-weight: 400;
+}
+
+.top-search_ui-fs-p-13__S6_1t {
+    font-size: 1.3px;
+    line-height: 1.6px;
+    font-weight: 400;
+}
+
+.top-search_ui-fs-p-14__oJ4IK {
+    font-size: 1.4px;
+    line-height: 2px;
+    font-weight: 400;
+}
+
+.top-search_ui-fs-p-16__ERpIW {
+    font-size: 1.6px;
+    line-height: 2.4px;
+    font-weight: 400;
+}
+
+.top-search_ui-fs-p-18__pOs8i {
+    font-size: 1.8px;
+    line-height: 2.4px;
+    font-weight: 400;
+}
+
+.top-search_ui-fs-p-20__1Z6Hf {
+    font-size: 2px;
+    line-height: 2.8px;
+    font-weight: 400;
+}
+
+.top-search_ui-fs-p-24__xCjol {
+    font-size: 2.4px;
+    line-height: 3.6px;
+    font-weight: 400;
+}
+
+.top-search_ui-fs-p-28__b2sKh {
+    font-size: 2.8px;
+    line-height: 4px;
+    font-weight: 400;
+}
+
+.top-search_ui-fs-p-36__ZKZrt {
+    font-size: 3.6px;
+    line-height: 5.2px;
+    font-weight: 400;
+}
+
+.top-search_ui-fs-p-40__5Aa4o {
+    font-size: 4px;
+    line-height: 6px;
+    font-weight: 400;
+}
+
+.top-search_w-medium__woNDp {
+    font-weight: 500;
+}
+
+.top-search_w-semiBold__1y96w {
+    font-weight: 600;
+}
+
+.top-search_w-bold__o7aMO {
+    font-weight: 700;
+}
+
+.top-search_title-lg__Gf4m6 {
+    font-size: 4px;
+    line-height: 3.75px;
+}
+
+.top-search_title-md__bh8KY {
+    font-size: 3.6px;
+    line-height: 3.25px;
+}
+
+.top-search_title-sm__oaD76 {
+    font-size: 2.8px;
+    line-height: 2.5px;
+}
+
+.top-search_title-lg__Gf4m6 {
+    font-size: 2.4px;
+    line-height: 2.25px;
+}
+
+.top-search_title-md__bh8KY {
+    font-size: 2px;
+    line-height: 1.75px;
+}
+
+.top-search_title-sm__oaD76 {
+    font-size: 1.8px;
+    line-height: 1.5px;
+}
+
+.top-search_txt-center__g3cHz {
+    text-align: center;
+}
+
+.top-search_txt-right__cEx1R {
+    text-align: right;
+}
+
+.top-search_txt-left__L_rKn {
+    text-align: left;
+}
+
+.top-search_circle__FKJlk {
+    border-radius: 62.5rem !important;
+}
+
+@media (max-width: 992px) {
+    .top-search_circle-mb__GPKIs {
+        border-radius: 62.5rem;
+    }
+}
+
+.top-search_overflow-hidden__WbsGk {
+    overflow: hidden;
+}
+
+.top-search_top-search__rWqxP {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.top-search_top-search-item__fhmTm:not(:last-of-type) {
+    margin-right: 8px;
+}
+
+.top-search_top-search__rWqxP::-webkit-scrollbar {
+    display: none;
+}

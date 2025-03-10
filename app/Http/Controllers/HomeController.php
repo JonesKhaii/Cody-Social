@@ -70,7 +70,6 @@ class HomeController extends Controller
             ->latest()
             ->paginate(6);
 
-        // Nếu bạn dùng view partial để render danh sách bài viết, bạn có thể trả về HTML render từ view đó:
         $html = view('partials.posts', compact('posts'))->render();
 
         return response()->json(['html' => $html]);

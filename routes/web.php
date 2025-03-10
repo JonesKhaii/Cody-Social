@@ -12,6 +12,9 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\PostLikeController;
+use App\Http\Controllers\AffiliateController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
 // AUTH--------------------------------------------------------------------------------
 // Trang đăng nhập & xử lý đăng nhập
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -53,6 +56,8 @@ Route::get('/appointment', function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/post/{slug}', [PostController::class, 'detail'])->name('post.detail');
+// Delete post
+Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 //Search
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/search-results', [SearchController::class, 'results'])->name('search.results');
@@ -73,6 +78,16 @@ Route::put('/appointments/{id}/approve', [DoctorController::class, 'approveAppoi
 Route::put('/appointments/{id}/reject', [DoctorController::class, 'rejectAppointment'])->name('doctor.appointments.reject');
 Route::put('/appointments/{id}/complete', [DoctorController::class, 'completeAppointment'])->name('doctor.appointments.complete');
 Route::put('/appointments/{id}/cancel', [DoctorController::class, 'cancelAppointment'])->name('doctor.appointments.cancel');
+
+
+Route::get('/doctor/post-interactions', [DoctorController::class, 'getPostInteractions'])->name('doctor.postInteractions');
+Route::get('/doctor/appointments-stats', [DoctorController::class, 'getAppointmentStats'])->name('doctor.appointments.stats');
+Route::get('/doctor/appointments-time', [DoctorController::class, 'getAppointmentsByTimeframe'])->name('doctor.appointmentsStats');
+
+// Affialte 
+Route::get('/affiliate/search-product', [AffiliateController::class, 'searchProduct']);
+Route::get('/affiliate/search-product-table', [ProductController::class, 'searchProductTable']);
+Route::post('/affiliate/generate-link/{product_slug}', [AffiliateController::class, 'generateLink']);
 
 
 
@@ -104,3 +119,9 @@ Route::post('/post/{slug}/comment', [CommentController::class, 'store'])->name('
 
 //Like
 Route::post('/like-post', [PostLikeController::class, 'toggleLike'])->name('post.like');
+
+// Category
+Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
+// API:
+// Image
+Route::post('/upload-image', [ImageController::class, 'uploadImage'])->name('upload.image');

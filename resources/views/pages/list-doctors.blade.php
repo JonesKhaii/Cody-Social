@@ -95,7 +95,8 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mt-3">
-                            <a href="{{ route('doctor.detail', $doctor->id) }}" class="btn btn-primary w-50 me-2 py-2">
+                            <a href="{{ route('doctor.detail', $doctor->id) }}" class="btn btn-primary w-50 me-2 py-2"
+                                style=" display: flex;align-items: center;justify-content: center;">
                                 Xem Hồ Sơ
                             </a>
                             <button class="btn btn-outline-success w-50 follow-btn py-2" data-doctor="{{ $doctor->name }}">
