@@ -282,36 +282,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // JS xử lý cho phần bảng sản phẩm tiếp thị
-// $(document).ready(function () {
-//     // Kích hoạt DataTable cho bảng
-//     var table = $('#product-dataTable').DataTable({
-//         "processing": true, // Cho phép xử lý dữ liệu
-//         "serverSide": false, // Bật server-side paging nếu cần
-//         "searching": true, // Tính năng tìm kiếm tự động
-//         "paging": true, // Bật phân trang
-//         "ordering": true, // Cho phép sắp xếp cột
-//         "info": true, // Hiển thị thông tin về số lượng bản ghi
-//         "language": {
-//             "lengthMenu": "Hiển thị _MENU_ dòng",
-//             "zeroRecords": "Không tìm thấy sản phẩm",
-//             "info": "Trang _PAGE_/_PAGES_",
-//             "infoEmpty": "Không có dữ liệu",
-//             "search": "Tìm kiếm:",
-//             "paginate": {
-//                 "first": "Đầu",
-//                 "last": "Cuối",
-//                 "next": "Tiếp",
-//                 "previous": "Trước"
-//             }
-//         }
+$(document).ready(function () {
+    // Kích hoạt DataTable cho bảng
+    var table = $('#product-dataTable').DataTable({
+        "processing": true, // Cho phép xử lý dữ liệu
+        "serverSide": false, // Bật server-side paging nếu cần
+        "searching": true, // Tính năng tìm kiếm tự động
+        "paging": true, // Bật phân trang
+        "ordering": true, // Cho phép sắp xếp cột
+        "info": true, // Hiển thị thông tin về số lượng bản ghi
+        "language": {
+            "lengthMenu": "Hiển thị _MENU_ dòng",
+            "zeroRecords": "Không tìm thấy sản phẩm",
+            "info": "Trang _PAGE_/_PAGES_",
+            "infoEmpty": "Không có dữ liệu",
+            "search": "Tìm kiếm:",
+            "paginate": {
+                "first": "Đầu",
+                "last": "Cuối",
+                "next": "Tiếp",
+                "previous": "Trước"
+            }
+        }
 
-//     });
+    });
 
-//     // Tùy chỉnh hành vi của ô tìm kiếm trong DataTable
-//     $('#product-dataTable_filter input').on('keyup', function () {
-//         table.search(this.value).draw(); // Tìm kiếm trong bảng khi gõ
-//     });
-// });
+    // Tùy chỉnh hành vi của ô tìm kiếm trong DataTable
+    $('#product-dataTable_filter input').on('keyup', function () {
+        table.search(this.value).draw(); // Tìm kiếm trong bảng khi gõ
+    });
+});
 // Thêm class 'original-row' cho các dòng ban đầu khi tải trang
 document.addEventListener('DOMContentLoaded', function () {
     let originalRows = document.querySelectorAll('#product-table-body tr');
@@ -386,12 +386,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // Ẩn dropdown khi click ra ngoài
-document.addEventListener('click', function (event) {
-    let dropdown = document.getElementById('product-dropdown');
-    if (!event.target.closest('.form-group')) {
-        dropdown.style.display = 'none';
-    }
-});
+// document.addEventListener('click', function (event) {
+//     let dropdown = document.getElementById('product-dropdown');
+//     if (!event.target.closest('.form-group')) {
+//         dropdown.style.display = 'none';
+//     }
+// });
 
 
 
