@@ -44,7 +44,7 @@
         </form>
 
         <div class="footer-text">
-            Chưa có tài khoản? <a href="#">Đăng ký ngay</a>
+            Chưa có tài khoản? <a href="{{ route('register') }}">Đăng ký ngay</a>
         </div>
     </div>
 

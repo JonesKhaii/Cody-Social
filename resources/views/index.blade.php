@@ -43,16 +43,46 @@
                 <div class="col-6">
                     <h1>Thông Tin Y Tế Nổi Bật</h1>
                 </div>
-                <div class="col-6 text-end">
+                {{-- <div class="col-6 text-end">
                     <select class="btn btn-light" id="Genero">
                         <option value="">Tất cả</option>
                         @foreach ($categories as $category)
                             <option value="{{ $category->title }}">{{ $category->title }}</option>
                         @endforeach
                     </select>
+                </div> --}}
+                <div class="col-12 col-md-6">
+                    <div class="d-flex justify-content-md-end">
+                        <select class="form-select filter-select" id="Genero" aria-label="Lọc theo danh mục">
+                            <option value="">Tất cả danh mục</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->title }}">{{ $category->title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-
             </div>
+
+
+            {{-- <div class="container-fluid py-3">
+                <div class="row align-items-center g-3">
+                    <!-- Tiêu đề - Co lại trên mobile -->
+                    <div class="col-12 col-md-6">
+                        <h1 class="medical-title mb-0">Thông Tin Y Tế Nổi Bật</h1>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <div class="d-flex justify-content-md-end">
+                            <select class="form-select filter-select" id="Genero" aria-label="Lọc theo danh mục">
+                                <option value="">Tất cả danh mục</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->title }}">{{ $category->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div> --}}
 
             <!-- Danh sách bài viết -->
             <div class="container mt-5" id="postsContainer">
@@ -82,20 +112,24 @@
 
                         @if ($firstPost)
                             <div class="first-row">
-                                <img src="{{ asset($firstPost->photo) }}" alt="{{ $firstPost->title }}" />
-                                <div class="text-content">
-                                    <span class="badge">{{ $category->title }}</span>
-                                    <h3>{{ $firstPost->title }}</h3>
-                                    <p>{{ Str::limit($firstPost->summary, 100) }}</p>
-                                </div>
+                                <a href="{{ route('post.detail', $firstPost->slug) }}" class="post-link">
+                                    <img src="{{ asset($firstPost->photo) }}" alt="{{ $firstPost->title }}" />
+                                    <div class="text-content">
+                                        <span class="badge">{{ $category->title }}</span>
+                                        <h3>{{ $firstPost->title }}</h3>
+                                        <p>{{ Str::limit($firstPost->summary, 100) }}</p>
+                                    </div>
+                                </a>
                             </div>
                         @endif
 
                         @foreach ($posts as $post)
                             <div class="article">
-                                <span class="badge">{{ $category->title }}</span>
-                                <h3>{{ $post->title }}</h3>
-                                <p>{{ Str::limit($post->summary, 100) }}</p>
+                                <a href="{{ route('post.detail', $post->slug) }}" class="post-link">
+                                    <span class="badge">{{ $category->title }}</span>
+                                    <h3>{{ $post->title }}</h3>
+                                    <p>{{ Str::limit($post->summary, 100) }}</p>
+                                </a>
                             </div>
                         @endforeach
                     </div>
@@ -123,7 +157,7 @@
 
         </div>
     </div>
-    <script src="{{ asset('asset/js/main.js') }}"></script>
+    {{-- <script src="{{ asset('asset/js/main.js') }}"></script> --}}
     <script>
         $(document).ready(function() {
             // Danh sách từ khóa hàng đầu (bạn có thể thay bằng dữ liệu lấy từ backend nếu cần)
@@ -479,6 +513,27 @@
         flex-direction: column;
         gap: 10px;
         justify-content: center;
+    }
+
+    .post-link {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+
+    .first-row .post-link {
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .article:hover,
+    .first-row:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
     }
 
     /* Responsive cho tablet */

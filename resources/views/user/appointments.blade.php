@@ -197,167 +197,6 @@
         </div>
     </div>
 
-    <!-- Modal Đặt lịch khám (unchanged) -->
-    {{-- <div class="modal fade" id="bookAppointmentModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Đặt lịch khám</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('user.book.appointment') }}" method="POST" id="appointmentForm">
-                        @csrf
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Chọn bác sĩ</label>
-                                <select name="doctor_id" class="form-select" required>
-                                    <option value="">-- Chọn bác sĩ --</option>
-                                    @foreach ($doctors as $doctor)
-                                        <option value="{{ $doctor->id }}">Bs. {{ $doctor->name }} -
-                                            {{ $doctor->specialization }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label">Hình thức khám</label>
-                                <select name="consultation_type" class="form-select" required>
-                                    <option value="Offline">Khám tại phòng khám</option>
-                                    <option value="Online">Tư vấn trực tuyến</option>
-                                    <option value="At Home">Khám tại nhà</option>
-                                </select>
-
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label">Ngày khám</label>
-                                <input type="date" name="date" class="form-control" required
-                                    min="{{ date('Y-m-d') }}">
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label">Giờ khám</label>
-                                <select name="time" class="form-select" required>
-                                    <option value="">-- Chọn giờ --</option>
-                                    @foreach (['08:00', '09:00', '10:00', '14:00', '15:00', '16:00'] as $time)
-                                        <option value="{{ $time }}">{{ $time }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="col-12">
-                                <label class="form-label">Lý do khám</label>
-                                <textarea name="notes" class="form-control" rows="3" placeholder="Mô tả triệu chứng, lý do khám..."></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="submit" form="appointmentForm" class="btn btn-primary">Đặt lịch</button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
-    <!-- Modal Đặt lịch khám -->
-    {{-- <div class="modal fade" id="bookAppointmentModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Đặt lịch khám</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form action="{{ route('user.book.appointment') }}" method="POST" id="appointmentForm">
-                        @csrf
-
-                        <div class="row g-3">
-                            <!-- Tìm kiếm bác sĩ -->
-                            <div class="col-md-12">
-                                <label class="form-label">Tìm kiếm bác sĩ</label>
-                                <input type="text" class="form-control" id="search-doctor"
-                                    placeholder="Nhập tên bác sĩ hoặc chuyên khoa...">
-                            </div>
-
-                            <!-- Danh sách bác sĩ -->
-                            <div class="col-md-12" id="doctor-list">
-                                <label class="form-label mt-3">Chọn bác sĩ</label>
-                                <select name="doctor_id" class="form-select" required>
-                                    <option value="">-- Chọn bác sĩ --</option>
-                                    @foreach ($doctors as $doctor)
-                                        <option value="{{ $doctor->id }}">
-                                            Bs. {{ $doctor->name }} - {{ $doctor->specialization }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Danh sách bác sĩ nổi bật -->
-                            <div class="col-md-12">
-                                <label class="form-label mt-3">Bác sĩ nổi bật</label>
-                                <div class="row">
-                                    @foreach ($doctors as $doctor)
-                                        <div class="col-md-4 mb-3 text-center">
-                                            <img src="{{ asset($doctor->photo ?? '/images/default-avatar.png') }}"
-                                                alt="{{ $doctor->name }}"
-                                                class="rounded-circle" width="80" height="80">
-                                            <h6 class="mt-2">{{ $doctor->name }}</h6>
-                                            <small class="text-muted">{{ $doctor->specialization }}</small>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-
-                            <!-- Hình thức khám -->
-                            <div class="col-md-6">
-                                <label class="form-label">Hình thức khám</label>
-                                <select name="consultation_type" class="form-select" required>
-                                    <option value="Offline">Khám tại phòng khám</option>
-                                    <option value="Online">Tư vấn trực tuyến</option>
-                                    <option value="At Home">Khám tại nhà</option>
-                                </select>
-                            </div>
-
-                            <!-- Ngày và Giờ khám -->
-                            <div class="col-md-6">
-                                <label class="form-label">Ngày khám</label>
-                                <input type="date" name="date" class="form-control" required
-                                    min="{{ date('Y-m-d') }}">
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label">Giờ khám</label>
-                                <select name="time" class="form-select" required>
-                                    <option value="">-- Chọn giờ --</option>
-                                    @foreach (['08:00', '09:00', '10:00', '14:00', '15:00', '16:00'] as $time)
-                                        <option value="{{ $time }}">{{ $time }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Lý do khám -->
-                            <div class="col-12">
-                                <label class="form-label">Lý do khám</label>
-                                <textarea name="notes" class="form-control" rows="3" placeholder="Mô tả triệu chứng, lý do khám..."></textarea>
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="submit" form="appointmentForm" class="btn btn-primary">Đặt lịch</button>
-                </div>
-
-            </div>
-        </div>
-    </div> --}}
-
     <!-- Modal Đặt lịch khám -->
     <div class="modal fade" id="bookAppointmentModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg">
@@ -401,7 +240,8 @@
                                     <div class="card-header bg-success text-white">Bác sĩ đã chọn</div>
                                     <div class="card-body d-flex align-items-center">
                                         <img id="selected-doctor-img" src="" alt="Bác sĩ đã chọn"
-                                            class="rounded-circle me-3" width="60" height="60">
+                                            class="rounded-circle object-fit-cover doctor-avatar me-3" width="60"
+                                            height="60">
                                         <div>
                                             <h6 id="selected-doctor-name" class="mb-1"></h6>
                                             <p id="selected-doctor-specialization" class="text-muted small mb-0"></p>
@@ -429,7 +269,8 @@
                                             <div class="card h-100 doctor-card" data-doctor-id="{{ $doctor->id }}">
                                                 <div class="card-body text-center">
                                                     <img src="{{ $doctor->photo }}"
-                                                        alt="{{ $doctor->name }}" class="rounded-circle mb-3"
+                                                        alt="{{ $doctor->name }}"
+                                                        class="rounded-circle object-fit-cover doctor-avatar mb-3"
                                                         width="80" height="80">
                                                     <h6 class="card-title">Bs. {{ $doctor->name }}</h6>
                                                     <p class="card-text text-muted small">{{ $doctor->specialization }}
@@ -450,7 +291,7 @@
                                                             data-doctor-id="{{ $doctor->id }}"
                                                             data-doctor-name="{{ $doctor->name }}"
                                                             data-doctor-specialization="{{ $doctor->specialization }}"
-                                                            data-doctor-photo="{{ asset($doctor->photo ?? '/images/default-avatar.png') }}">
+                                                            data-doctor-photo="{{ $doctor->photo }}">
                                                             <i class="bi bi-info-circle"></i> Xem thông tin
                                                         </button>
                                                         <button type="button"
@@ -458,7 +299,7 @@
                                                             data-doctor-id="{{ $doctor->id }}"
                                                             data-doctor-name="{{ $doctor->name }}"
                                                             data-doctor-specialization="{{ $doctor->specialization }}"
-                                                            data-doctor-photo="{{ asset($doctor->photo ?? '/images/default-avatar.png') }}">
+                                                            data-doctor-photo="{{ $doctor->photo }}">
                                                             <i class="bi bi-check-circle"></i> Chọn
                                                         </button>
                                                     </div>
@@ -525,7 +366,8 @@
                 <div class="modal-body">
                     <div class="mb-4 text-center">
 
-                        <img id="doctor-info-img" src="{{ $doctor->photo }}" alt="Bác sĩ" class="rounded-circle mb-3"
+                        <img id="doctor-info-img" src="{{ $doctor->photo }}" alt="Bác sĩ"
+                            class="rounded-circle object-fit-cover doctor-avatar mb-3"
                             width="100" height="100">
                         <h5 id="doctor-info-name" class="mb-1"></h5>
                         <p id="doctor-info-specialization" class="text-muted"></p>
@@ -590,7 +432,7 @@
                         id: {{ $doctor->id }},
                         name: "{{ $doctor->name }}",
                         specialization: "{{ $doctor->specialization }}",
-                        photo: "{{ asset($doctor->photo ?? '/images/default-avatar.png') }}"
+                        photo: "{{ $doctor->photo ?? '/images/default-avatar.png' }}"
                     },
                 @endforeach
             ];
@@ -746,6 +588,47 @@
         });
     </script>
 @endsection
+
+<style>
+    .doctor-avatar {
+        object-fit: cover;
+        border-radius: 50%;
+        aspect-ratio: 1/1;
+        object-position: center;
+        border: 2px solid #e0e0e0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .doctor-card:hover .doctor-avatar {
+        border-color: #0d6efd;
+        transform: scale(1.05);
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .avatar-container {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+
+    .doctor-avatar.avatar-lg {
+        width: 100px;
+        height: 100px;
+    }
+
+    .doctor-avatar.avatar-md {
+        width: 80px;
+        height: 80px;
+    }
+
+    .doctor-avatar.avatar-sm {
+        width: 60px;
+        height: 60px;
+    }
+</style>
+
 @push('scripts')
     <script>
         // Validation và xử lý form (unchanged)

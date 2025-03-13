@@ -44,13 +44,20 @@
                 {{ $posts->links() }}
             </div>
         @else
-            <p>Không có bài viết nào trong danh mục <strong>{{ $category->title }}</strong>.</p>
+            <div class="row">
+                <p>Không có bài viết nào trong danh mục <strong>{{ $category->title }}</strong>.</p>
+            </div>
         @endif
     </div>
 @endsection
 
 
 <style>
+    .row {
+        min-height: 400px;
+
+    }
+
     .row-eq-height {
         display: flex;
         flex-wrap: wrap;

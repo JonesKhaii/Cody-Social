@@ -518,3 +518,165 @@ footer > div > img {
     padding-right: 15px;
 }
 /*Fim Footer*/
+
+/* CSS Chính cho Header */
+.navbar.bg-primary {
+    background-color: #2377b3 !important;
+    padding: 0.5rem 0;
+    transition: all 0.3s ease;
+}
+
+/* Chỉnh sửa navbar toggler */
+.navbar-toggler {
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    padding: 0.25rem 0.5rem;
+    transition: all 0.3s;
+}
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.15rem rgba(255, 255, 255, 0.5);
+    outline: none;
+}
+
+/* Style cho các menu item */
+.nav-link {
+    position: relative;
+    padding: 0.8rem 0.5rem;
+    margin: 0 0.2rem;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.nav-link.active {
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+/* Hiệu ứng đường gạch dưới khi hover */
+.nav-link:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 5px;
+    left: 50%;
+    background-color: white;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover:after {
+    width: 70%;
+}
+
+/* Logo styling */
+.logo {
+    transition: transform 0.3s ease;
+}
+.logo:hover {
+    transform: scale(1.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Menu dropdown cho mobile */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background-color: #2377b3;
+        padding: 1rem;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s ease;
+    }
+
+    .navbar-collapse.show {
+        max-height: 100vh;
+    }
+
+    .navbar-nav .nav-item {
+        margin-bottom: 0.5rem;
+    }
+
+    .nav-link {
+        border-radius: 4px;
+        padding: 0.5rem 1rem;
+    }
+
+    .navbar-nav .nav-item:last-child {
+        margin-top: 0.5rem;
+    }
+}
+
+/* Style cho header sticky khi scroll */
+.navbar.sticky-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1030;
+    animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Filter và bộ lọc  */
+/* CSS cho tiêu đề và bộ lọc responsive */
+
+/* Styling cho tiêu đề */
+.medical-title {
+    color: #2377b3;
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+/* Cải thiện select dropdown */
+.filter-select {
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 300px;
+}
+
+.filter-select:focus {
+    border-color: #2377b3;
+    box-shadow: 0 0 0 0.25rem rgba(35, 119, 179, 0.25);
+}
+
+/* Media queries cho responsive */
+@media (max-width: 767.98px) {
+    .medical-title {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .filter-select {
+        max-width: 100%;
+    }
+}
+
+/* Media query cho màn hình rất nhỏ */
+@media (max-width: 575.98px) {
+    .medical-title {
+        font-size: 1.25rem;
+    }
+}

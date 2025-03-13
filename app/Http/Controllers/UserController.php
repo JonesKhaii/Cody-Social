@@ -42,7 +42,7 @@ class UserController extends Controller
             ->orderBy('date', 'asc')
             ->orderBy('time', 'asc')
             ->get();
-        $doctors = \App\Models\Doctor::all(['id', 'name', 'specialization']);
+        $doctors = \App\Models\Doctor::all(['id', 'name', 'specialization', 'photo']);
 
         return view('user.appointments', compact('appointments', 'doctors'));
     }
@@ -113,10 +113,10 @@ class UserController extends Controller
         $doctors = \App\Models\Doctor::where('name', 'LIKE', "%{$query}%")
             ->orWhere('specialization', 'LIKE', "%{$query}%")
             ->limit(10)
-            ->get(['id', 'name', 'specialization']);
-
+            ->get(['id', 'name', 'specialization', 'photo']);
         return response()->json($doctors);
     }
+
 
     public function update(Request $request, $id)
     {
