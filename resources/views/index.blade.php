@@ -93,8 +93,8 @@
                     <div class="category-header">
                         <span>{{ $category->title }}</span>
                         @if ($category && $category->slug)
-                            <a href="{{ route('category.show', ['slug' => $category->slug]) }}"><span>Xem tất cả
-                                    -></span></a>
+                            <a href="{{ route('category.show', ['slug' => $category->slug]) }}"><span>Xem tất cả<i
+                                        class="fas fa-arrow-right"></i></span></a>
                         @endif
                     </div>
 
