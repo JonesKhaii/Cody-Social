@@ -1,3 +1,15 @@
+@php
+    $isLoggedInAsDoctor = Auth::guard('doctor')->check();
+    $isLoggedInAsUser = Auth::guard('web')->check();
+
+    $role = $isLoggedInAsDoctor ? 'doctor' : ($isLoggedInAsUser ? 'user' : session('role'));
+    $notificationCount = 0;
+    if ($isLoggedInAsDoctor) {
+        $notificationCount = Auth::guard('doctor')->user()->unreadNotifications->count();
+    } elseif ($isLoggedInAsUser) {
+        $notificationCount = Auth::guard('web')->user()->unreadNotifications->count();
+    }
+@endphp
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -5,7 +17,7 @@
     @include('layouts.head')
 </head>
 
-<body>
+<body data-role="{{ $role }}">
     <!-- Header -->
     @include('layouts.header')
 
@@ -16,9 +28,8 @@
     @include('layouts.footer')
 
     <!-- Scripts -->
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-    {{-- <script src="{{ asset('js/main.js') }}"></script> --}}
     @yield('scripts')
+    <script src="{{ asset('js/notification.js') }}"></script>
 </body>
 
 </html>

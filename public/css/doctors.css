@@ -165,6 +165,10 @@ body {
     transform: rotate(90deg);
 }
 
+.notification-container {
+    margin-right: 10px;
+}
+
 /* Doctor profile section */
 .doctor-profile {
     padding: 25px 20px;

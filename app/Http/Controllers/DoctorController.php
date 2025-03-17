@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
+use App\Models\User;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,7 @@ use App\Models\Appointment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
-
+use App\Helpers\NotificationHelper;
 
 
 class DoctorController extends Controller
@@ -49,8 +50,8 @@ class DoctorController extends Controller
         // dd($products);
         $appointments = Appointment::where('doctor_id', $doctor_id)
             ->with(['user:id,name,email,phone']) // Lấy thông tin bệnh nhân
-            ->orderBy('date', 'asc')
-            ->orderBy('time', 'asc')
+            ->orderBy('date', 'desc')
+            ->orderBy('time', 'desc')
             ->get(['id', 'user_id', 'date', 'time', 'status', 'approval_status', 'notes', 'consultation_type']);
 
         $productss = Product::with(['cat_info', 'sub_cat_info', 'brand'])
@@ -127,9 +128,42 @@ class DoctorController extends Controller
             'approval_status' => 'Chấp nhận'
         ]);
 
-        return back()->with('success', 'Lịch hẹn đã được xác nhận.');
+        // Lấy thông tin người dùng (bệnh nhân)
+        $user = User::find($appointment->user_id);
+
+        if ($user) {
+            // Gửi thông báo đơn giản (chỉ cần hiển thị)
+            NotificationHelper::send(
+                $user,
+                'appointment',
+                'Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' lúc ' . $appointment->time . ' đã được chấp nhận'
+            );
+        }
+
+        return back()->with('success', 'Lịch hẹn đã được xác nhận và thông báo đã gửi đến bệnh nhân.');
     }
 
+    // public function rejectAppointment($id)
+    // {
+    //     $doctor = Auth::guard('doctor')->user();
+
+    //     if (!$doctor) {
+    //         return redirect()->route('login');
+    //     }
+
+    //     $appointment = Appointment::where('doctor_id', $doctor->id)->findOrFail($id);
+
+    //     if ($appointment->approval_status !== 'Chờ duyệt' || $appointment->status !== 'Chờ duyệt') {
+    //         return back()->with('error', 'Lịch hẹn đã được xử lý trước đó.');
+    //     }
+
+    //     $appointment->update([
+    //         'status' => 'Đã Huỷ',
+    //         'approval_status' => 'Từ chối',
+    //     ]);
+
+    //     return back()->with('success', 'Lịch hẹn đã bị từ chối.');
+    // }
     public function rejectAppointment($id)
     {
         $doctor = Auth::guard('doctor')->user();
@@ -149,9 +183,60 @@ class DoctorController extends Controller
             'approval_status' => 'Từ chối',
         ]);
 
-        return back()->with('success', 'Lịch hẹn đã bị từ chối.');
+        $user = User::find($appointment->user_id);
+
+        if ($user) {
+            NotificationHelper::send(
+                $user,
+                'appointment',
+                'Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' lúc ' . $appointment->time . ' đã bị **từ chối**.'
+            );
+        }
+
+        return back()->with('success', 'Lịch hẹn đã bị từ chối và thông báo đã gửi đến bệnh nhân.');
     }
 
+    // public function completeAppointment($id)
+    // {
+    //     $doctor = Auth::guard('doctor')->user();
+
+    //     if (!$doctor) {
+    //         return redirect()->route('login');
+    //     }
+
+    //     $appointment = Appointment::where('doctor_id', $doctor->id)->findOrFail($id);
+
+    //     if ($appointment->status !== 'Sắp tới' || $appointment->approval_status !== 'Chấp nhận') {
+    //         return back()->with('error', 'Lịch hẹn không thể hoàn thành.');
+    //     }
+
+    //     $appointment->update([
+    //         'status' => 'Hoàn thành',
+    //     ]);
+
+    //     return back()->with('success', 'Lịch hẹn đã hoàn thành thành công.');
+    // }
+
+    // public function cancelAppointment($id)
+    // {
+    //     $doctor = Auth::guard('doctor')->user();
+
+    //     if (!$doctor) {
+    //         return redirect()->route('login');
+    //     }
+
+    //     $appointment = Appointment::where('doctor_id', $doctor->id)->findOrFail($id);
+
+    //     if ($appointment->status === 'Hoàn thành') {
+    //         return back()->with('error', 'Không thể hủy lịch hẹn đã hoàn thành.');
+    //     }
+
+    //     $appointment->update([
+    //         'status' => 'Đã Huỷ',
+    //     ]);
+
+    //     return back()->with('success', 'Lịch hẹn đã bị hủy.');
+    // }
     public function completeAppointment($id)
     {
         $doctor = Auth::guard('doctor')->user();
@@ -170,7 +255,17 @@ class DoctorController extends Controller
             'status' => 'Hoàn thành',
         ]);
 
-        return back()->with('success', 'Lịch hẹn đã hoàn thành thành công.');
+        $user = User::find($appointment->user_id);
+
+        if ($user) {
+            NotificationHelper::send(
+                $user,
+                'appointment',
+                'Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' đã được **hoàn thành**.'
+            );
+        }
+
+        return back()->with('success', 'Lịch hẹn đã hoàn thành và thông báo đã gửi đến bệnh nhân.');
     }
 
     public function cancelAppointment($id)
@@ -191,9 +286,18 @@ class DoctorController extends Controller
             'status' => 'Đã Huỷ',
         ]);
 
-        return back()->with('success', 'Lịch hẹn đã bị hủy.');
-    }
+        $user = User::find($appointment->user_id);
 
+        if ($user) {
+            NotificationHelper::send(
+                $user,
+                'appointment',
+                'Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' đã bị **hủy**.'
+            );
+        }
+
+        return back()->with('success', 'Lịch hẹn đã bị hủy và thông báo đã gửi đến bệnh nhân.');
+    }
     public function showDetail($id)
     {
         $doctor = Doctor::select(['id', 'name', 'specialization', 'photo', 'email', 'phone', 'bio'])

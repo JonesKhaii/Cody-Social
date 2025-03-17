@@ -1,65 +1,275 @@
-// JavaScript để xử lý navbar và sticky header
+// document.addEventListener('DOMContentLoaded', function () {
+//     const navbar = document.getElementById('mainHeader');
+//     const navbarToggler = document.getElementById('navbarToggleBtn');
+//     const navbarCollapse = document.getElementById('navbarMobile');
+//     let bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+//         toggle: false
+//     });
+
+//     // Xử lý menu toggle
+//     navbarToggler.addEventListener('click', function () {
+//         console.log('NavbarToggler clicked');
+//         bsCollapse.toggle();
+//         // Cập nhật trạng thái aria-expanded
+//         const isExpanded = navbarToggler.getAttribute('aria-expanded') === 'true';
+//         navbarToggler.setAttribute('aria-expanded', (!isExpanded).toString());
+//     });
+
+//     // Đóng menu khi click vào nav-link (mobile)
+//     const navLinks = document.querySelectorAll('.nav-link');
+//     navLinks.forEach(link => {
+//         link.addEventListener('click', function () {
+//             if (window.innerWidth < 992 && navbarCollapse.classList.contains('show')) {
+//                 bsCollapse.hide();
+//                 navbarToggler.setAttribute('aria-expanded', 'false');
+//             }
+//         });
+//     });
+
+//     // Đóng menu khi click ra ngoài
+//     document.addEventListener('click', function (event) {
+//         const isClickInside = navbar.contains(event.target);
+//         if (!isClickInside && navbarCollapse.classList.contains('show')) {
+//             bsCollapse.hide();
+//             navbarToggler.setAttribute('aria-expanded', 'false');
+//         }
+//     });
+
+//     // Xử lý thông báo dropdown trên mobile
+//     const notificationTrigger = document.querySelector('.notification-trigger');
+//     const notificationDropdown = document.querySelector('.notification-dropdown');
+
+//     if (notificationTrigger && notificationDropdown) {
+//         // Tạo Bootstrap Dropdown instance cho notifications
+//         const notificationDropdownInstance = new bootstrap.Dropdown(notificationTrigger);
+
+//         // Ngăn chặn dropdown đóng khi click vào nội dung
+//         notificationDropdown.addEventListener('click', function (event) {
+//             if (event.target.closest('.dropdown-item') === null &&
+//                 event.target.closest('.mark-all-read-btn') !== null) {
+//                 event.stopPropagation();
+//             }
+//         });
+
+//         // Xử lý khi click vào nút đánh dấu tất cả đã đọc
+//         const markAllReadBtn = document.querySelector('.mark-all-read-btn');
+//         if (markAllReadBtn) {
+//             markAllReadBtn.addEventListener('click', function (event) {
+//                 event.stopPropagation();
+//                 // Thêm code xử lý đánh dấu đọc tại đây
+//                 console.log('Mark all as read');
+//             });
+//         }
+//     }
+
+//     // Sticky navbar khi scroll
+//     let lastScrollTop = 0;
+//     window.addEventListener('scroll', function () {
+//         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+//         if (scrollTop > 70) {
+//             navbar.classList.add('sticky-top');
+//         } else {
+//             navbar.classList.remove('sticky-top');
+//         }
+
+//         // Ẩn navbar khi scroll xuống và hiện khi scroll lên trên mobile
+//         if (window.innerWidth < 768) {
+//             if (scrollTop > lastScrollTop && scrollTop > 200) {
+//                 // Scroll xuống
+//                 navbar.style.transform = 'translateY(-100%)';
+//             } else {
+//                 // Scroll lên
+//                 navbar.style.transform = 'translateY(0)';
+//             }
+//         } else {
+//             navbar.style.transform = 'translateY(0)';
+//         }
+
+//         lastScrollTop = scrollTop;
+//     });
+
+//     // Xử lý resize từ mobile sang desktop
+//     window.addEventListener('resize', function () {
+//         if (window.innerWidth >= 992 && navbarCollapse.classList.contains('show')) {
+//             bsCollapse.hide();
+//             navbarToggler.setAttribute('aria-expanded', 'false');
+//         }
+
+//         // Đảm bảo thông báo dropdown đúng vị trí khi resize
+//         if (window.innerWidth >= 768) {
+//             navbar.style.transform = 'translateY(0)';
+//         }
+//     });
+
+//     // Load thông báo (ví dụ)
+//     function loadNotifications() {
+//         const notificationList = document.getElementById('notification-list');
+//         if (notificationList) {
+//             // Thay thế bằng AJAX call để lấy thông báo
+//             setTimeout(() => {
+//                 notificationList.innerHTML = `
+//                     <a href="#" class="dropdown-item d-flex align-items-center py-2 px-3 border-bottom">
+//                         <div class="me-3">
+//                             <i class="fas fa-calendar-check text-primary"></i>
+//                         </div>
+//                         <div>
+//                             <div class="small text-muted">5 phút trước</div>
+//                             <p class="mb-0">Bạn có cuộc hẹn mới với Dr. Nguyen</p>
+//                         </div>
+//                     </a>
+//                     <a href="#" class="dropdown-item d-flex align-items-center py-2 px-3 border-bottom">
+//                         <div class="me-3">
+//                             <i class="fas fa-comment-medical text-success"></i>
+//                         </div>
+//                         <div>
+//                             <div class="small text-muted">Hôm qua</div>
+//                             <p class="mb-0">Bác sĩ đã trả lời câu hỏi của bạn</p>
+//                         </div>
+//                     </a>
+//                 `;
+//             }, 1000);
+//         }
+//     }
+
+//     // Gọi loadNotifications khi dropdown mở
+//     if (notificationTrigger) {
+//         notificationTrigger.addEventListener('shown.bs.dropdown', loadNotifications);
+//     }
+// });
+
+
 document.addEventListener('DOMContentLoaded', function () {
-    // Tham chiếu đến các phần tử
-    const navbar = document.querySelector('.navbar');
-    const navbarToggler = document.querySelector('.navbar-toggler');
-    const navbarCollapse = document.querySelector('.navbar-collapse');
-    let lastScrollTop = 0;
+    const navbar = document.getElementById('mainHeader');
+    const navbarToggler = document.getElementById('navbarToggleBtn');
+    const navbarCollapse = document.getElementById('navbarMobile');
+    const notificationTrigger = document.querySelector('.notification-trigger');
+    const notificationDropdown = document.querySelector('.notification-dropdown');
 
-    // Xử lý đóng menu khi click ra ngoài
+    let bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+        toggle: false
+    });
+
+    // Xử lý menu toggle
+    if (navbarToggler) {
+        navbarToggler.addEventListener('click', function () {
+            bsCollapse.toggle();
+            const isExpanded = navbarToggler.getAttribute('aria-expanded') === 'true';
+            navbarToggler.setAttribute('aria-expanded', (!isExpanded).toString());
+        });
+    }
+
+    // Đóng menu khi click vào nav-link (mobile)
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function () {
+            if (window.innerWidth < 992 && navbarCollapse.classList.contains('show')) {
+                bsCollapse.hide();
+                navbarToggler.setAttribute('aria-expanded', 'false');
+            }
+        });
+    });
+
+    // Đóng menu khi click ra ngoài
     document.addEventListener('click', function (event) {
-        const isNavbarCollapsed = window.getComputedStyle(navbarToggler).display !== 'none';
-        if (isNavbarCollapsed &&
-            !navbarToggler.contains(event.target) &&
-            !navbarCollapse.contains(event.target) &&
-            navbarCollapse.classList.contains('show')) {
-
-            // Sử dụng Bootstrap API để đóng menu
-            const bsCollapse = new bootstrap.Collapse(navbarCollapse);
+        if (!navbar.contains(event.target) && navbarCollapse.classList.contains('show')) {
             bsCollapse.hide();
+            navbarToggler.setAttribute('aria-expanded', 'false');
         }
     });
 
-    // Đánh dấu active menu item dựa trên URL hiện tại
-    const currentPath = window.location.pathname;
-    document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
-            link.classList.add('active');
-        }
-    });
+    // Xử lý thông báo dropdown
+    if (notificationTrigger && notificationDropdown) {
+        const notificationDropdownInstance = new bootstrap.Dropdown(notificationTrigger);
 
-    // Xử lý sticky header khi scroll
+        notificationTrigger.addEventListener('click', function (e) {
+            e.preventDefault();
+            notificationDropdownInstance.toggle();
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!notificationDropdown.contains(e.target) && !notificationTrigger.contains(e.target)) {
+                notificationDropdownInstance.hide();
+            }
+        });
+
+        // Ngăn dropdown đóng khi click vào các thành phần bên trong
+        notificationDropdown.addEventListener('click', function (event) {
+            if (event.target.closest('.dropdown-item') === null &&
+                event.target.closest('.mark-all-read-btn') !== null) {
+                event.stopPropagation();
+            }
+        });
+
+        const markAllReadBtn = document.querySelector('.mark-all-read-btn');
+        if (markAllReadBtn) {
+            markAllReadBtn.addEventListener('click', function (event) {
+                event.stopPropagation();
+                console.log('Mark all as read');
+            });
+        }
+    }
+
+    // Sticky navbar khi scroll
+    let lastScrollTop = 0;
     window.addEventListener('scroll', function () {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-        // Nếu scroll xuống quá 100px, thêm sticky-top
-        if (scrollTop > 100) {
+        if (scrollTop > 70) {
             navbar.classList.add('sticky-top');
-            navbar.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.1)';
         } else {
             navbar.classList.remove('sticky-top');
-            navbar.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.1)';
+        }
+
+        if (window.innerWidth < 768) {
+            if (scrollTop > lastScrollTop && scrollTop > 200) {
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                navbar.style.transform = 'translateY(0)';
+            }
+        } else {
+            navbar.style.transform = 'translateY(0)';
         }
 
         lastScrollTop = scrollTop;
     });
 
-    // Đóng menu khi click vào nav-link trên mobile
-    const navLinks = document.querySelectorAll('.nav-link');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function () {
-            if (window.innerWidth < 992 && navbarCollapse.classList.contains('show')) {
-                const bsCollapse = new bootstrap.Collapse(navbarCollapse);
-                bsCollapse.hide();
-            }
-        });
-    });
-
-    // Điều chỉnh navbar khi resize màn hình
+    // Xử lý resize từ mobile sang desktop
     window.addEventListener('resize', function () {
         if (window.innerWidth >= 992 && navbarCollapse.classList.contains('show')) {
-            const bsCollapse = new bootstrap.Collapse(navbarCollapse);
             bsCollapse.hide();
+            navbarToggler.setAttribute('aria-expanded', 'false');
         }
     });
+
+    // Load thông báo (ví dụ)
+    function loadNotifications() {
+        const notificationList = document.getElementById('notification-list');
+        if (notificationList) {
+            setTimeout(() => {
+                notificationList.innerHTML = `
+                    <a href="#" class="dropdown-item d-flex align-items-center py-2 px-3 border-bottom">
+                        <div class="me-3">
+                            <i class="fas fa-calendar-check text-primary"></i>
+                        </div>
+                        <div>
+                            <div class="small text-muted">5 phút trước</div>
+                            <p class="mb-0">Bạn có cuộc hẹn mới với Dr. Nguyen</p>
+                        </div>
+                    </a>
+                    <a href="#" class="dropdown-item d-flex align-items-center py-2 px-3 border-bottom">
+                        <div class="me-3">
+                            <i class="fas fa-comment-medical text-success"></i>
+                        </div>
+                        <div>
+                            <div class="small text-muted">Hôm qua</div>
+                            <p class="mb-0">Bác sĩ đã trả lời câu hỏi của bạn</p>
+                        </div>
+                    </a>`;
+            }, 1000);
+        }
+    }
+
+    if (notificationTrigger) {
+        notificationTrigger.addEventListener('shown.bs.dropdown', loadNotifications);
+    }
 });

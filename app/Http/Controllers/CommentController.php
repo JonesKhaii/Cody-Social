@@ -3,39 +3,42 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\NotificationHelper;
 
 class CommentController extends Controller
 {
     public function store(Request $request)
     {
-        $user = Auth::guard('web')->user(); // Lấy user từ guard 'web'
-        $doctor = Auth::guard('doctor')->user(); // Lấy doctor từ guard 'doctor'
+        $user = Auth::guard('web')->user() ?? Auth::guard('doctor')->user();
 
-        // Nếu cả User và Doctor đều không đăng nhập, không cho bình luận
-        if (!$user && !$doctor) {
+        if (!$user) {
             return back()->with('error', 'Bạn cần đăng nhập để bình luận.');
         }
 
-        // Xác định vai trò của người bình luận
-        $commentData = [
+        $comment = Comment::create([
             'post_id' => $request->post_id,
             'comment' => $request->comment,
             'status' => 'active',
             'parent_id' => $request->parent_id,
             'replied_comment' => $request->parent_id ? $request->replied_comment : null,
-        ];
+            'user_id' => get_class($user) === 'App\\Models\\User' ? $user->id : null,
+            'doctor_id' => get_class($user) === 'App\\Models\\Doctor' ? $user->id : null,
+        ]);
 
-        // Nếu là User → lưu user_id, nếu là Doctor → lưu doctor_id
-        if ($user) {
-            $commentData['user_id'] = $user->id;
-        } elseif ($doctor) {
-            $commentData['doctor_id'] = $doctor->id;
+        // Gửi thông báo cho tác giả bài viết
+        $post = Post::findOrFail($request->post_id);
+        $postAuthor = $post->author_info;
+        if ($postAuthor && $postAuthor->id !== $user->id) {
+            NotificationHelper::send(
+                $postAuthor,
+                'comment',
+                $user->name . ' đã bình luận về bài viết của bạn: "' . $post->title . '".',
+                route('post.detail', ['slug' => $post->slug])
+            );
         }
-
-        Comment::create($commentData);
 
         return back()->with('success', 'Bình luận của bạn đã được thêm.');
     }

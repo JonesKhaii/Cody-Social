@@ -1,113 +1,112 @@
 @php
-    // Kiểm tra đăng nhập thực tế, không chỉ dựa vào session
     $isLoggedInAsDoctor = Auth::guard('doctor')->check();
     $isLoggedInAsUser = Auth::guard('web')->check();
 
-    // Xác định role dựa trên trạng thái đăng nhập thực tế
-    $role = null;
+    $role = $isLoggedInAsDoctor ? 'doctor' : ($isLoggedInAsUser ? 'user' : session('role'));
+    $notificationCount = 0;
     if ($isLoggedInAsDoctor) {
-        $role = 'doctor';
+        $notificationCount = Auth::guard('doctor')->user()->unreadNotifications->count();
     } elseif ($isLoggedInAsUser) {
-        $role = 'user';
-    } else {
-        $role = session('role');
+        $notificationCount = Auth::guard('web')->user()->unreadNotifications->count();
     }
 @endphp
 
-<header class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+<header class="navbar navbar-expand-lg navbar-dark shadow-sm" id="mainHeader">
     <div class="container">
         <!-- Logo và thương hiệu -->
-        <div class="logo-container d-flex align-items-center">
-            <a href="{{ route('home') }}" class="d-flex align-items-center text-decoration-none">
-                <img src="{{ asset('asset/images/logo.png') }}" alt="CodyHealth Logo" class="logo me-2"
-                    style="height: 40px; width: 40px; border-radius: 50%;" />
-                <span class="navbar-brand fs-3 fw-bold mb-0 text-white">CodyHealth</span>
-            </a>
-        </div>
+        <a href="{{ route('home') }}" class="d-flex align-items-center text-decoration-none">
+            <img src="{{ asset('asset/images/logo.png') }}" alt="CodyHealth Logo" class="logo me-2"
+                style="height: 36px; width: 36px; border-radius: 50%;" />
+            <span class="navbar-brand fs-4 fw-bold mb-0 text-white">CODYHEALTH</span>
+        </a>
 
-        <!-- Nút Toggle cho Mobile -->
-        <button class="navbar-toggler border-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <!-- Nút toggle cho mobile -->
+        <button class="navbar-toggler border-0" type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarMobile"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+            aria-controls="navbarMobile">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Menu chính -->
-        <div class="navbar-collapse collapse" id="navbarNav">
-            <ul class="navbar-nav align-items-center ms-auto">
+        <!-- Navbar cho Desktop và Mobile -->
+        <div class="navbar-collapse collapse" id="navbarMobile">
+            <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'home' ? 'active fw-bold' : '' }} px-3 text-white"
-                        href="{{ route('home') }}">
-                        <i class="fas fa-home me-1"></i> Trang Chủ
-                    </a>
+                    <a class="nav-link {{ Route::currentRouteName() == 'home' ? 'active' : '' }} px-3 text-white"
+                        href="{{ route('home') }}">Trang chủ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'about' ? 'active fw-bold' : '' }} px-3 text-white"
-                        href="{{ route('about') }}">
-                        <i class="fas fa-info-circle me-1"></i> Về chúng tôi
-                    </a>
+                    <a class="nav-link {{ Route::currentRouteName() == 'about' ? 'active' : '' }} px-3 text-white"
+                        href="{{ route('about') }}">Về chúng tôi</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'doctors.list' ? 'active fw-bold' : '' }} px-3 text-white"
-                        href="{{ route('doctors.list') }}">
-                        <i class="fas fa-user-md me-1"></i> Bác Sĩ
-                    </a>
+                    <a class="nav-link {{ Route::currentRouteName() == 'doctors.list' ? 'active' : '' }} px-3 text-white"
+                        href="{{ route('doctors.list') }}">Bác sĩ</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link px-3 text-white" href="#">
-                        <i class="fas fa-question-circle me-1"></i> Hỏi Đáp
-                    </a>
-                </li>
-
-                <!-- Ẩn mục Lịch Khám nếu là bác sĩ -->
-                @if ($role !== 'doctor')
-                    <li class="nav-item">
-                        @if ($role === 'user')
-                            <a class="nav-link {{ Route::currentRouteName() == 'user.appointments' ? 'active fw-bold' : '' }} px-3 text-white"
-                                href="{{ route('user.appointments') }}">
-                                <i class="fas fa-calendar-check me-1"></i> Lịch Khám
-                            </a>
-                        @else
-                            <a class="nav-link px-3 text-white" href="{{ route('login') }}">
-                                <i class="fas fa-calendar-check me-1"></i> Lịch Khám
-                            </a>
-                        @endif
-                    </li>
-                @endif
 
                 @if ($role === 'doctor')
                     <li class="nav-item">
-                        <a class="nav-link {{ Route::currentRouteName() == 'doctor.profile' ? 'active fw-bold' : '' }} px-3 text-white"
-                            href="{{ route('doctor.profile') }}">
-                            <i class="fas fa-stethoscope me-1"></i> Trang Tổng Quan
-                        </a>
-                    </li>
-                @elseif ($role === 'user')
-                    <li class="nav-item">
-                        <a class="nav-link {{ Route::currentRouteName() == 'user.profile' ? 'active fw-bold' : '' }} px-3 text-white"
-                            href="{{ route('user.profile') }}">
-                            <i class="fas fa-user-circle me-1"></i> Hồ Sơ
-                        </a>
-                    </li>
-                @else
-                    <li class="nav-item">
-                        <a class="nav-link {{ Route::currentRouteName() == 'login' ? 'active fw-bold' : '' }} px-3 text-white"
-                            href="{{ route('login') }}">
-                            <i class="fas fa-sign-in-alt me-1"></i> Đăng Nhập
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ Route::currentRouteName() == 'register' ? 'active fw-bold' : '' }} px-3 text-white"
-                            href="{{ route('register') }}">
-                            <i class="fas fa-user-plus me-1"></i> Đăng Ký
-                        </a>
+                        <a class="nav-link {{ Route::currentRouteName() == 'doctor.profile' ? 'active' : '' }} px-3 text-white"
+                            href="{{ route('doctor.profile') }}">Trang tổng quan</a>
                     </li>
                 @endif
 
-                {{-- Đăng xuất --}}
-                @if (Auth::guard('doctor')->check() || Auth::guard('web')->check())
-                    <li class="nav-item ms-2">
-                        <a class="nav-link btn btn-outline-light rounded-pill px-3" href="{{ route('logout') }}">
-                            <i class="fas fa-sign-out-alt me-1"></i> Đăng Xuất
+                @if ($role === 'user')
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'user.appointments' ? 'active' : '' }} px-3 text-white"
+                            href="{{ route('user.appointments') }}">Lịch khám</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'user.profile' ? 'active' : '' }} px-3 text-white"
+                            href="{{ route('user.profile') }}">Hồ sơ</a>
+                    </li>
+                @endif
+
+                <!-- Thông báo -->
+                @if ($role === 'doctor' || $role === 'user')
+                    <li class="nav-item dropdown notification-wrapper">
+                        <a class="nav-link position-relative dropdown-toggle notification-trigger px-3 text-white"
+                            href="#" id="notificationDropdown" role="button" aria-expanded="false">
+                            <i class="fas fa-bell"></i>
+                            @if ($notificationCount > 0)
+                                <span
+                                    class="position-absolute start-100 translate-middle badge rounded-pill bg-danger notification-badge top-0">
+                                    {{ $notificationCount > 99 ? '99+' : $notificationCount }}
+                                </span>
+                            @endif
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end notification-dropdown shadow"
+                            aria-labelledby="notificationDropdown">
+                            <div class="dropdown-header d-flex justify-content-between align-items-center">
+                                <span>Thông báo mới</span>
+                                @if ($notificationCount > 0)
+                                    <button type="button" class="btn btn-sm text-primary mark-all-read-btn"
+                                        style="font-size: 0.8rem;">Đánh dấu đã đọc</button>
+                                @endif
+                            </div>
+                            <div id="notification-list" class="notification-content-list scrollable-menu">
+                                <div class="p-2 text-center"><small>Đang tải thông báo...</small></div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item view-all-notifications text-center" href="#">Xem tất cả</a>
+                        </div>
+                    </li>
+                @endif
+
+                <!-- Đăng xuất/Đăng nhập -->
+                @if ($isLoggedInAsDoctor || $isLoggedInAsUser)
+                    <li class="nav-item ms-lg-2">
+                        <a class="nav-link logout-btn text-white" href="{{ route('logout') }}">
+                            <i class="fas fa-sign-out-alt d-none d-lg-inline-block me-1"></i>Đăng xuất
+                        </a>
+                    </li>
+                @else
+                    <li class="nav-item ms-lg-2">
+                        <a class="nav-link login-btn text-white" href="{{ route('login') }}">
+                            <i class="fas fa-sign-in-alt d-none d-lg-inline-block me-1"></i>Đăng nhập
                         </a>
                     </li>
                 @endif
@@ -115,8 +114,3 @@
         </div>
     </div>
 </header>
-
-
-@section('scripts')
-    <script src="{{ asset('js/header.js') }}"></script>
-@endsection

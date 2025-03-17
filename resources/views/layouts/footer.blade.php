@@ -25,6 +25,6 @@
         <p>© 2025 Cody Health. Tất cả quyền được bảo lưu.</p>
     </div>
 
-    <script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
+    {{-- <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script> --}}
 </footer>

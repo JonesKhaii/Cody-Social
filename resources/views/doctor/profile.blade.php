@@ -4,15 +4,33 @@
 
 @section('main-content')
 
+    <!-- Font và Icon -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+
+    <!-- jQuery -->
     <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Bootstrap (JS và CSS) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- CanvasJS-->
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/doctors.css') }}">
+
 
     @if (session('success'))
         <div id="success-alert" class="alert alert-success">
@@ -76,14 +94,36 @@
 
         <!-- Main Content -->
         <div class="main-panel">
-            <div class="page-header">
-                <h1 class="page-title">Tổng Quan</h1>
-                <ul class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="#" class="breadcrumb-link">Trang chủ</a>
-                    </li>
-                    <li class="breadcrumb-item active">Tổng Quan</li>
-                </ul>
+            <div class="page-header d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="page-title">Tổng Quan</h1>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('home') }}" class="breadcrumb-link">Trang chủ</a>
+                        </li>
+                        <li class="breadcrumb-item active">Tổng Quan</li>
+                    </ul>
+                </div>
+
+                <div class="notification-container">
+                    @php
+                        $unreadNotificationsCount = 0;
+                        $user = null;
+
+                        if (Auth::guard('doctor')->check()) {
+                            $user = Auth::guard('doctor')->user();
+                        } elseif (Auth::guard('web')->check()) {
+                            $user = Auth::guard('web')->user();
+                        }
+
+                        if ($user) {
+                            $unreadNotificationsCount = $user->unreadNotifications->count();
+                        }
+                    @endphp
+
+                </div>
+
+
             </div>
 
             <div class="content">
@@ -197,7 +237,7 @@
                                 </div>
                             </div>
 
-                            <div class="card-body">
+                            {{-- <div class="card-body">
                                 @if ($appointments->count() > 0)
                                     <div class="table-responsive">
                                         <table class="table-hover table">
@@ -207,6 +247,7 @@
                                                     <th>Thời gian</th>
                                                     <th>Hình thức khám</th>
                                                     <th>Trạng thái</th>
+                                                    <th>Chi tiết</th> <!-- Cột mới cho nút Chi tiết -->
                                                     <th>Thao tác</th>
                                                 </tr>
                                             </thead>
@@ -266,21 +307,27 @@
                                                                         class="badge text-bg-danger">{{ $appointment->status }}</span>
                                                                 @break
                                                             @endswitch
+                                                        </td>                                          
+                                                        <td>
+                                                            <button type="button"
+                                                                class="btn btn-info btn-sm view-appointment"
+                                                                data-id="{{ $appointment->id }}"
+                                                                data-patient-name="{{ $appointment->user->name }}"
+                                                                data-patient-email="{{ $appointment->user->email }}"
+                                                                data-patient-phone="{{ $appointment->user->phone }}"
+                                                                data-date="{{ \Carbon\Carbon::parse($appointment->date)->format('d/m/Y') }}"
+                                                                data-time="{{ \Carbon\Carbon::parse($appointment->time)->format('H:i') }}"
+                                                                data-type="{{ $appointment->consultation_type }}"
+                                                                data-status="{{ $appointment->status }}"
+                                                                data-approval="{{ $appointment->approval_status }}"
+                                                                data-notes="{{ $appointment->notes ?? 'Không có ghi chú' }}"
+                                                                data-result="{{ $appointment->result ?? '' }}">
+                                                                Xem
+                                                            </button>
                                                         </td>
 
                                                         <td>
                                                             @if ($appointment->approval_status === 'Chờ duyệt')
-                                                                {{-- <form method="POST"
-                                                                    action="{{ route('doctor.appointments.approve', ['id' => $appointment->id]) }}"
-                                                                    class="d-inline">
-                                                                    @csrf
-                                                                    @method('PUT')
-                                                                    <button type="submit"
-                                                                        class="btn btn-sm btn-success me-1"
-                                                                        title="Xác nhận">
-                                                                        <i class="fas fa-check"></i>
-                                                                    </button>
-                                                                </form> --}}
                                                                 <form method="POST"
                                                                     action="{{ route('doctor.appointments.approve', ['id' => $appointment->id]) }}"
                                                                     class="d-inline">
@@ -311,6 +358,124 @@
                                                                     @method('PUT')
                                                                     <button type="submit"
                                                                         class="btn btn-primary btn-sm">Hoàn thành</button>
+                                                                </form>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                @else
+                                    <div class="py-5 text-center">
+                                        <p class="text-muted mb-0">Chưa có lịch hẹn nào được đặt</p>
+                                    </div>
+                                @endif
+                            </div> --}}
+                            <div class="card-body">
+                                @if ($appointments->count() > 0)
+                                    <div class="table-responsive">
+                                        <table class="table-hover table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Bệnh nhân</th>
+                                                    <th>Thời gian</th>
+                                                    <th>Hình thức khám</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Chi tiết</th>
+                                                    <th>Thao tác</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($appointments as $appointment)
+                                                    <tr>
+                                                        <td>
+                                                            <div>{{ $appointment->user->name }}</div>
+                                                            <span
+                                                                class="text-muted d-block">{{ $appointment->user->email }}</span>
+                                                            <span
+                                                                class="text-muted d-block">{{ $appointment->user->phone }}</span>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                {{ \Carbon\Carbon::parse($appointment->date)->format('d/m/Y') }}
+                                                            </div>
+                                                            <small
+                                                                class="text-muted">{{ \Carbon\Carbon::parse($appointment->time)->format('H:i') }}</small>
+                                                        </td>
+                                                        <td>
+                                                            @switch($appointment->consultation_type)
+                                                                @case('Online')
+                                                                    <span class="badge text-bg-info">Trực tuyến</span>
+                                                                @break
+
+                                                                @case('Offline')
+                                                                    <span class="badge text-bg-primary">Tại phòng khám</span>
+                                                                @break
+
+                                                                @case('At Home')
+                                                                    <span class="badge text-bg-success">Tại nhà</span>
+                                                                @break
+                                                            @endswitch
+                                                        </td>
+                                                        <td>
+                                                            @switch($appointment->status)
+                                                                @case('Chờ duyệt')
+                                                                    <span
+                                                                        class="badge text-bg-warning">{{ $appointment->status }}</span>
+                                                                @break
+
+                                                                @case('Sắp tới')
+                                                                    <span
+                                                                        class="badge text-bg-info">{{ $appointment->status }}</span>
+                                                                @break
+
+                                                                @case('Hoàn thành')
+                                                                    <span
+                                                                        class="badge text-bg-success">{{ $appointment->status }}</span>
+                                                                @break
+
+                                                                @case('Đã Huỷ')
+                                                                    <span
+                                                                        class="badge text-bg-danger">{{ $appointment->status }}</span>
+                                                                @break
+                                                            @endswitch
+                                                        </td>
+                                                        <td>
+                                                            <button type="button"
+                                                                class="btn btn-info btn-sm view-appointment"
+                                                                data-id="{{ $appointment->id }}"
+                                                                data-patient-name="{{ $appointment->user->name }}"
+                                                                data-patient-email="{{ $appointment->user->email }}"
+                                                                data-patient-phone="{{ $appointment->user->phone }}"
+                                                                data-date="{{ \Carbon\Carbon::parse($appointment->date)->format('d/m/Y') }}"
+                                                                data-time="{{ \Carbon\Carbon::parse($appointment->time)->format('H:i') }}"
+                                                                data-type="{{ $appointment->consultation_type }}"
+                                                                data-status="{{ $appointment->status }}"
+                                                                data-approval="{{ $appointment->approval_status }}"
+                                                                data-notes="{{ $appointment->notes ?? 'Không có ghi chú' }}"
+                                                                data-result="{{ $appointment->result ?? '' }}">
+                                                                Xem
+                                                            </button>
+                                                        </td>
+                                                        <td>
+                                                            @if ($appointment->status === 'Sắp tới' && $appointment->approval_status === 'Chấp nhận')
+                                                                <form method="POST"
+                                                                    action="{{ route('doctor.appointments.complete', ['id' => $appointment->id]) }}"
+                                                                    class="d-inline">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary btn-sm">Hoàn thành</button>
+                                                                </form>
+
+                                                                <form method="POST"
+                                                                    action="{{ route('doctor.appointments.cancel', ['id' => $appointment->id]) }}"
+                                                                    class="d-inline">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <button type="button"
+                                                                        class="btn btn-danger btn-sm cancel-appointment-btn">Hủy</button>
                                                                 </form>
                                                             @endif
                                                         </td>
@@ -356,7 +521,7 @@
                                     </div>
                                 @else
                                     <div class="post-list">
-                                        @foreach ($posts as $post)
+                                        @foreach ($posts->sortByDesc('created_at') as $post)
                                             <div class="post-card">
 
                                                 <a href="{{ route('post.detail', ['slug' => $post->slug]) }}">
@@ -406,12 +571,7 @@
                                     </div>
                                 @endif
 
-                                {{-- <div class="create-post-container">
-                                    <a href="" class="btn btn-primary">
-                                        <i class="fas fa-plus"></i>
-                                        Tạo bài viết mới
-                                    </a>
-                                </div> --}}
+
                             </div>
                         </div>
                     </div>
@@ -673,6 +833,7 @@
 
     @include('doctor.add')
     @include('doctor.edit')
+    @include('doctor.appointment-details')
 
     {{-- @if (session('success'))
         <div id="success-alert" class="alert alert-success">

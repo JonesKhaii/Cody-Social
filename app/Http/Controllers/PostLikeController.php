@@ -6,47 +6,55 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\PostLike;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\NotificationHelper;
 
 class PostLikeController extends Controller
 {
     // public function toggleLike(Request $request)
     // {
     //     $post = Post::findOrFail($request->post_id);
-    //     $user = Auth::guard('web')->user();
-    //     $doctor = Auth::guard('doctor')->user();
+    //     $user = Auth::guard('web')->user() ?? Auth::guard('doctor')->user(); // Kiểm tra user hoặc doctor
 
-    //     if (!$user && !$doctor) {
+    //     if (!$user) {
     //         return response()->json(['error' => 'Bạn cần đăng nhập để like.'], 401);
     //     }
 
-    //     $likeData = [
-    //         'post_id' => $post->id,
-    //         'user_id' => $user ? $user->id : null,
-    //         'doctor_id' => $doctor ? $doctor->id : null,
-    //     ];
-
-    //     $existingLike = PostLike::where($likeData)->first();
+    //     // Kiểm tra xem user hoặc doctor đã like chưa
+    //     $existingLike = PostLike::where('post_id', $post->id)
+    //         ->where(function ($query) use ($user) {
+    //             $query->where('user_id', $user->id)
+    //                 ->orWhere('doctor_id', $user->id);
+    //         })->first();
 
     //     if ($existingLike) {
-    //         // Nếu đã like, thì unlike
-    //         $existingLike->delete();
-    //         return response()->json(['liked' => false, 'message' => 'Bạn đã bỏ like bài viết này.']);
+    //         $existingLike->delete(); // Nếu đã like thì bỏ like
+    //         $liked = false;
     //     } else {
-    //         // Nếu chưa like, thì thêm like
-    //         PostLike::create($likeData);
-    //         return response()->json(['liked' => true, 'message' => 'Bạn đã like bài viết này.']);
+    //         PostLike::create([
+    //             'post_id' => $post->id,
+    //             'user_id' => get_class($user) === 'App\Models\User' ? $user->id : null,
+    //             'doctor_id' => get_class($user) === 'App\Models\Doctor' ? $user->id : null,
+    //         ]);
+    //         $liked = true;
     //     }
+
+    //     // Đếm số lượt like mới
+    //     $likeCount = PostLike::where('post_id', $post->id)->count();
+
+    //     return response()->json([
+    //         'liked' => $liked,
+    //         'count' => $likeCount
+    //     ]);
     // }
     public function toggleLike(Request $request)
     {
         $post = Post::findOrFail($request->post_id);
-        $user = Auth::guard('web')->user() ?? Auth::guard('doctor')->user(); // Kiểm tra user hoặc doctor
+        $user = Auth::guard('web')->user() ?? Auth::guard('doctor')->user();
 
         if (!$user) {
             return response()->json(['error' => 'Bạn cần đăng nhập để like.'], 401);
         }
 
-        // Kiểm tra xem user hoặc doctor đã like chưa
         $existingLike = PostLike::where('post_id', $post->id)
             ->where(function ($query) use ($user) {
                 $query->where('user_id', $user->id)
@@ -54,18 +62,28 @@ class PostLikeController extends Controller
             })->first();
 
         if ($existingLike) {
-            $existingLike->delete(); // Nếu đã like thì bỏ like
+            $existingLike->delete();
             $liked = false;
         } else {
             PostLike::create([
                 'post_id' => $post->id,
-                'user_id' => get_class($user) === 'App\Models\User' ? $user->id : null,
-                'doctor_id' => get_class($user) === 'App\Models\Doctor' ? $user->id : null,
+                'user_id' => get_class($user) === 'App\\Models\\User' ? $user->id : null,
+                'doctor_id' => get_class($user) === 'App\\Models\\Doctor' ? $user->id : null,
             ]);
             $liked = true;
+
+            // Gửi thông báo cho tác giả bài viết khi được like
+            $postAuthor = $post->author_info;
+            if ($postAuthor && $postAuthor->id !== $user->id) {
+                NotificationHelper::send(
+                    $postAuthor,
+                    'like',
+                    $user->name . ' đã thích bài viết của bạn: "' . $post->title . '".',
+                    route('post.detail', ['slug' => $post->slug])
+                );
+            }
         }
 
-        // Đếm số lượt like mới
         $likeCount = PostLike::where('post_id', $post->id)->count();
 
         return response()->json([

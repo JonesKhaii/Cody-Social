@@ -8,6 +8,7 @@ use App\Models\Doctor;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\NotificationHelper;
 
 class UserController extends Controller
 {
@@ -50,6 +51,7 @@ class UserController extends Controller
     /**
      * Đặt lịch khám mới
      */
+
     public function bookAppointment(Request $request)
     {
         $request->validate([
@@ -67,7 +69,7 @@ class UserController extends Controller
         }
 
         // Tạo lịch hẹn mới
-        Appointment::create([
+        $appointment = Appointment::create([
             'user_id' => $user->id,
             'doctor_id' => $request->doctor_id,
             'date' => $request->date,
@@ -78,9 +80,27 @@ class UserController extends Controller
             'notes' => $request->notes
         ]);
 
-        return redirect()->route('user.appointments')->with('success', 'Lịch khám đã được đặt thành công.');
-    }
+        // Lấy thông tin bác sĩ
+        $doctor = Doctor::find($request->doctor_id);
 
+        if ($doctor) {
+            // Sử dụng helper để gửi thông báo cho bác sĩ
+            NotificationHelper::send(
+                $doctor,
+                'appointment',
+                'Bạn có lịch hẹn mới từ bệnh nhân ' . $user->name . ' vào ' . date('d/m/Y', strtotime($request->date)) . ' lúc ' . $request->time,
+                route('doctor.appointments.details', $appointment->id),
+                [
+                    'appointment_id' => $appointment->id,
+                    'patient_name' => $user->name,
+                    'appointment_date' => $request->date,
+                    'appointment_time' => $request->time
+                ]
+            );
+        }
+
+        return redirect()->route('user.appointments')->with('success', 'Lịch khám đã được đặt thành công và thông báo đã gửi đến bác sĩ.');
+    }
     /**
      * Hủy lịch khám
      */
@@ -159,5 +179,24 @@ class UserController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', 'Cập nhật thông tin thành công!');
+    }
+
+
+    public function getAppointmentDetails($id)
+    {
+        $appointment = Appointment::with(['doctor:id,name,specialization,photo'])
+            ->select('id', 'doctor_id', 'date', 'time', 'consultation_type', 'status', 'notes')
+            ->findOrFail($id);
+
+        return response()->json([
+            'doctor_name' => $appointment->doctor->name,
+            'specialization' => $appointment->doctor->specialization,
+            'doctor_photo' => $appointment->doctor->photo,
+            'date' => $appointment->date,
+            'time' => $appointment->time,
+            'consultation_type' => $appointment->consultation_type === 'online' ? 'Tư vấn trực tuyến' : 'Khám tại phòng khám',
+            'status' => $appointment->status,
+            'notes' => $appointment->notes,
+        ]);
     }
 }

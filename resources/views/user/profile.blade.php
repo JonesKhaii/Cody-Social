@@ -5,12 +5,12 @@
 @section('main-content')
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Bootstrap JS và Popper.js (bắt buộc cho Bootstrap 5) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="{{ asset('css/users.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/users.css') }}"> --}}
 
     <!-- Breadcrumbs -->
     <div class="breadcrumbs bg-light py-2">
@@ -45,9 +45,10 @@
                     <!-- Profile Card -->
                     <div class="card profile-card mb-4 shadow-sm">
                         <div class="card-body p-4 text-center">
-                            <div class="avatar-container mb-3">
+                            <div
+                                style="width: 150px; height: 150px; margin: 0 auto; overflow: hidden; border-radius: 50%; position: relative;">
                                 <img src="{{ $user->photo ? asset($user->photo) : 'https://via.placeholder.com/150' }}"
-                                    alt="User Avatar" class="profile-photo">
+                                    alt="User Avatar" style="width: 100%; height: 100%; object-fit: cover; display: block;">
                             </div>
                             <h3 class="profile-name">{{ $user->name }}</h3>
                             <p class="profile-role mb-2">{{ ucfirst($user->role) }}</p>

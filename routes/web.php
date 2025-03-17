@@ -15,6 +15,7 @@ use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\NotificationController;
 // AUTH--------------------------------------------------------------------------------
 // Trang đăng nhập & xử lý đăng nhập
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -83,7 +84,7 @@ Route::put('/appointments/{id}/cancel', [DoctorController::class, 'cancelAppoint
 Route::get('/doctor/post-interactions', [DoctorController::class, 'getPostInteractions'])->name('doctor.postInteractions');
 Route::get('/doctor/appointments-stats', [DoctorController::class, 'getAppointmentStats'])->name('doctor.appointments.stats');
 Route::get('/doctor/appointments-time', [DoctorController::class, 'getAppointmentsByTimeframe'])->name('doctor.appointmentsStats');
-
+Route::get('/doctor/appointments/{id}/details', [AppointmentController::class, 'showDetails'])->name('doctor.appointments.details');
 // Affialte 
 Route::get('/affiliate/search-product', [AffiliateController::class, 'searchProduct']);
 Route::get('/affiliate/search-product-table', [ProductController::class, 'searchProductTable']);
@@ -105,6 +106,8 @@ Route::get('/user/profile', [UserController::class, 'profile'])->name('user.prof
 Route::middleware(['auth:web'])->group(function () {
     Route::get('/user/appointments', [UserController::class, 'getAppointments'])->name('user.appointments');
 });
+Route::get('/appointments/{id}/details', [UserController::class, 'getAppointmentDetails']);
+
 Route::get('/user/appointments', [UserController::class, 'getAppointments'])->name('user.appointments');
 Route::post('/user/book-appointment', [UserController::class, 'bookAppointment'])->name('user.book.appointment');
 Route::patch('/user/appointments/{id}/cancel', [UserController::class, 'cancelAppointment'])->name('user.appointments.cancel');
@@ -125,3 +128,21 @@ Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('categ
 // API:
 // Image
 Route::post('/upload-image', [ImageController::class, 'uploadImage'])->name('upload.image');
+
+
+// Notification routes
+
+// Notification routes for user
+// Route cho User
+Route::middleware(['auth:web'])->prefix('user')->group(function () {
+    Route::get('/notifications/unread', [NotificationController::class, 'fetchUnread']);
+    Route::post('/notifications/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('user.notifications.markAsRead');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('user.notifications.markAllRead');
+});
+
+// Route cho Doctor
+Route::middleware(['auth:doctor'])->prefix('doctor')->group(function () {
+    Route::get('/notifications/unread', [NotificationController::class, 'fetchUnread']);
+    Route::post('/notifications/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('doctor.notifications.markAsRead');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('doctor.notifications.markAllRead');
+});

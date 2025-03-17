@@ -62,28 +62,6 @@
                     </div>
                 </div>
             </div>
-
-
-            {{-- <div class="container-fluid py-3">
-                <div class="row align-items-center g-3">
-                    <!-- Tiêu đề - Co lại trên mobile -->
-                    <div class="col-12 col-md-6">
-                        <h1 class="medical-title mb-0">Thông Tin Y Tế Nổi Bật</h1>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                        <div class="d-flex justify-content-md-end">
-                            <select class="form-select filter-select" id="Genero" aria-label="Lọc theo danh mục">
-                                <option value="">Tất cả danh mục</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->title }}">{{ $category->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
-
             <!-- Danh sách bài viết -->
             <div class="container mt-5" id="postsContainer">
                 @include('partials.posts', ['posts' => $posts])
@@ -93,7 +71,7 @@
                     <div class="category-header">
                         <span>{{ $category->title }}</span>
                         @if ($category && $category->slug)
-                            <a href="{{ route('category.show', ['slug' => $category->slug]) }}"><span>Xem tất cả<i
+                            <a href="{{ route('category.show', ['slug' => $category->slug]) }}"><span>Xem tất cả <i
                                         class="fas fa-arrow-right"></i></span></a>
                         @endif
                     </div>
@@ -110,10 +88,24 @@
                             $firstPost = $posts->shift();
                         @endphp
 
-                        @if ($firstPost)
+                        {{-- @if ($firstPost)
                             <div class="first-row">
                                 <a href="{{ route('post.detail', $firstPost->slug) }}" class="post-link">
                                     <img src="{{ asset($firstPost->photo) }}" alt="{{ $firstPost->title }}" />
+                                    <div class="text-content">
+                                        <span class="badge">{{ $category->title }}</span>
+                                        <h3>{{ $firstPost->title }}</h3>
+                                        <p>{{ Str::limit($firstPost->summary, 100) }}</p>
+                                    </div>
+                                </a>
+                            </div>
+                        @endif --}}
+                        @if ($firstPost)
+                            <div class="first-row">
+                                <a href="{{ route('post.detail', $firstPost->slug) }}" class="post-link">
+                                    <div class="featured-image">
+                                        <img src="{{ asset($firstPost->photo) }}" alt="{{ $firstPost->title }}" />
+                                    </div>
                                     <div class="text-content">
                                         <span class="badge">{{ $category->title }}</span>
                                         <h3>{{ $firstPost->title }}</h3>
@@ -157,7 +149,7 @@
 
         </div>
     </div>
-    {{-- <script src="{{ asset('asset/js/main.js') }}"></script> --}}
+
     <script>
         $(document).ready(function() {
             // Danh sách từ khóa hàng đầu (bạn có thể thay bằng dữ liệu lấy từ backend nếu cần)

@@ -1,219 +1,373 @@
-<!DOCTYPE html>
-<html lang="vi">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Đặt Lịch Khám | CodyHealth</title>
-        <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-        />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-        />
-        <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-        <link rel="stylesheet" href="asset/css/mystyle.css" />
-        <style>
-            body {
-                background-color: #f4f4f4;
-            }
-            .doctor-card {
-                background: white;
-                padding: 15px;
-                border-radius: 8px;
-                margin-bottom: 20px;
-                transition: transform 0.3s ease-in-out;
-                cursor: pointer;
-            }
-            .doctor-card:hover {
-                transform: scale(1.03);
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            }
-            .doctor-card img {
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                margin-right: 15px;
-            }
-            .form-container {
-                background: white;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-            }
-            .hidden {
-                display: none;
-            }
-        </style>
-    </head>
+@php // Kiểm tra đăng nhập thực tế, không chỉ dựa vào session
+$isLoggedInAsDoctor = Auth::guard('doctor')->check(); $isLoggedInAsUser =
+Auth::guard('web')->check(); // Xác định role dựa trên trạng thái đăng nhập thực
+tế $role = null; if ($isLoggedInAsDoctor) { $role = 'doctor'; $user =
+Auth::guard('doctor')->user(); } elseif ($isLoggedInAsUser) { $role = 'user';
+$user = Auth::guard('web')->user(); } else { $role = session('role'); $user =
+null; } // Giả lập số thông báo chưa đọc - thay thế bằng dữ liệu thực từ
+database sau $unreadNotificationsCount = 3; // Avatar mặc định nếu người dùng
+không có ảnh $defaultAvatar = asset('asset/images/default-avatar.png'); // Thay
+$user->avatar bằng đúng field chứa avatar trong model của bạn $userAvatar =
+$user && isset($user->avatar) ? asset($user->avatar) : $defaultAvatar; @endphp
 
-    <body>
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-primary shadow-sm">
-            <div class="container">
-                <a class="navbar-brand text-white" href="index.html"
-                    ><i class="fas fa-heartbeat"></i> CodyHealth</a
+<header
+    class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow"
+>
+    <div class="container-fluid px-md-4">
+        <!-- Logo bên trái -->
+        <div class="logo-container me-lg-0 me-auto">
+            <a
+                href="{{ route('home') }}"
+                class="d-flex align-items-center text-decoration-none"
+            >
+                <img
+                    src="{{ asset('asset/images/logo.png') }}"
+                    alt="CodyHealth Logo"
+                    class="logo me-2"
+                    style="height: 40px; width: 40px; border-radius: 50%"
+                />
+                <span
+                    class="navbar-brand fs-4 fw-bold d-none d-sm-inline mb-0 text-white"
+                    >CODYHEALTH</span
                 >
-                <button
-                    class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav"
-                >
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="index.html"
-                                >Trang Chủ</a
-                            >
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="doctors.html"
-                                >Bác Sĩ</a
-                            >
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                class="nav-link text-white active"
-                                href="appointment.html"
-                                >Đặt Lịch Khám</a
-                            >
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <!-- Main Content -->
-        <div class="container mt-4">
-            <h2 class="text-center mb-4">Đặt Lịch Khám</h2>
-
-            <!-- Ô tìm kiếm bác sĩ -->
-            <input
-                type="text"
-                id="searchDoctor"
-                class="form-control mb-3"
-                placeholder="Tìm kiếm bác sĩ..."
-            />
-
-            <!-- Danh sách bác sĩ đã theo dõi -->
-            <h4 class="mb-3">Bác Sĩ Đã Theo Dõi</h4>
-            <div class="row" id="followedDoctors"></div>
-
-            <!-- Danh sách bác sĩ -->
-            <h4 class="mt-4">Chọn Bác Sĩ</h4>
-            <div class="row" id="doctorList">
-                <div class="col-md-4">
-                    <div
-                        class="doctor-card d-flex align-items-center"
-                        data-doctor="Dr. Anna Nguyen"
-                    >
-                        <img src="asset/images/users/doctor1.jpeg" />
-                        <div>
-                            <h6>Dr. Anna Nguyen</h6>
-                            <p class="text-muted">Tim Mạch</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div
-                        class="doctor-card d-flex align-items-center"
-                        data-doctor="Dr. John Smith"
-                    >
-                        <img src="asset/images/users/doctor2.jpeg" />
-                        <div>
-                            <h6>Dr. John Smith</h6>
-                            <p class="text-muted">Nội Khoa</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Form đặt lịch -->
-            <div class="form-container mt-4">
-                <h4 class="mb-3">Thông Tin Đặt Lịch</h4>
-                <form id="appointmentForm">
-                    <div class="mb-3">
-                        <label class="form-label">Chọn Bác Sĩ</label>
-                        <input
-                            type="text"
-                            id="selectedDoctor"
-                            class="form-control"
-                            placeholder="Chọn bác sĩ"
-                            readonly
-                            required
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Chọn Ngày</label>
-                        <input type="date" class="form-control" required />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Chọn Giờ</label>
-                        <select class="form-select" required>
-                            <option value="08:00">08:00 AM</option>
-                            <option value="09:00">09:00 AM</option>
-                            <option value="10:00">10:00 AM</option>
-                            <option value="14:00">02:00 PM</option>
-                            <option value="15:00">03:00 PM</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Họ Tên Bệnh Nhân</label>
-                        <input type="text" class="form-control" required />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Số Điện Thoại</label>
-                        <input type="tel" class="form-control" required />
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">
-                        Xác Nhận Lịch Hẹn
-                    </button>
-                </form>
-            </div>
+            </a>
         </div>
 
-        <footer class="bg-light text-center p-3 mt-4">
-            <p>&copy; 2025 CodyHealth. Tất cả quyền được bảo lưu.</p>
-        </footer>
+        <!-- Nút Toggle cho Mobile -->
+        <button
+            class="navbar-toggler order-lg-3 border-white"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarMain"
+            aria-controls="navbarMain"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <script>
-            $(document).ready(function () {
-                // Tìm kiếm bác sĩ
-                $("#searchDoctor").on("input", function () {
-                    let value = $(this).val().toLowerCase();
-                    $(".doctor-card").each(function () {
-                        let doctorName = $(this).text().toLowerCase();
-                        $(this).parent().toggle(doctorName.includes(value));
-                    });
-                });
+        <!-- Menu chính ở giữa -->
+        <div
+            class="navbar-collapse justify-content-center order-lg-1 collapse"
+            id="navbarMain"
+        >
+            <ul class="navbar-nav">
+                <li class="nav-item mx-1">
+                    <a
+                        class="nav-link {{ Route::currentRouteName() == 'home' ? 'active' : '' }} px-3 text-center text-white"
+                        href="{{ route('home') }}"
+                    >
+                        <i class="fas fa-home fa-lg d-block mb-1"></i>
+                        <span class="small">Trang Chủ</span>
+                    </a>
+                </li>
+                <li class="nav-item mx-1">
+                    <a
+                        class="nav-link {{ Route::currentRouteName() == 'about' ? 'active' : '' }} px-3 text-center text-white"
+                        href="{{ route('about') }}"
+                    >
+                        <i class="fas fa-info-circle fa-lg d-block mb-1"></i>
+                        <span class="small">Về Chúng Tôi</span>
+                    </a>
+                </li>
+                <li class="nav-item mx-1">
+                    <a
+                        class="nav-link {{ Route::currentRouteName() == 'doctors.list' ? 'active' : '' }} px-3 text-center text-white"
+                        href="{{ route('doctors.list') }}"
+                    >
+                        <i class="fas fa-user-md fa-lg d-block mb-1"></i>
+                        <span class="small">Bác Sĩ</span>
+                    </a>
+                </li>
+                <li class="nav-item mx-1">
+                    <a class="nav-link px-3 text-center text-white" href="#">
+                        <i
+                            class="fas fa-question-circle fa-lg d-block mb-1"
+                        ></i>
+                        <span class="small">Hỏi Đáp</span>
+                    </a>
+                </li>
+                <!-- Ẩn mục Lịch Khám nếu là bác sĩ -->
+                @if ($role !== 'doctor')
+                <li class="nav-item mx-1">
+                    <a
+                        class="nav-link {{ in_array(Route::currentRouteName(), ['user.appointments', 'login']) ? 'active' : '' }} px-3 text-center text-white"
+                        href="{{ $role === 'user' ? route('user.appointments') : route('login') }}"
+                    >
+                        <i class="fas fa-calendar-check fa-lg d-block mb-1"></i>
+                        <span class="small">Lịch Khám</span>
+                    </a>
+                </li>
+                @endif @if ($role === 'doctor')
+                <li class="nav-item mx-1">
+                    <a
+                        class="nav-link {{ Route::currentRouteName() == 'doctor.profile' ? 'active' : '' }} px-3 text-center text-white"
+                        href="{{ route('doctor.profile') }}"
+                    >
+                        <i class="fas fa-stethoscope fa-lg d-block mb-1"></i>
+                        <span class="small">Tổng Quan</span>
+                    </a>
+                </li>
+                @elseif ($role === 'user')
+                <li class="nav-item mx-1">
+                    <a
+                        class="nav-link {{ Route::currentRouteName() == 'user.profile' ? 'active' : '' }} px-3 text-center text-white"
+                        href="{{ route('user.profile') }}"
+                    >
+                        <i class="fas fa-user-circle fa-lg d-block mb-1"></i>
+                        <span class="small">Hồ Sơ</span>
+                    </a>
+                </li>
+                @endif
+            </ul>
+        </div>
 
-                // Chọn bác sĩ
-                $(".doctor-card").click(function () {
-                    let doctorName = $(this).data("doctor");
-                    $("#selectedDoctor").val(doctorName);
-                });
+        <!-- Biểu tượng thông báo và avatar ở bên phải -->
+        <div class="d-flex align-items-center order-lg-2">
+            @if ($role === 'doctor' || $role === 'user')
+            <!-- Thông báo -->
+            <div class="nav-item dropdown me-lg-3 me-2">
+                <a
+                    class="btn btn-primary position-relative rounded-circle d-flex align-items-center justify-content-center"
+                    style="width: 40px; height: 40px"
+                    href="#"
+                    id="notificationDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                >
+                    <i class="fas fa-bell text-white"></i>
+                    @if ($unreadNotificationsCount > 0)
+                    <span
+                        class="position-absolute start-100 translate-middle badge rounded-pill bg-danger top-0"
+                        style="font-size: 0.6rem"
+                    >
+                        {{ $unreadNotificationsCount > 99 ? '99+' :
+                        $unreadNotificationsCount }}
+                        <span class="visually-hidden">thông báo chưa đọc</span>
+                    </span>
+                    @endif
+                </a>
+                <div
+                    class="dropdown-menu dropdown-menu-end notification-dropdown border-0 p-0 shadow"
+                    aria-labelledby="notificationDropdown"
+                >
+                    <div
+                        class="notification-header bg-primary d-flex justify-content-between align-items-center p-2 text-white"
+                    >
+                        <h6 class="m-0">Thông báo</h6>
+                        <a
+                            href="#"
+                            class="text-decoration-none small text-white"
+                            >Đánh dấu đã đọc</a
+                        >
+                    </div>
+                    <div
+                        class="notification-body"
+                        style="
+                            width: 320px;
+                            max-height: 350px;
+                            overflow-y: auto;
+                        "
+                    >
+                        <!-- Mẫu thông báo - Thay thế bằng vòng lặp dữ liệu thực từ database -->
+                        <a
+                            href="#"
+                            class="dropdown-item notification-item d-flex border-bottom unread px-3 py-2"
+                        >
+                            <div class="flex-shrink-0">
+                                <div
+                                    class="notification-icon bg-primary rounded-circle p-2 text-white"
+                                >
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                            </div>
+                            <div class="ms-2">
+                                <p class="notification-text m-0">
+                                    Lịch khám của bạn đã được xác nhận
+                                </p>
+                                <small class="text-muted">30 phút trước</small>
+                            </div>
+                        </a>
+                        <a
+                            href="#"
+                            class="dropdown-item notification-item d-flex border-bottom unread px-3 py-2"
+                        >
+                            <div class="flex-shrink-0">
+                                <div
+                                    class="notification-icon bg-success rounded-circle p-2 text-white"
+                                >
+                                    <i class="fas fa-file-medical"></i>
+                                </div>
+                            </div>
+                            <div class="ms-2">
+                                <p class="notification-text m-0">
+                                    Kết quả khám của bạn đã có
+                                </p>
+                                <small class="text-muted">2 giờ trước</small>
+                            </div>
+                        </a>
+                        <a
+                            href="#"
+                            class="dropdown-item notification-item d-flex border-bottom unread px-3 py-2"
+                        >
+                            <div class="flex-shrink-0">
+                                <div
+                                    class="notification-icon bg-info rounded-circle p-2 text-white"
+                                >
+                                    <i class="fas fa-pills"></i>
+                                </div>
+                            </div>
+                            <div class="ms-2">
+                                <p class="notification-text m-0">
+                                    Nhắc nhở: Đến giờ uống thuốc
+                                </p>
+                                <small class="text-muted">3 giờ trước</small>
+                            </div>
+                        </a>
+                        <a
+                            href="#"
+                            class="dropdown-item notification-item d-flex border-bottom px-3 py-2"
+                        >
+                            <div class="flex-shrink-0">
+                                <div
+                                    class="notification-icon bg-warning rounded-circle p-2 text-white"
+                                >
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                            </div>
+                            <div class="ms-2">
+                                <p class="notification-text m-0">
+                                    Bác sĩ đã trả lời câu hỏi của bạn
+                                </p>
+                                <small class="text-muted">Hôm qua</small>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="notification-footer border-top p-2 text-center">
+                        <a href="#" class="text-decoration-none"
+                            >Xem tất cả thông báo</a
+                        >
+                    </div>
+                </div>
+            </div>
+            @endif
 
-                // Hiển thị bác sĩ đã theo dõi từ localStorage
-                let followedDoctors = Object.keys(localStorage).filter((key) =>
-                    key.startsWith("followed_")
-                );
-                if (followedDoctors.length > 0) {
-                    followedDoctors.forEach((key) => {
-                        let doctorName = key.replace("followed_", "");
-                        $("#followedDoctors").append(
-                            `<div class="col-md-4"><div class="doctor-card d-flex align-items-center" data-doctor="${doctorName}"><h6>${doctorName}</h6></div></div>`
-                        );
-                    });
-                } else {
-                    $("#followedDoctors").append(
-                        "<p class='text-muted'>Bạn chưa theo dõi bác sĩ nào.</p>"
-                    );
-                }
-            });
-        </script>
-    </body>
-</html>
+            <!-- Avatar và menu người dùng -->
+            <div class="nav-item dropdown">
+                <a
+                    class="nav-link dropdown-toggle d-flex align-items-center p-0"
+                    href="#"
+                    id="userDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                >
+                    <div
+                        class="avatar-circle"
+                        style="
+                            width: 40px;
+                            height: 40px;
+                            overflow: hidden;
+                            border-radius: 50%;
+                            border: 2px solid #fff;
+                        "
+                    >
+                        <img
+                            src="{{ $userAvatar }}"
+                            alt="User Avatar"
+                            class="img-fluid"
+                            style="width: 100%; height: 100%; object-fit: cover"
+                        />
+                    </div>
+                </a>
+                <ul
+                    class="dropdown-menu dropdown-menu-end border-0 shadow"
+                    aria-labelledby="userDropdown"
+                >
+                    @if ($role === 'doctor')
+                    <li>
+                        <h6 class="dropdown-header">Xin chào, Bác sĩ!</h6>
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item"
+                            href="{{ route('doctor.profile') }}"
+                        >
+                            <i class="fas fa-user-md me-2"></i>Hồ sơ của tôi
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-cog me-2"></i>Cài đặt tài khoản
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item text-danger"
+                            href="{{ route('logout') }}"
+                        >
+                            <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                        </a>
+                    </li>
+                    @elseif ($role === 'user')
+                    <li>
+                        <h6 class="dropdown-header">Xin chào!</h6>
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item"
+                            href="{{ route('user.profile') }}"
+                        >
+                            <i class="fas fa-user me-2"></i>Hồ sơ của tôi
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item"
+                            href="{{ route('user.appointments') }}"
+                        >
+                            <i class="fas fa-calendar-check me-2"></i>Lịch khám
+                            của tôi
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-cog me-2"></i>Cài đặt tài khoản
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li>
+                        <a
+                            class="dropdown-item text-danger"
+                            href="{{ route('logout') }}"
+                        >
+                            <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                        </a>
+                    </li>
+                    @else
+                    <li>
+                        <a class="dropdown-item" href="{{ route('login') }}">
+                            <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('register') }}">
+                            <i class="fas fa-user-plus me-2"></i>Đăng ký
+                        </a>
+                    </li>
+                    @endif
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+
+@section('scripts')
+<script src="{{ asset('js/header.js') }}"></script>
+@endsection

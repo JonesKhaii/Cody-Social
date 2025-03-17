@@ -1,0 +1,135 @@
+<header class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+    <div class="container">
+        <!-- Logo và thương hiệu -->
+        <div class="logo-container d-flex align-items-center">
+            <a
+                href="{{ route('home') }}"
+                class="d-flex align-items-center text-decoration-none"
+            >
+                <img
+                    src="{{ asset('asset/images/logo.png') }}"
+                    alt="CodyHealth Logo"
+                    class="logo me-2"
+                    style="height: 40px; width: 40px; border-radius: 50%"
+                />
+                <span class="navbar-brand fs-3 fw-bold mb-0 text-white">
+                    CODYHEALTH</span
+                >
+            </a>
+        </div>
+
+        <!-- Nút Toggle cho Mobile -->
+        <button
+            class="navbar-toggler border-white"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu chính -->
+        <div class="navbar-collapse collapse" id="navbarNav">
+            <ul class="navbar-nav align-items-center ms-auto">
+                <li class="nav-item">
+                    <a
+                        class="nav-link {{ Route::currentRouteName() == 'home' ? 'active fw-bold' : '' }} px-3 text-white"
+                        href="{{ route('home') }}"
+                    >
+                        <i class="fas fa-home me-1"></i> Trang Chủ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a
+                        class="nav-link {{ Route::currentRouteName() == 'about' ? 'active fw-bold' : '' }} px-3 text-white"
+                        href="{{ route('about') }}"
+                    >
+                        <i class="fas fa-info-circle me-1"></i> Về chúng tôi
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a
+                        class="nav-link {{ Route::currentRouteName() == 'doctors.list' ? 'active fw-bold' : '' }} px-3 text-white"
+                        href="{{ route('doctors.list') }}"
+                    >
+                        <i class="fas fa-user-md me-1"></i> Bác Sĩ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 text-white" href="#">
+                        <i class="fas fa-question-circle me-1"></i> Hỏi Đáp
+                    </a>
+                </li>
+
+                <!-- Ẩn mục Lịch Khám nếu là bác sĩ -->
+                @if ($role !== 'doctor')
+                <li class="nav-item">
+                    @if ($role === 'user')
+                    <a
+                        class="nav-link {{ Route::currentRouteName() == 'user.appointments' ? 'active fw-bold' : '' }} px-3 text-white"
+                        href="{{ route('user.appointments') }}"
+                    >
+                        <i class="fas fa-calendar-check me-1"></i> Lịch Khám
+                    </a>
+                    @else
+                    <a
+                        class="nav-link px-3 text-white"
+                        href="{{ route('login') }}"
+                    >
+                        <i class="fas fa-calendar-check me-1"></i> Lịch Khám
+                    </a>
+                    @endif
+                </li>
+                @endif @if ($role === 'doctor')
+                <li class="nav-item">
+                    <a
+                        class="nav-link {{ Route::currentRouteName() == 'doctor.profile' ? 'active fw-bold' : '' }} px-3 text-white"
+                        href="{{ route('doctor.profile') }}"
+                    >
+                        <i class="fas fa-stethoscope me-1"></i> Trang Tổng Quan
+                    </a>
+                </li>
+                @elseif ($role === 'user')
+                <li class="nav-item">
+                    <a
+                        class="nav-link {{ Route::currentRouteName() == 'user.profile' ? 'active fw-bold' : '' }} px-3 text-white"
+                        href="{{ route('user.profile') }}"
+                    >
+                        <i class="fas fa-user-circle me-1"></i> Hồ Sơ
+                    </a>
+                </li>
+                @else
+                <li class="nav-item">
+                    <a
+                        class="nav-link {{ Route::currentRouteName() == 'login' ? 'active fw-bold' : '' }} px-3 text-white"
+                        href="{{ route('login') }}"
+                    >
+                        <i class="fas fa-sign-in-alt me-1"></i> Đăng Nhập
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a
+                        class="nav-link {{ Route::currentRouteName() == 'register' ? 'active fw-bold' : '' }} px-3 text-white"
+                        href="{{ route('register') }}"
+                    >
+                        <i class="fas fa-user-plus me-1"></i> Đăng Ký
+                    </a>
+                </li>
+                @endif {{-- Đăng xuất --}} @if (Auth::guard('doctor')->check()
+                || Auth::guard('web')->check())
+                <li class="nav-item ms-2">
+                    <a
+                        class="nav-link btn btn-outline-light rounded-pill px-3"
+                        href="{{ route('logout') }}"
+                    >
+                        <i class="fas fa-sign-out-alt me-1"></i> Đăng Xuất
+                    </a>
+                </li>
+                @endif
+            </ul>
+        </div>
+    </div>
+</header>

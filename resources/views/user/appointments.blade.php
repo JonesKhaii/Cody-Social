@@ -2,12 +2,12 @@
 @section('title', 'Lịch khám')
 @section('main-content')
 
-    <!-- Bootstrap CSS -->
+    {{-- <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Bootstrap JS và Popper.js (bắt buộc cho Bootstrap 5) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script> --}}
 
     <div class="container py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -48,6 +48,8 @@
                                         <th>Ngày giờ</th>
                                         <th>Hình thức</th>
                                         <th>Ghi chú</th>
+                                        <th>Chi tiết</th>
+
                                         <th class="text-end">Thao tác</th>
                                     </tr>
                                 </thead>
@@ -100,6 +102,13 @@
                                                 @else
                                                     <span class="text-muted fst-italic">Không có ghi chú</span>
                                                 @endif
+                                            </td>
+                                            <!-- Details Button -->
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info"
+                                                    onclick="showAppointmentDetails({{ $appointment->id }})">
+                                                    Xem
+                                                </button>
                                             </td>
 
                                             <!-- Actions -->
@@ -423,6 +432,22 @@
         </div>
     </div>
 
+    <!-- Modal Chi Tiết Lịch khám -->
+    <div id="appointment-details-modal" class="modal fade">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-white">
+                    <h5 class="modal-title"><i class="fas fa-calendar-check me-2"></i>Chi tiết lịch khám</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="appointment-details-content">
+                    <p>Đang tải thông tin...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Lưu danh sách bác sĩ để tìm kiếm
@@ -495,7 +520,7 @@
                         doctorCard.innerHTML = `
                     <div class="card h-100 doctor-card">
                         <div class="card-body text-center">
-                            <img src="${doctor.photo}" alt="${doctor.name}" class="rounded-circle mb-2" width="60" height="60">
+                            <img src="${doctor.photo}" alt="${doctor.name}"  class="rounded-circle object-fit-cover doctor-avatar mb-3" width="60" height="60">
                             <h6 class="card-title">Bs. ${doctor.name}</h6>
                             <p class="card-text text-muted small">${doctor.specialization}</p>
                         </div>
@@ -586,6 +611,38 @@
                 selectedDoctorInfo.style.display = 'none';
             });
         });
+
+
+        function showAppointmentDetails(appointmentId) {
+            const modal = new bootstrap.Modal(document.getElementById('appointment-details-modal'));
+            document.getElementById('appointment-details-content').innerHTML = '<p>Đang tải dữ liệu...</p>';
+            modal.show();
+
+            // Fetch chi tiết sau khi modal hiển thị
+            fetch(`/appointments/${appointmentId}/details`)
+                .then(response => response.json())
+                .then(data => {
+                    const content = `
+                <div class="d-flex align-items-center mb-3">
+                    <img src="${data.doctor_photo || '/images/default-avatar.png'}" width="60" height="60" class="rounded-circle me-3">
+                    <div>
+                        <h5>Bác sĩ: ${data.doctor_name}</h5>
+                        <small class="text-muted">${data.specialization}</small>
+                    </div>
+                </div>
+                <p><strong>Ngày:</strong> ${data.date}</p>
+                <p><strong>Giờ:</strong> ${data.time}</p>
+                <p><strong>Hình thức:</strong> ${data.consultation_type}</p>
+                <p><strong>Trạng thái:</strong> ${data.status}</p>
+                <p><strong>Ghi chú:</strong> ${data.notes || 'Không có'}</p>
+            `;
+                    document.getElementById('appointment-details-content').innerHTML = content;
+                })
+                .catch(() => {
+                    document.getElementById('appointment-details-content').innerHTML =
+                        `<p class="text-danger">Lỗi tải dữ liệu.</p>`;
+                });
+        }
     </script>
 @endsection
 
@@ -626,6 +683,10 @@
     .doctor-avatar.avatar-sm {
         width: 60px;
         height: 60px;
+    }
+
+    .modal-header {
+        background-color: #2377B3 !important;
     }
 </style>
 
