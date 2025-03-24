@@ -27,8 +27,8 @@
                     value="{{ $doctor->workplace }}">
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                 <button type="button" class="btn btn-secondary" id="cancel-modal">Hủy</button>
+                <button type="submit" class="btn btn-primary" style="text-align: center">Lưu thay đổi</button>
             </div>
         </form>
     </div>
@@ -69,9 +69,12 @@
             <div class="form-group">
                 <label>Ảnh hiện tại</label>
                 <br>
-                <div class="image-preview-container">
+                {{-- <div class="image-preview-container">
                     <img id="edit-preview-image" src="{{ $post->photo }}?t={{ time() }}"
                         alt="Ảnh bài viết">
+                </div> --}}
+                <div class="image-preview-container">
+                    <img id="edit-preview-image" src="" alt="Ảnh bài viết">
                 </div>
 
             </div>
@@ -83,8 +86,8 @@
             </div>
 
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Cập nhật bài viết</button>
                 <button type="button" class="btn btn-secondary" id="cancel-edit-post">Hủy</button>
+                <button type="submit" class="btn btn-primary">Cập nhật bài viết</button>
             </div>
         </form>
     </div>

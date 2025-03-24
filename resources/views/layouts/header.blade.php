@@ -45,11 +45,15 @@
                     <a class="nav-link {{ Route::currentRouteName() == 'doctors.list' ? 'active' : '' }} px-3 text-white"
                         href="{{ route('doctors.list') }}">Bác sĩ</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 text-white" target="_blank"
+                        href="https://toikhoe.vn/">Sản phẩm của chúng tôi</a>
+                </li>
 
                 @if ($role === 'doctor')
                     <li class="nav-item">
                         <a class="nav-link {{ Route::currentRouteName() == 'doctor.profile' ? 'active' : '' }} px-3 text-white"
-                            href="{{ route('doctor.profile') }}">Trang tổng quan</a>
+                            href="{{ route('doctor.profile') }}">Trang tổng quan bác sĩ</a>
                     </li>
                 @endif
 
@@ -60,7 +64,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ Route::currentRouteName() == 'user.profile' ? 'active' : '' }} px-3 text-white"
-                            href="{{ route('user.profile') }}">Hồ sơ</a>
+                            href="{{ route('user.profile') }}">Hồ sơ người dùng</a>
                     </li>
                 @endif
 
@@ -71,8 +75,7 @@
                             href="#" id="notificationDropdown" role="button" aria-expanded="false">
                             <i class="fas fa-bell"></i>
                             @if ($notificationCount > 0)
-                                <span
-                                    class="position-absolute start-100 translate-middle badge rounded-pill bg-danger notification-badge top-0">
+                                <span class="badge rounded-pill bg-danger notification-badge">
                                     {{ $notificationCount > 99 ? '99+' : $notificationCount }}
                                 </span>
                             @endif

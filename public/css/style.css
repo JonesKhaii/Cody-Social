@@ -70,7 +70,7 @@ header > .navbar {
 header .navbar-brand {
     font-weight: 700;
     margin-left: 12px;
-    width: 300px;
+    width: 200px;
 }
 /*End Header*/
 
@@ -113,7 +113,7 @@ input.nosubmit {
 #Genero {
     margin-right: 4%;
     float: right;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     color: #5b5b5b;
     font-weight: bold;
 }
@@ -317,7 +317,7 @@ input.nosubmit {
 }
 
 .first-row {
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -955,5 +955,59 @@ footer > div > img {
 @media (max-width: 575.98px) {
     .medical-title {
         font-size: 1.25rem;
+    }
+}
+
+/* Notification supplement */
+/* Ẩn gạch chân cho dropdown-toggle trong phần thông báo */
+.notification-trigger.dropdown-toggle::after {
+    display: none !important;
+}
+
+/* Ẩn gạch chân dưới link */
+.notification-trigger {
+    text-decoration: none !important;
+}
+
+/* Điều chỉnh vị trí badge thông báo */
+.notification-badge {
+    position: absolute !important;
+    top: 0 !important;
+    right: 5px !important; /* Điều chỉnh vị trí ngang */
+    transform: translate(50%, -30%) !important; /* Điều chỉnh vị trí */
+    font-size: 0.65rem !important;
+    padding: 0.25em 0.5em !important; /* Kích thước badge nhỏ hơn */
+}
+
+/* Đảm bảo vị trí tương đối cho container */
+.notification-wrapper {
+    position: relative !important;
+}
+.notification-trigger .fas.fa-bell {
+    font-size: 20px;
+}
+
+.notification-dropdown {
+    width: 450px !important;
+    max-width: 100vw !important;
+    min-width: 300px !important;
+    white-space: normal !important;
+}
+
+/* Đảm bảo nội dung thông báo có thể hiển thị tốt */
+.notification-content-list {
+    max-height: 300px; /* Chiều cao tối đa cho phần nội dung */
+    overflow-y: auto;
+    width: 100%;
+}
+
+@media (max-width: 576px) {
+    .notification-dropdown {
+        width: calc(100vw - 20px) !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) !important;
+        position: fixed !important;
+        top: 60px !important;
     }
 }

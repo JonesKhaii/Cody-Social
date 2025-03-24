@@ -1,0 +1,130 @@
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--secondary-color);
+    color: var(--text-light);
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 0 5px 5px 0;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+    z-index: 10;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.sidebar-header {
+    padding: 25px 20px;
+    /* display: flex; */
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    font-size: 24px;
+    color: white;
+}
+
+.logo-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: white;
+}
+
+.sidebar .sidebar-wrapper {
+    padding: 25px 0;
+    background-color: var(--secondary-color);
+}
+
+.sidebar .nav {
+    padding-left: 0;
+    list-style-type: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sidebar .nav-item {
+    margin: 5px 15px;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.sidebar .nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar .nav-item.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar .nav-link {
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.sidebar .nav-link i {
+    margin-right: 12px;
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+}
+
+.sidebar .nav-link p {
+    margin: 0;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.sidebar .nav-item.active .nav-link {
+    font-weight: 500;
+}
+
+/* Responsive */
+/* @media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+    }
+
+    .sidebar .nav-link p,
+    .sidebar .logo-text,
+    .sidebar .doctor-profile {
+        display: none;
+    }
+
+    .sidebar .nav-link {
+        justify-content: center;
+    }
+
+    .sidebar .nav-link i {
+        margin-right: 0;
+    }
+
+    .profile-photo-container {
+        grid-column: span 1;
+    }
+} */

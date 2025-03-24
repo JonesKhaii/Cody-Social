@@ -146,3 +146,25 @@ Route::middleware(['auth:doctor'])->prefix('doctor')->group(function () {
     Route::post('/notifications/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('doctor.notifications.markAsRead');
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])->name('doctor.notifications.markAllRead');
 });
+
+
+// Phần thống kê ở trang bác sĩ
+
+// Route::middleware(['auth:doctor'])->prefix('doctor')->group(function () {
+//     Route::get('/post-stats', [DoctorController::class, 'getPostStatsPerPost']);
+//     Route::get('/post-totals', [DoctorController::class, 'getPostInteractionTotals']);
+// });
+
+Route::prefix('doctor')->middleware('auth:doctor')->group(function () {
+    // =====================Post=============================
+    Route::get('/post-kpi', [DoctorController::class, 'getPostKPI']);
+    Route::get('/post-trend', [DoctorController::class, 'getPostTrend']);
+    Route::get('/post-top', [DoctorController::class, 'getTopPosts']);
+    Route::get('/post-category-distribution', [DoctorController::class, 'getCategoryDistribution']);
+    Route::get('/post-detail-stats', [DoctorController::class, 'getPostStatsPerPost']);
+    // =====================Appointment=============================
+    Route::get('/appointment-kpi', [DoctorController::class, 'getAppointmentKPI']);
+    Route::get('/appointment-trend', [DoctorController::class, 'getAppointmentTrend']);
+    Route::get('/appointment-type-distribution', [DoctorController::class, 'getAppointmentTypeDistribution']);
+    Route::get('/appointment-comparison', [DoctorController::class, 'getAppointmentComparison']);
+});

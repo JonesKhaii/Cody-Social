@@ -23,10 +23,35 @@ class Post extends Model
         return $this->hasOne('App\Models\PostTag', 'id', 'post_tag_id');
     }
 
-    public function author_info()
+    // public function author_info()
+    // {
+    //     if ($this->added_by && User::find($this->added_by)) {
+    //         return $this->belongsTo(User::class, 'added_by', 'id');
+    //     }
+
+    //     return $this->belongsTo(Doctor::class, 'added_by', 'id');
+    // }
+
+    public function user()
     {
-        return $this->belongsTo(Doctor::class, 'added_by', 'id');
+        return $this->belongsTo(User::class, 'added_by');
     }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'added_by');
+    }
+    public function getAuthorInfoAttribute()
+    {
+        // Ưu tiên Doctor trước
+        if ($this->doctor) {
+            return $this->doctor;
+        }
+
+        // Nếu không có doctor, kiểm tra user
+        return $this->user;
+    }
+
     public static function getAllPost()
     {
         return Post::with(['cat_info', 'author_info'])->orderBy('id', 'DESC')->paginate(10);
@@ -84,5 +109,46 @@ class Post extends Model
                 }
             })
             ->exists();
+    }
+
+
+    // Statistic
+    public function getPostInteractionTotals()
+    {
+        $doctorId = auth()->guard('doctor')->id();
+
+        $posts = Post::where('added_by', $doctorId)
+            ->withCount(['likes', 'comments'])
+            ->select('id', 'views') // chỉ lấy cần thiết
+            ->get();
+
+        $totals = [
+            'likes' => $posts->sum('likes_count'),
+            'comments' => $posts->sum('comments_count'),
+            'views' => $posts->sum('views'),
+        ];
+
+        return response()->json($totals);
+    }
+
+
+    public function getPostStatsPerPost()
+    {
+        $doctorId = auth()->guard('doctor')->id();
+
+        $posts = Post::where('added_by', $doctorId)
+            ->withCount(['likes', 'comments'])
+            ->select(['id', 'title', 'views'])
+            ->get()
+            ->map(function ($post) {
+                return [
+                    'title' => $post->title,
+                    'views' => $post->views ?? 0,
+                    'likes' => $post->likes_count ?? 0,
+                    'comments' => $post->comments_count ?? 0,
+                ];
+            });
+
+        return response()->json($posts);
     }
 }

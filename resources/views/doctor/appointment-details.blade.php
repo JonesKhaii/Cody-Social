@@ -103,7 +103,7 @@
 
     /* Đảm bảo modal có kích thước tối thiểu */
     .modal-content {
-        min-width: 520px;
+        min-width: 320px;
     }
 
     .modal-header {

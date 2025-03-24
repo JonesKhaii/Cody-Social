@@ -1,6 +1,9 @@
 <div class="row row-eq-height">
     @if ($posts->count() > 0)
         @foreach ($posts as $post)
+            @if (!$post->slug)
+                @continue
+            @endif
             <div class="col-md-4 d-flex">
                 <div class="card w-100 mb-4 shadow-sm">
                     <img class="card-img-top" src="{{ asset($post->photo) }}" alt="{{ $post->title }}"

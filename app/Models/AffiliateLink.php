@@ -56,6 +56,8 @@ class AffiliateLink extends Model
         ]);
     }
 
+
+
     /**
      * Kiểm tra xem link affiliate có tồn tại không
      */

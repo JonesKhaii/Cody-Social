@@ -31,8 +31,8 @@
                 <input type="file" name="photo" id="photo" class="form-control" accept="image/*" required>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Đăng bài</button>
                 <button type="button" class="btn btn-secondary" id="cancel-add-post">Hủy</button>
+                <button type="submit" class="btn btn-primary">Đăng bài</button>
             </div>
         </form>
 

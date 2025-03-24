@@ -18,9 +18,10 @@ class HomeController extends Controller
         $posts = Post::select('id', 'title', 'slug', 'summary', 'photo', 'post_cat_id', 'post_tag_id', 'added_by', 'created_at')
             ->where('status', 'active')
             ->with([
-                'cat_info:id,title', // Lấy tiêu đề danh mục bài viết
-                'tag_info:id,title', // Lấy tên các tag liên kết với bài viết
-                'author_info:id,name', // Lấy thông tin tác giả (name)
+                'cat_info:id,title',
+                'tag_info:id,title',
+                'user:id,name',
+                'doctor:id,name',
             ])
             ->latest()
             ->paginate(6); // Phân trang (6 bài viết mỗi trang)

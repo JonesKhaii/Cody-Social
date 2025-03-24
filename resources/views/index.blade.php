@@ -66,6 +66,7 @@
             <div class="container mt-5" id="postsContainer">
                 @include('partials.posts', ['posts' => $posts])
             </div>
+
             @foreach ($popularCategories as $category)
                 <div class="category-container">
                     <div class="category-header">

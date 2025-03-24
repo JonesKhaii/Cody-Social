@@ -24,8 +24,16 @@ class PostController extends Controller
 
     public function detail($slug)
     {
-        $post = Post::where('slug', $slug)->where('status', 'active')->firstOrFail();
+        $post = Post::with(['user', 'doctor'])->where('slug', $slug)->where('status', 'active')->firstOrFail();
+
         // $post = Post::where('slug', $slug)->firstOrFail();
+
+        if (!session()->has('viewed_post_' . $post->id)) {
+            $post->increment('views');
+            session()->put('viewed_post_' . $post->id, true);
+        }
+
+        // dd($post->views);
 
         // Lấy các bình luận liên quan đến bài viết
         $comments = $post->comments()->with('author_info', 'replies')->get();

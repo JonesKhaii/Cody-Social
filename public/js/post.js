@@ -92,3 +92,24 @@ $(document).ready(function () {
         });
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const replyButtons = document.querySelectorAll('.btn-reply');
+    const parentInput = document.getElementById('parent_id');
+
+    replyButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const commentId = this.getAttribute('data-id');
+            parentInput.value = commentId;
+
+            // Tô sáng comment đang được trả lời (tuỳ chọn)
+            document.querySelectorAll('.single-comment').forEach(el => el.classList.remove('border-success'));
+            const target = document.getElementById(`comment-${commentId}`);
+            if (target) target.classList.add('border-success');
+
+            // Scroll tới form
+            document.querySelector('.reply').scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+});
+

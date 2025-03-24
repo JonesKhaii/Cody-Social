@@ -6,20 +6,30 @@ use Illuminate\Database\Eloquent\Model;
 
 class PostComment extends Model
 {
-    protected $fillable = ['user_id', 'post_id', 'comment', 'replied_comment', 'parent_id', 'status'];
+    protected $fillable = ['user_id', 'doctor_id', 'post_id', 'comment', 'replied_comment', 'parent_id', 'status'];
 
-    public function user_info()
+    // Quan hệ với User
+    public function user()
     {
-        return $this->hasOne('App\User', 'id', 'user_id');
-    }
-    public static function getAllComments()
-    {
-        return PostComment::with('user_info')->paginate(10);
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
 
-    public static function getAllUserComments()
+    // Quan hệ với Doctor
+    public function doctor()
     {
-        return PostComment::where('user_id', auth()->user()->id)->with('user_info')->paginate(10);
+        return $this->belongsTo('App\Models\Doctor', 'doctor_id', 'id');
+    }
+
+    // Trả về thông tin người viết bình luận (user hoặc doctor)
+    public function getAuthorInfoAttribute()
+    {
+        return $this->user ?? $this->doctor;
+    }
+
+    // Trả về avatar người viết bình luận
+    public function getAuthorPhotoAttribute()
+    {
+        return $this->author_info->photo ?? 'images/default-avatar.png';
     }
 
     public function post()

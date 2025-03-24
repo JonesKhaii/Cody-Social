@@ -7,8 +7,11 @@ use App\Models\User;
 use App\Models\Doctor;
 use App\Models\Product;
 use App\Models\AffiliateLink;
+use App\Models\AffiliateClick;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
 
 class AffiliateController extends Controller
 {
@@ -65,6 +68,56 @@ class AffiliateController extends Controller
         ], 201);
     }
 
+    public function trackClick(Request $request, $hash_ref)
+    {
+        // ✅ Tìm affiliate link theo hash_ref
+        $affiliate = DB::table('affiliate_links')->where('hash_ref', $hash_ref)->first();
+
+        if (!$affiliate) {
+            return response()->json(['error' => 'Affiliate link không tồn tại.'], 404);
+        }
+
+        $ip_address = $request->ip();
+        $user_agent = $request->header('User-Agent');
+        $doctor_id = $affiliate->doctor_id;
+        $product_id = $affiliate->product_id;
+
+        // ✅ Kiểm tra xem IP/User-Agent đã click trong 10 phút gần đây chưa (chống spam điểm)
+        $recentClick = DB::table('affiliate_clicks')
+            ->where('doctor_id', $doctor_id)
+            ->where('product_id', $product_id)
+            ->where(function ($query) use ($ip_address, $user_agent) {
+                $query->where('ip_address', $ip_address)
+                    ->orWhere('user_agent', $user_agent);
+            })
+            ->where('created_at', '>', now()->subMinutes(10))
+            ->exists();
+
+        // ✅ Lưu thông tin click
+        AffiliateClick::create([
+            'doctor_id' => $doctor_id,
+            'product_id' => $product_id,
+            'hash_ref' => $hash_ref,
+            'ip_address' => $ip_address,
+            'user_agent' => $user_agent,
+        ]);
+
+
+        $pointsAdded = 0;
+
+        // ✅ Nếu chưa click gần đây => Cộng điểm
+        if (!$recentClick) {
+            DB::table('doctors')->where('id', $doctor_id)->increment('points', 1);
+            $pointsAdded = 1;
+        }
+
+        return response()->json([
+            'message' => 'Click được ghi nhận!',
+            'doctor_id' => $doctor_id,
+            'product_id' => $product_id,
+            'points_added' => $pointsAdded
+        ], 200);
+    }
 
     public function searchProduct(Request $request)
     {

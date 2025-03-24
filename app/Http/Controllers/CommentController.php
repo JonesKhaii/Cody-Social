@@ -10,6 +10,38 @@ use App\Helpers\NotificationHelper;
 
 class CommentController extends Controller
 {
+    // public function store(Request $request)
+    // {
+    //     $user = Auth::guard('web')->user() ?? Auth::guard('doctor')->user();
+
+    //     if (!$user) {
+    //         return back()->with('error', 'Bạn cần đăng nhập để bình luận.');
+    //     }
+
+    //     $comment = Comment::create([
+    //         'post_id' => $request->post_id,
+    //         'comment' => $request->comment,
+    //         'status' => 'active',
+    //         'parent_id' => $request->parent_id,
+    //         'replied_comment' => $request->parent_id ? $request->replied_comment : null,
+    //         'user_id' => get_class($user) === 'App\\Models\\User' ? $user->id : null,
+    //         'doctor_id' => get_class($user) === 'App\\Models\\Doctor' ? $user->id : null,
+    //     ]);
+
+    //     // Gửi thông báo cho tác giả bài viết
+    //     $post = Post::findOrFail($request->post_id);
+    //     $postAuthor = $post->author_info;
+    //     if ($postAuthor && $postAuthor->id !== $user->id) {
+    //         NotificationHelper::send(
+    //             $postAuthor,
+    //             'comment',
+    //             $user->name . ' đã bình luận về bài viết của bạn: "' . $post->title . '".',
+    //             route('post.detail', ['slug' => $post->slug])
+    //         );
+    //     }
+
+    //     return back()->with('success', 'Bình luận của bạn đã được thêm.');
+    // }
     public function store(Request $request)
     {
         $user = Auth::guard('web')->user() ?? Auth::guard('doctor')->user();
@@ -28,8 +60,31 @@ class CommentController extends Controller
             'doctor_id' => get_class($user) === 'App\\Models\\Doctor' ? $user->id : null,
         ]);
 
+        // $post = Post::findOrFail($request->post_id);
+        $post = Post::with([
+            'comments.user',
+            'comments.doctor',
+            'comments.replies.user',
+            'comments.replies.doctor'
+        ])->findOrFail($request->post_id);
+
+
+        // Gửi thông báo cho người được trả lời (nếu có)
+        if ($request->parent_id) {
+            $parentComment = Comment::find($request->parent_id);
+            $replyUser = $parentComment->author_info ?? null;
+
+            if ($replyUser && $replyUser->id !== $user->id) {
+                NotificationHelper::send(
+                    $replyUser,
+                    'comment_reply',
+                    $user->name . ' đã trả lời bình luận của bạn trong bài viết "' . $post->title . '".',
+                    route('post.detail', ['slug' => $post->slug]) . '#comment-' . $comment->id
+                );
+            }
+        }
+
         // Gửi thông báo cho tác giả bài viết
-        $post = Post::findOrFail($request->post_id);
         $postAuthor = $post->author_info;
         if ($postAuthor && $postAuthor->id !== $user->id) {
             NotificationHelper::send(

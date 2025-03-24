@@ -49,6 +49,9 @@
                                     <i class="fa fa-calendar me-1"></i> {{ $post->created_at->format('d M, Y') }}
                                 </span>
                                 <span class="d-flex align-items-center mb-2 me-3">
+                                    <i class="fa-solid fa-eye"></i> {{ $post->views }} Lượt xem
+                                </span>
+                                <span class="d-flex align-items-center mb-2 me-3">
                                     <i class="fa fa-comments me-1"></i> {{ $post->comments->count() }} bình luận
                                 </span>
 
@@ -96,7 +99,7 @@
                             <h3 class="comment-title h4 mb-4">Bình luận ({{ $post->comments->count() }})</h3>
 
                             <!-- Hiển thị danh sách bình luận -->
-                            <div class="comment-list">
+                            {{-- <div class="comment-list">
                                 @foreach ($post->comments->where('parent_id', null) as $comment)
                                     <div class="single-comment border-bottom mb-4 pb-4">
                                         <div class="d-flex">
@@ -158,7 +161,75 @@
                                         @endif
                                     </div>
                                 @endforeach
+                            </div> --}}
+
+                            <!-- Hiển thị danh sách bình luận -->
+                            <div class="comment-list">
+                                @foreach ($post->comments->where('parent_id', null) as $comment)
+                                    <div class="single-comment border-bottom mb-4 pb-4" id="comment-{{ $comment->id }}">
+                                        <div class="d-flex">
+                                            <div class="comment-avatar me-3">
+                                                <img src="{{ asset($comment->user->photo ?? ($comment->doctor->photo ?? 'images/default-avatar.png')) }}"
+                                                    alt="Avatar" class="rounded-circle" width="60" height="60"
+                                                    style="object-fit: cover;">
+                                            </div>
+                                            <div class="comment-body flex-grow-1">
+                                                <div class="comment-meta mb-2">
+                                                    <span class="fw-bold">
+                                                        {{ optional($comment->author_info)->name ?? 'Người dùng ẩn danh' }}
+                                                    </span>
+                                                    <span class="comment-date text-muted small ms-2">
+                                                        {{ $comment->created_at->format('d M, Y H:i') }}
+                                                    </span>
+                                                </div>
+                                                <p class="comment-text mb-2">{{ $comment->comment }}</p>
+
+                                                <!-- Nút trả lời -->
+                                                <div class="comment-reply">
+                                                    <a href="javascript:void(0);"
+                                                        class="btn-reply reply text-primary small text-decoration-none"
+                                                        data-id="{{ $comment->id }}">
+                                                        <i class="fa fa-reply me-1"></i> Trả lời
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Hiển thị các trả lời -->
+                                        @if ($comment->replies->count() > 0)
+                                            <div class="comment-replies ps-md-5 mt-3 ps-4">
+                                                @foreach ($comment->replies as $reply)
+                                                    <div class="single-comment border-bottom mb-3 pb-3"
+                                                        id="comment-{{ $reply->id }}">
+                                                        <div class="d-flex">
+                                                            <div class="comment-avatar me-3">
+                                                                <img src="{{ asset($reply->author_photo) }}"
+                                                                    alt="Avatar" class="rounded-circle"
+                                                                    width="50" height="50"
+                                                                    style="object-fit: cover;">
+
+
+                                                            </div>
+                                                            <div class="comment-body flex-grow-1">
+                                                                <div class="comment-meta mb-2">
+                                                                    <span class="fw-bold">
+                                                                        {{ optional($reply->author_info)->name ?? 'Người dùng ẩn danh' }}
+                                                                    </span>
+                                                                    <span class="comment-date text-muted small ms-2">
+                                                                        {{ $reply->created_at->format('d M, Y H:i') }}
+                                                                    </span>
+                                                                </div>
+                                                                <p class="comment-text mb-0">{{ $reply->comment }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endforeach
                             </div>
+
                         </div>
 
                         <!-- Form bình luận -->
