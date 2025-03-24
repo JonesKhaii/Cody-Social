@@ -45,7 +45,16 @@
                 {{ $posts->links() }}
             </div>
         @else
-            <p>Không tìm thấy kết quả nào cho từ khóa <strong>{{ $q }}</strong>.</p>
+            <div class="row">
+                <p>Không tìm thấy kết quả nào cho từ khóa <strong>{{ $q }}</strong>.</p>
+            </div>
         @endif
     </div>
 @endsection
+
+<style>
+    .row {
+        min-height: 400px;
+
+    }
+</style>

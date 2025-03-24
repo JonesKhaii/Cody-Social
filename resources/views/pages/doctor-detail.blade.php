@@ -152,7 +152,8 @@
                     <p class="text-primary mb-4">{{ $doctor->specialization }}</p>
 
                     <div class="d-flex justify-content-between mb-4 gap-2">
-                        <button class="btn btn-appointment w-50">Đặt Lịch Khám</button>
+                        <button class="btn btn-primary btn-appointment w-50" data-bs-toggle="modal"
+                            data-bs-target="#bookAppointmentModal">Đặt Lịch Khám</button>
                         <button class="btn btn-follow w-50">Theo Dõi</button>
                     </div>
 
@@ -207,4 +208,35 @@
             </div>
         </div>
     </div>
+    @include('pages.booking-appointment')
+
+    <script>
+        document.querySelector('.btn-appointment').addEventListener('click', function() {
+            const doctor = {
+                id: '{{ $doctor->id }}',
+                name: '{{ $doctor->name }}',
+                specialization: '{{ $doctor->specialization }}',
+                photo: '{{ $doctor->photo }}'
+            };
+
+            // Điền thông tin bác sĩ vào modal
+            document.getElementById('selected_doctor_id').value = doctor.id;
+            document.getElementById('selected-doctor-name').textContent = 'Bs. ' + doctor.name;
+            document.getElementById('selected-doctor-specialization').textContent = doctor.specialization;
+            document.getElementById('selected-doctor-img').src = doctor.photo;
+            document.getElementById('selected-doctor-info').style.display = 'block';
+
+            // Mở modal để người dùng điền thông tin và đặt lịch
+            const bookAppointmentModal = new bootstrap.Modal(document.getElementById('bookAppointmentModal'));
+            bookAppointmentModal.show();
+
+            // Đảm bảo khi đóng modal, backdrop cũng sẽ biến mất
+            document.getElementById('bookAppointmentModal').addEventListener('hidden.bs.modal', function() {
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove(); // Loại bỏ backdrop khi modal đóng
+                }
+            });
+        });
+    </script>
 @endsection

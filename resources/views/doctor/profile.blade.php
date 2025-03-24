@@ -74,7 +74,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#statistics" data-toggle="tab">
+                                <a class="nav-link" href="#statistics" data-bs-toggle="tab">
                                     <i class="fas fa-chart-pie"></i>
                                     <p>Báo cáo thống kê</p>
                                 </a>

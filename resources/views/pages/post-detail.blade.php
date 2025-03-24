@@ -623,5 +623,9 @@
         .py-4 {
             padding-top: 0 !important;
         }
+
+        .object-fit-cover {
+            object-fit: cover;
+        }
     </style>
 @endpush

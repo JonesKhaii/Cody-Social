@@ -230,20 +230,23 @@ class DoctorController extends Controller
             NotificationHelper::send(
                 $user,
                 'appointment',
-                'Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' đã bị **hủy**.'
+                '<i class="fas fa-calendar-times text-danger"></i> Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' đã bị **hủy**.'
             );
         }
 
         return back()->with('success', 'Lịch hẹn đã bị hủy và thông báo đã gửi đến bệnh nhân.');
     }
+
+
     public function showDetail($id)
     {
+
         $doctor = Doctor::select(['id', 'name', 'specialization', 'photo', 'email', 'phone', 'bio'])
             ->with(['posts:id,added_by,title,slug,summary,photo,created_at'])
             ->findOrFail($id);
-
         return view('pages.doctor-detail', compact('doctor'));
     }
+
 
     // Statics 
     public function getAppointmentStats()

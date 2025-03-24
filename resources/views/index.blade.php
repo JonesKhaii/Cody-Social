@@ -20,14 +20,14 @@
             <!-- Ô tìm kiếm với nút tìm kiếm và dropdown gợi ý -->
             <div class="search-container" style="position: relative;">
                 <form class="nosubmit" onsubmit="return false;">
-                    <div class="input-group">
+                    <div class="search-input-group">
                         <input
                             type="text"
-                            class="form-control"
+                            class="search-form-control"
                             id="Pesquisar"
                             placeholder="Tìm kiếm từ khóa, tên bài viết, tác giả"
                             autocomplete="off" />
-                        <button class="btn btn-primary" type="button" id="searchBtn">
+                        <button class="btn btn-primary search-btn" type="button" id="searchBtn">
                             <i class="fas fa-search"></i> Tìm kiếm
                         </button>
                     </div>
@@ -587,5 +587,57 @@
         .article p {
             font-size: 13px;
         }
+    }
+
+
+    .search-input-group {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .search-form-control {
+        flex-grow: 1;
+        height: 45px;
+        padding: 0 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .search-form-control:focus {
+        color: #007bff
+    }
+
+    .search-btn {
+        height: 45px;
+        padding: 0 15px;
+        border-radius: 6px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+    }
+
+    .search-input-group .search-form-control {
+        border: 1px solid #007bff;
+        color: #000;
+        transition: border-color 0.3s ease;
+    }
+
+    .search-input-group .search-form-control:focus,
+    .search-input-group .search-form-control:hover {
+        border-color: #007bff;
+        outline: none;
+        color: #000;
+
+    }
+
+    .search-input-group .search-form-control:active {
+        border-color: #0056b3;
     }
 </style>

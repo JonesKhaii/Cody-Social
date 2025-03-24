@@ -9,10 +9,86 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Format số với dấu phân cách hàng nghìn
-    function formatNumber(num) {
-        return new Intl.NumberFormat('vi-VN').format(num);
+    // Theo dõi sự kiện khi thay đổi tab
+    $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+        let target = $(e.target).attr("href");
+
+        // Khởi tạo biểu đồ khi tab thống kê được chọn
+        if (target === "#statistics" || target === "#income") {
+            initStatisticCharts();
+        }
+    });
+});
+
+// Format số với dấu phân cách hàng nghìn
+function formatNumber(num) {
+    return new Intl.NumberFormat('vi-VN').format(num);
+}
+
+// Hàm hiệu ứng đếm số
+function animateValue(id, start, end, duration) {
+    const obj = document.getElementById(id);
+    const range = end - start;
+    const minTimer = 50;
+    let stepTime = Math.abs(Math.floor(duration / range));
+    stepTime = Math.max(stepTime, minTimer);
+
+    let startTime = new Date().getTime();
+    let endTime = startTime + duration;
+    let timer;
+
+    function run() {
+        let now = new Date().getTime();
+        let remaining = Math.max((endTime - now) / duration, 0);
+        let value = Math.round(end - (remaining * range));
+        obj.textContent = formatNumber(value);
+        if (value == end) {
+            clearInterval(timer);
+        }
     }
+
+    timer = setInterval(run, stepTime);
+    run();
+}
+
+// Format date for tooltip
+function formatDate(date, range) {
+    const options = {
+        day: range === "day" || range === "week" ? "numeric" : undefined,
+        month: "short",
+        year: "numeric"
+    };
+
+    if (range === "week") {
+        return `Tuần ${getWeekNumber(date)} - ${date.toLocaleDateString("vi-VN", options)}`;
+    }
+
+    return date.toLocaleDateString("vi-VN", options);
+}
+
+// Get week number
+function getWeekNumber(date) {
+    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+    const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+}
+
+// Hàm xác định màu sắc cho badge tỷ lệ tương tác
+function getERBadgeClass(rate) {
+    if (rate >= 5) return "bg-success";
+    if (rate >= 3) return "bg-info";
+    if (rate >= 1) return "bg-warning";
+    return "bg-danger";
+}
+
+// Khởi tạo tất cả biểu đồ thống kê
+function initStatisticCharts() {
+    // Sử dụng một biến flag để đảm bảo chỉ khởi tạo một lần
+    if (window.statisticChartsInitialized) {
+        return;
+    }
+
+    window.statisticChartsInitialized = true;
 
     // === KPI Tổng quan với hiệu ứng đếm ===
     fetch("/doctor/post-kpi")
@@ -27,32 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
             // Đặt giá trị ER
             document.getElementById("avgER").textContent = data.avg_engagement_rate + "%";
         });
-
-    // Hàm hiệu ứng đếm số
-    function animateValue(id, start, end, duration) {
-        const obj = document.getElementById(id);
-        const range = end - start;
-        const minTimer = 50;
-        let stepTime = Math.abs(Math.floor(duration / range));
-        stepTime = Math.max(stepTime, minTimer);
-
-        let startTime = new Date().getTime();
-        let endTime = startTime + duration;
-        let timer;
-
-        function run() {
-            let now = new Date().getTime();
-            let remaining = Math.max((endTime - now) / duration, 0);
-            let value = Math.round(end - (remaining * range));
-            obj.textContent = formatNumber(value);
-            if (value == end) {
-                clearInterval(timer);
-            }
-        }
-
-        timer = setInterval(run, stepTime);
-        run();
-    }
 
     // === Biểu đồ Top bài viết (Cải tiến) ===
     fetch("/doctor/post-top")
@@ -124,55 +174,52 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(res => res.json())
         .then(data => {
             const tableBody = document.querySelector("#postDetailTable tbody");
-            tableBody.innerHTML = "";
-            data.forEach((post, index) => {
-                tableBody.innerHTML += `
-                    <tr>
-                        <td class="px-3">${index + 1}</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="post-icon bg-light rounded me-2 p-2">
-                                    <i class="fas fa-file-alt text-primary"></i>
+            if (tableBody) {
+                tableBody.innerHTML = "";
+                data.forEach((post, index) => {
+                    tableBody.innerHTML += `
+                        <tr>
+                            <td class="px-3">${index + 1}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="post-icon bg-light rounded me-2 p-2">
+                                        <i class="fas fa-file-alt text-primary"></i>
+                                    </div>
+                                    <div class="post-info">
+                                        <div class="fw-medium">${post.title}</div>
+                                        <small class="text-muted">${post.created_at || 'N/A'}</small>
+                                    </div>
                                 </div>
-                                <div class="post-info">
-                                    <div class="fw-medium">${post.title}</div>
-                                    <small class="text-muted">${post.created_at || 'N/A'}</small>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-center">${formatNumber(post.views)}</td>
-                        <td class="text-center">${formatNumber(post.likes)}</td>
-                        <td class="text-center">${formatNumber(post.comments)}</td>
-                        <td class="text-center">
-                            <span class="badge rounded-pill ${getERBadgeClass(post.engagement_rate)}">${post.engagement_rate}%</span>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            // Tìm kiếm trong bảng
-            document.getElementById("postSearch").addEventListener("keyup", function () {
-                const term = this.value.toLowerCase();
-                const rows = tableBody.querySelectorAll("tr");
-
-                rows.forEach(row => {
-                    const title = row.querySelector(".post-info div").textContent.toLowerCase();
-                    if (title.includes(term)) {
-                        row.style.display = "";
-                    } else {
-                        row.style.display = "none";
-                    }
+                            </td>
+                            <td class="text-center">${formatNumber(post.views)}</td>
+                            <td class="text-center">${formatNumber(post.likes)}</td>
+                            <td class="text-center">${formatNumber(post.comments)}</td>
+                            <td class="text-center">
+                                <span class="badge rounded-pill ${getERBadgeClass(post.engagement_rate)}">${post.engagement_rate}%</span>
+                            </td>
+                        </tr>
+                    `;
                 });
-            });
-        });
 
-    // Hàm xác định màu sắc cho badge tỷ lệ tương tác
-    function getERBadgeClass(rate) {
-        if (rate >= 5) return "bg-success";
-        if (rate >= 3) return "bg-info";
-        if (rate >= 1) return "bg-warning";
-        return "bg-danger";
-    }
+                // Tìm kiếm trong bảng
+                const postSearch = document.getElementById("postSearch");
+                if (postSearch) {
+                    postSearch.addEventListener("keyup", function () {
+                        const term = this.value.toLowerCase();
+                        const rows = tableBody.querySelectorAll("tr");
+
+                        rows.forEach(row => {
+                            const title = row.querySelector(".post-info div").textContent.toLowerCase();
+                            if (title.includes(term)) {
+                                row.style.display = "";
+                            } else {
+                                row.style.display = "none";
+                            }
+                        });
+                    });
+                }
+            }
+        });
 
     // === Biểu đồ xu hướng (views/likes/comments theo thời gian) ===
     function renderTrendChart(range = "month") {
@@ -272,140 +319,139 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(err => {
                 console.error("Error fetching data:", err);
-                document.getElementById("trendChart").innerHTML =
-                    `<div class="alert alert-danger">Không thể tải dữ liệu. Vui lòng thử lại sau.</div>`;
+                const trendChart = document.getElementById("trendChart");
+                if (trendChart) {
+                    trendChart.innerHTML = `<div class="alert alert-danger">Không thể tải dữ liệu. Vui lòng thử lại sau.</div>`;
+                }
             });
-    }
-
-    // Format date for tooltip
-    function formatDate(date, range) {
-        const options = {
-            day: range === "day" || range === "week" ? "numeric" : undefined,
-            month: "short",
-            year: "numeric"
-        };
-
-        if (range === "week") {
-            return `Tuần ${getWeekNumber(date)} - ${date.toLocaleDateString("vi-VN", options)}`;
-        }
-
-        return date.toLocaleDateString("vi-VN", options);
-    }
-
-    // Get week number
-    function getWeekNumber(date) {
-        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-        const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
-        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
     }
 
     // Gọi ban đầu
     renderTrendChart();
 
     // Gọi lại khi thay đổi dropdown
-    document.getElementById("trendRange").addEventListener("change", function () {
-        const range = this.value;
-        renderTrendChart(range);
-    });
-});
+    const trendRange = document.getElementById("trendRange");
+    if (trendRange) {
+        trendRange.addEventListener("change", function () {
+            const range = this.value;
+            renderTrendChart(range);
+        });
+    }
 
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    // Fetch KPI lịch khám
     // Fetch KPI lịch khám
     fetch("/doctor/appointment-kpi")
         .then(res => res.json())
         .then(data => {
             // Hiển thị tổng số lịch khám
-            document.getElementById("totalAppointments").textContent = data.total_appointments;
+            const totalAppointments = document.getElementById("totalAppointments");
+            if (totalAppointments) {
+                totalAppointments.textContent = data.total_appointments;
+            }
 
             // Hiển thị từng trạng thái riêng biệt
             const statusData = data.appointment_status;
-            document.getElementById("pendingAppointments").textContent = statusData['Chờ duyệt'] || 0;
-            document.getElementById("upcomingAppointments").textContent = statusData['Sắp tới'] || 0;
-            document.getElementById("completedAppointments").textContent = statusData['Hoàn thành'] || 0;
-            document.getElementById("cancelledAppointments").textContent = statusData['Đã Huỷ'] || 0;
+            const pendingAppointments = document.getElementById("pendingAppointments");
+            const upcomingAppointments = document.getElementById("upcomingAppointments");
+            const completedAppointments = document.getElementById("completedAppointments");
+            const cancelledAppointments = document.getElementById("cancelledAppointments");
+
+            if (pendingAppointments) pendingAppointments.textContent = statusData['Chờ duyệt'] || 0;
+            if (upcomingAppointments) upcomingAppointments.textContent = statusData['Sắp tới'] || 0;
+            if (completedAppointments) completedAppointments.textContent = statusData['Hoàn thành'] || 0;
+            if (cancelledAppointments) cancelledAppointments.textContent = statusData['Đã Huỷ'] || 0;
         })
         .catch(error => {
             console.error("Error fetching appointment KPI:", error);
-            document.getElementById("totalAppointments").textContent = "Error";
+            const totalAppointments = document.getElementById("totalAppointments");
+            if (totalAppointments) {
+                totalAppointments.textContent = "Error";
+            }
         });
+
     // Biểu đồ xu hướng lịch khám
     fetch("/doctor/appointment-trend")
         .then(res => res.json())
         .then(data => {
-            const chart = new CanvasJS.Chart("appointmentTrendChart", {
-                animationEnabled: true,
-                theme: "light2",
-                backgroundColor: "transparent",
-                axisX: {
-                    valueFormatString: "DD MMM YYYY",
-                    gridColor: "#f0f0f0"
-                },
-                axisY: {
-                    includeZero: true,
-                    gridColor: "#f0f0f0"
-                },
-                data: [{
-                    type: "spline",
-                    name: "Số lịch khám",
-                    showInLegend: true,
-                    dataPoints: data.map(item => ({
-                        x: new Date(item.date),
-                        y: item.total
-                    }))
-                }]
-            });
-            chart.render();
+            const appointmentTrendChart = document.getElementById("appointmentTrendChart");
+            if (appointmentTrendChart) {
+                const chart = new CanvasJS.Chart("appointmentTrendChart", {
+                    animationEnabled: true,
+                    theme: "light2",
+                    backgroundColor: "transparent",
+                    axisX: {
+                        valueFormatString: "DD MMM YYYY",
+                        gridColor: "#f0f0f0"
+                    },
+                    axisY: {
+                        includeZero: true,
+                        gridColor: "#f0f0f0"
+                    },
+                    data: [{
+                        type: "spline",
+                        name: "Số lịch khám",
+                        showInLegend: true,
+                        dataPoints: data.map(item => ({
+                            x: new Date(item.date),
+                            y: item.total
+                        }))
+                    }]
+                });
+                chart.render();
+            }
         });
 
     // Biểu đồ phân bổ hình thức khám
     fetch("/doctor/appointment-type-distribution")
         .then(res => res.json())
         .then(data => {
-            const chart = new CanvasJS.Chart("appointmentTypeDistributionChart", {
-                animationEnabled: true,
-                theme: "light2",
-                backgroundColor: "transparent",
-                data: [{
-                    type: "doughnut",
-                    indexLabel: "{label} - {y}%",
-                    dataPoints: data.map(item => ({
-                        label: item.type,
-                        y: item.percentage
-                    }))
-                }]
-            });
-            chart.render();
+            const appointmentTypeDistributionChart = document.getElementById("appointmentTypeDistributionChart");
+            if (appointmentTypeDistributionChart) {
+                const chart = new CanvasJS.Chart("appointmentTypeDistributionChart", {
+                    animationEnabled: true,
+                    theme: "light2",
+                    backgroundColor: "transparent",
+                    data: [{
+                        type: "doughnut",
+                        indexLabel: "{label} - {y}%",
+                        dataPoints: data.map(item => ({
+                            label: item.type,
+                            y: item.percentage
+                        }))
+                    }]
+                });
+                chart.render();
+            }
         });
 
     // Biểu đồ cột so sánh tỷ lệ lịch khám
     fetch("/doctor/appointment-comparison")
         .then(res => res.json())
         .then(data => {
-            const chart = new CanvasJS.Chart("appointmentComparisonChart", {
-                animationEnabled: true,
-                theme: "light2",
-                backgroundColor: "transparent",
-                axisX: {
-                    title: "Thời gian",
-                    labelAngle: -45,
-                    gridColor: "#f0f0f0"
-                },
-                axisY: {
-                    title: "Tỷ lệ (%)",
-                    gridColor: "#f0f0f0"
-                },
-                data: [{
-                    type: "column",
-                    indexLabel: "{y}%",
-                    dataPoints: data.map(item => ({
-                        label: item.period,
-                        y: item.rate
-                    }))
-                }]
-            });
-            chart.render();
+            const appointmentComparisonChart = document.getElementById("appointmentComparisonChart");
+            if (appointmentComparisonChart) {
+                const chart = new CanvasJS.Chart("appointmentComparisonChart", {
+                    animationEnabled: true,
+                    theme: "light2",
+                    backgroundColor: "transparent",
+                    axisX: {
+                        title: "Thời gian",
+                        labelAngle: -45,
+                        gridColor: "#f0f0f0"
+                    },
+                    axisY: {
+                        title: "Tỷ lệ (%)",
+                        gridColor: "#f0f0f0"
+                    },
+                    data: [{
+                        type: "column",
+                        indexLabel: "{y}%",
+                        dataPoints: data.map(item => ({
+                            label: item.period,
+                            y: item.rate
+                        }))
+                    }]
+                });
+                chart.render();
+            }
         });
-});
+}

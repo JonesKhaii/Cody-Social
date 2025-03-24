@@ -1011,3 +1011,22 @@ footer > div > img {
         top: 60px !important;
     }
 }
+
+#backToTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #2377b3;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 20px;
+    display: none; /* Ẩn mặc định */
+    cursor: pointer;
+    z-index: 1000;
+}
+
+#backToTop:hover {
+    background-color: #0056b3;
+}
