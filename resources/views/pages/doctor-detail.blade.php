@@ -170,7 +170,7 @@
                 <div class="profile-section">
                     <h5 class="section-title">Giới Thiệu Bác Sĩ</h5>
                     <div class="doctor-bio">
-                        {{ $doctor->bio }}
+                        {!! $doctor->formatted_bio !!}
                     </div>
                 </div>
 

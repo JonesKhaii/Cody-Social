@@ -78,7 +78,15 @@ class CommentController extends Controller
                 NotificationHelper::send(
                     $replyUser,
                     'comment_reply',
-                    $user->name . ' đã trả lời bình luận của bạn trong bài viết "' . $post->title . '".',
+                    '<div class="notification-content">
+                        <div class="notification-icon">
+                            <i class="fas fa-comment text-primary"></i>
+                        </div>
+                        <div class="notification-text">
+                            ' . $user->name . ' đã trả lời bình luận của bạn trong bài viết 
+                            "<strong>' . $post->title . '</strong>"
+                        </div>
+                    </div>',
                     route('post.detail', ['slug' => $post->slug]) . '#comment-' . $comment->id
                 );
             }

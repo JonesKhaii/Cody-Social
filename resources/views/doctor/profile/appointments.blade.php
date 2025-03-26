@@ -93,7 +93,7 @@
                                         Xem
                                     </button>
                                 </td>
-                                <td>
+                                {{-- <td>
                                     @if ($appointment->status === 'Sắp tới' && $appointment->approval_status === 'Chấp nhận')
                                         <form method="POST"
                                             action="{{ route('doctor.appointments.complete', ['id' => $appointment->id]) }}"
@@ -113,7 +113,50 @@
                                                 class="btn btn-danger btn-sm cancel-appointment-btn">Hủy</button>
                                         </form>
                                     @endif
+                                </td> --}}
+                                <td>
+                                    {{-- Hiển thị nút Chấp nhận và Từ chối nếu approval_status là 'Chờ duyệt' --}}
+                                    @if ($appointment->approval_status === 'Chờ duyệt')
+                                        <form method="POST"
+                                            action="{{ route('doctor.appointments.approve', ['id' => $appointment->id]) }}"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn btn-sm btn-success me-1" title="Xác nhận">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </form>
+
+                                        <form method="POST"
+                                            action="{{ route('doctor.appointments.reject', ['id' => $appointment->id]) }}"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn btn-danger btn-sm">Từ chối</button>
+                                        </form>
+                                    @endif
+
+                                    {{-- Hiển thị nút Hoàn thành và Hủy nếu status là 'Sắp tới' và approval_status là 'Chấp nhận' --}}
+                                    @if ($appointment->status === 'Sắp tới' && $appointment->approval_status === 'Chấp nhận')
+                                        <form method="POST"
+                                            action="{{ route('doctor.appointments.complete', ['id' => $appointment->id]) }}"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn btn-primary btn-sm">Hoàn thành</button>
+                                        </form>
+
+                                        <form method="POST"
+                                            action="{{ route('doctor.appointments.cancel', ['id' => $appointment->id]) }}"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="button"
+                                                class="btn btn-danger btn-sm cancel-appointment-btn">Hủy</button>
+                                        </form>
+                                    @endif
                                 </td>
+
                             </tr>
                         @endforeach
                     </tbody>

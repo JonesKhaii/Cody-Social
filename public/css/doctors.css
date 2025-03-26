@@ -1280,7 +1280,7 @@ table.dataTable td {
     font-size: 18px;
     width: 24px;
     text-align: center;
-    margin-right: 15px;
+    /* margin-right: 15px; */
     transition: margin var(--transition-speed);
 }
 
@@ -1446,7 +1446,7 @@ table.dataTable td {
     justify-content: center;
     cursor: pointer;
     z-index: 200;
-    width: 24px;
+    width: 5px;
     height: 24px;
     right: 1px;
     top: 50%;
@@ -2058,4 +2058,7 @@ select {
 select.form-control::after,
 select.form-select::after {
     right: 10px; /* Đảm bảo biểu tượng dropdown không bị đè lên text */
+}
+.submenu-container.active .submenu-icon {
+    transform: rotate(90deg);
 }

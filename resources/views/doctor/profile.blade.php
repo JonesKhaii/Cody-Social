@@ -16,9 +16,6 @@
     @endif
 
     <div class="wrapper">
-        {{-- <button class="sidebar-toggle" id="sidebarToggle">
-            <i class="fas fa-bars"></i>
-        </button> --}}
 
         <!-- Overlay khi mở sidebar trên mobile -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -74,7 +71,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#statistics" data-bs-toggle="tab">
+                                <a class="nav-link" href="#statistics" data-toggle="tab" data-bs-toggle="tab">
                                     <i class="fas fa-chart-pie"></i>
                                     <p>Báo cáo thống kê</p>
                                 </a>
@@ -96,14 +93,14 @@
 
                 <div class="user-profile">
                     <div class="user-avatar">
-                        <img src="assets/avatar.jpg" alt="User Avatar">
+                        <img src="{{ $doctor->photo }}" alt="Doctor" class="profile-photo">
                         <div class="status-indicator online"></div>
                     </div>
                     <div class="user-info">
-                        <h5 class="user-name">Bác sĩ Nguyễn</h5>
-                        <p class="user-role">Quản trị viên</p>
+                        <h5 class="profile-name-small">{{ $doctor->name }}</h5>
+                        <p class="user-role">Bác sĩ</p>
                     </div>
-                    <a href="#logout" class="logout-button">
+                    <a href="{{ route('logout') }}" class="logout-button">
                         <i class="fas fa-sign-out-alt"></i>
                     </a>
                 </div>

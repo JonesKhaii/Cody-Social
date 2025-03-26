@@ -10,42 +10,7 @@ use App\Helpers\NotificationHelper;
 
 class PostLikeController extends Controller
 {
-    // public function toggleLike(Request $request)
-    // {
-    //     $post = Post::findOrFail($request->post_id);
-    //     $user = Auth::guard('web')->user() ?? Auth::guard('doctor')->user(); // Kiểm tra user hoặc doctor
 
-    //     if (!$user) {
-    //         return response()->json(['error' => 'Bạn cần đăng nhập để like.'], 401);
-    //     }
-
-    //     // Kiểm tra xem user hoặc doctor đã like chưa
-    //     $existingLike = PostLike::where('post_id', $post->id)
-    //         ->where(function ($query) use ($user) {
-    //             $query->where('user_id', $user->id)
-    //                 ->orWhere('doctor_id', $user->id);
-    //         })->first();
-
-    //     if ($existingLike) {
-    //         $existingLike->delete(); // Nếu đã like thì bỏ like
-    //         $liked = false;
-    //     } else {
-    //         PostLike::create([
-    //             'post_id' => $post->id,
-    //             'user_id' => get_class($user) === 'App\Models\User' ? $user->id : null,
-    //             'doctor_id' => get_class($user) === 'App\Models\Doctor' ? $user->id : null,
-    //         ]);
-    //         $liked = true;
-    //     }
-
-    //     // Đếm số lượt like mới
-    //     $likeCount = PostLike::where('post_id', $post->id)->count();
-
-    //     return response()->json([
-    //         'liked' => $liked,
-    //         'count' => $likeCount
-    //     ]);
-    // }
     public function toggleLike(Request $request)
     {
         $post = Post::findOrFail($request->post_id);
@@ -78,7 +43,15 @@ class PostLikeController extends Controller
                 NotificationHelper::send(
                     $postAuthor,
                     'like',
-                    $user->name . ' đã thích bài viết của bạn: "' . $post->title . '".',
+                    '<div class="notification-content">
+                        <div class="notification-icon">
+                           <i class="fa-solid fa-newspaper"></i>
+                        </div>
+                        <div class="notification-text">
+                            ' . $user->name . ' đã thích bài viết của bạn: 
+                            "<strong>' . $post->title . '</strong>"
+                        </div>
+                    </div>',
                     route('post.detail', ['slug' => $post->slug])
                 );
             }

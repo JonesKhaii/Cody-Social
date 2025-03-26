@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Auth\Authenticatable as LaravelAuthenticatable;
+use App\Helpers\BioFormatter;
 
 class Doctor extends Model implements Authenticatable
 {
@@ -65,6 +66,11 @@ class Doctor extends Model implements Authenticatable
     public function posts()
     {
         return $this->hasMany(Post::class, 'added_by');
+    }
+
+    public function getFormattedBioAttribute()
+    {
+        return BioFormatter::format($this->bio);
     }
 
     public function reviews()

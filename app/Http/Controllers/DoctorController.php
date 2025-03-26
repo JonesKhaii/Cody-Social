@@ -136,7 +136,17 @@ class DoctorController extends Controller
             NotificationHelper::send(
                 $user,
                 'appointment',
-                'Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' lúc ' . $appointment->time . ' đã được chấp nhận'
+                '<div class="notification-content">
+                    <div class="notification-icon">
+                        <i class="fas fa-calendar-check text-success"></i>
+                    </div>
+                    <div class="notification-text">
+                        Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' 
+                        vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' 
+                        lúc ' . $appointment->time . ' 
+                        đã được <strong>chấp nhận</strong>.
+                    </div>
+                </div>'
             );
         }
 
@@ -168,7 +178,17 @@ class DoctorController extends Controller
             NotificationHelper::send(
                 $user,
                 'appointment',
-                'Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' lúc ' . $appointment->time . ' đã bị **từ chối**.'
+                '<div class="notification-content">
+                    <div class="notification-icon">
+                        <i class="fas fa-calendar-times text-danger"></i>
+                    </div>
+                    <div class="notification-text">
+                        Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' 
+                        vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' 
+                        lúc ' . $appointment->time . ' 
+                        đã bị <strong>từ chối</strong>.
+                    </div>
+                </div>'
             );
         }
 
@@ -199,7 +219,16 @@ class DoctorController extends Controller
             NotificationHelper::send(
                 $user,
                 'appointment',
-                'Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' đã được **hoàn thành**.'
+                '<div class="notification-content">
+                    <div class="notification-icon">
+                        <i class="fas fa-calendar-check text-success"></i>
+                    </div>
+                    <div class="notification-text">
+                        Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' 
+                        vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' 
+                        đã được <strong>hoàn thành</strong>.
+                    </div>
+                </div>'
             );
         }
 
@@ -230,7 +259,16 @@ class DoctorController extends Controller
             NotificationHelper::send(
                 $user,
                 'appointment',
-                '<i class="fas fa-calendar-times text-danger"></i> Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' đã bị **hủy**.'
+                '<div class="notification-content">
+                    <div class="notification-icon">
+                        <i class="fas fa-calendar-times text-danger"></i>
+                    </div>
+                    <div class="notification-text">
+                        Lịch hẹn của bạn với Bác sĩ ' . $doctor->name . ' 
+                        vào ngày ' . date('d/m/Y', strtotime($appointment->date)) . ' 
+                        đã bị <strong>hủy</strong>.
+                    </div>
+                </div>'
             );
         }
 
@@ -241,7 +279,7 @@ class DoctorController extends Controller
     public function showDetail($id)
     {
 
-        $doctor = Doctor::select(['id', 'name', 'specialization', 'photo', 'email', 'phone', 'bio'])
+        $doctor = Doctor::select(['id', 'name', 'specialization', 'services', 'working_hours', 'location', 'workplace', 'photo', 'email', 'phone', 'bio'])
             ->with(['posts:id,added_by,title,slug,summary,photo,created_at'])
             ->findOrFail($id);
         return view('pages.doctor-detail', compact('doctor'));

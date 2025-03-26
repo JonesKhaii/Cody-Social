@@ -88,7 +88,16 @@ class UserController extends Controller
             NotificationHelper::send(
                 $doctor,
                 'appointment',
-                'Bạn có lịch hẹn mới từ bệnh nhân ' . $user->name . ' vào ' . date('d/m/Y', strtotime($request->date)) . ' lúc ' . $request->time,
+                '<div class="notification-content">
+                    <div class="notification-icon">
+                        <i class="fas fa-calendar-plus text-info"></i>
+                    </div>
+                    <div class="notification-text">
+                        Bạn có lịch hẹn mới từ bệnh nhân <strong>' . $user->name . '</strong> 
+                        vào ' . date('d/m/Y', strtotime($request->date)) . ' 
+                        lúc ' . $request->time . '
+                    </div>
+                </div>',
                 route('doctor.appointments.details', $appointment->id),
                 [
                     'appointment_id' => $appointment->id,
