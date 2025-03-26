@@ -7,7 +7,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="user-role" content="{{ $role }}">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<link rel="icon" type="image/x-icon" href="{{ asset('asset/images/favicon.ico') }}">
 <!-- Title Tag  -->
 <title>@yield('title')</title>
 

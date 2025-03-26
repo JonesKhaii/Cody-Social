@@ -1007,3 +1007,80 @@ footer > div > img {
 .notification-text {
     flex-grow: 1;
 }
+
+.contact-quick-actions {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.contact-quick-actions-container {
+    position: absolute;
+    right: 100%; /* Đẩy sang trái hoàn toàn */
+    bottom: 0;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    transform: translateX(-10px); /* Điều chỉnh khoảng cách nhẹ */
+}
+
+.contact-quick-actions-container.show {
+    max-height: 300px;
+    opacity: 1;
+}
+
+.contact-btn {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-radius: 25px;
+    text-decoration: none;
+    color: white;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.contact-btn span {
+    margin-left: 10px;
+}
+
+.zalo-btn {
+    background-color: #0068ff;
+}
+
+.phone-btn {
+    background-color: #25d366;
+}
+
+.messenger-btn {
+    background-color: #0084ff;
+}
+
+.contact-btn i,
+.contact-btn img {
+    width: 24px;
+    height: 24px;
+}
+
+.toggle-contact-actions {
+    align-self: flex-end;
+    background-color: #4a4a4a;
+    color: white;
+    border: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}

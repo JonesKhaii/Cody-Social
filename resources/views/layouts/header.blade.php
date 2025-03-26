@@ -15,9 +15,9 @@
     <div class="container">
         <!-- Logo và thương hiệu -->
         <a href="{{ route('home') }}" class="d-flex align-items-center text-decoration-none">
-            <img src="{{ asset('asset/images/logo.png') }}" alt="CodyHealth Logo" class="logo me-2"
-                style="height: 36px; width: 36px; border-radius: 50%;" />
-            <span class="navbar-brand fs-4 fw-bold mb-0 text-white">CODYHEALTH</span>
+            <img src="{{ asset('asset/images/logo1.png') }}" alt="CodyHealth Logo" class="logo me-2"
+                style="height: 50px; width: 50px; border-radius: 50%;" />
+            <span class="navbar-brand fs-4 fw-bold mb-0 text-white">ToiKhoeBlog</span>
         </a>
 
         <!-- Nút toggle cho mobile -->

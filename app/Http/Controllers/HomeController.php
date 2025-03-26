@@ -15,16 +15,37 @@ class HomeController extends Controller
     public function index()
     {
         // Lấy danh sách bài viết mới nhất, chỉ lấy các cột cần thiết
+        // $posts = Post::select('id', 'title', 'slug', 'summary', 'photo', 'post_cat_id', 'post_tag_id', 'added_by', 'created_at')
+        //     ->where('status', 'active')
+        //     ->with([
+        //         'cat_info:id,title',
+        //         'tag_info:id,title',
+        //         'user:id,name',
+        //         'doctor:id,name',
+        //     ])
+        //     ->latest()
+        //     ->paginate(6);
+
+        // $posts = Post::select('id', 'title', 'slug', 'summary', 'photo', 'post_cat_id', 'post_tag_id', 'added_by', 'created_at')
+        //     ->where('status', 'active')
+        //     ->with([
+        //         'cat_info:id,title',
+        //         'doctor:id,name', // Eager load doctor
+        //         'user:id,name'
+        //     ])
+        //     ->withCount(['comments'])
+        //     ->cursorPaginate(6);
+
         $posts = Post::select('id', 'title', 'slug', 'summary', 'photo', 'post_cat_id', 'post_tag_id', 'added_by', 'created_at')
             ->where('status', 'active')
             ->with([
                 'cat_info:id,title',
-                'tag_info:id,title',
-                'user:id,name',
                 'doctor:id,name',
+                'user:id,name'
             ])
-            ->latest()
-            ->paginate(6); // Phân trang (6 bài viết mỗi trang)
+            ->withCount(['comments'])
+            ->paginate(6);  // Use paginate instead of cursorPaginate
+
 
 
 

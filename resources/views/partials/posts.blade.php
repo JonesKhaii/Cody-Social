@@ -33,6 +33,11 @@
         <p class="text-center">Không có bài viết nào thuộc danh mục này.</p>
     @endif
 </div>
+<div class="d-flex justify-content-center">
+    {{ $posts->links('pagination::bootstrap-5') }}
+</div>
+
+
 
 <style>
     /* CSS để tạo card có chiều cao đồng đều */
@@ -69,5 +74,9 @@
         .row-eq-height {
             display: block;
         }
+    }
+
+    .text-muted {
+        margin-right: 15px;
     }
 </style>
