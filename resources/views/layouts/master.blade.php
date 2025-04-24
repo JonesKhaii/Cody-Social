@@ -33,19 +33,19 @@
         <div class="contact-quick-actions-container">
             <!-- Nút Zalo -->
             <a href="https://zalo.me/" target="_blank" class="contact-btn zalo-btn">
-                <img src="{{ asset('images/icon/zalo_icon.png') }}" alt="Zalo">
+                <img src="{{ asset('asset/images/icon/zalo_icon.png') }}" alt="Zalo">
                 <span>Zalo</span>
             </a>
 
             <!-- Nút Điện thoại -->
             <a href="tel:+84123456789" class="contact-btn phone-btn">
-                <img src="{{ asset('images/icon/phone_icon.png') }}" alt="Phone">
+                <img src="{{ asset('asset/images/icon/phone_icon.png') }}" alt="Phone">
                 <span>Gọi ngay</span>
             </a>
 
             <!-- Nút Messenger -->
             <a href="https://m.me/YOUR_FACEBOOK_PAGE" target="_blank" class="contact-btn messenger-btn">
-                <img src="{{ asset('images/icon/message_icon.png') }}" alt="Mess">
+                <img src="{{ asset('asset/images/icon/message_icon.png') }}" alt="Mess">
                 <span>Messenger</span>
             </a>
         </div>

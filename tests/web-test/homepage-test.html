@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CodyHealth - Đặt lịch khám và thông tin y tế</title>
+        <style>
+            :root {
+                --primary: #0056a6;
+                --primary-light: #4a89dc;
+                --secondary: #ff6b6b;
+                --light-green: #e8f5e9;
+                --text-dark: #333;
+                --text-light: #666;
+                --white: #fff;
+                --grey-light: #f5f5f5;
+                --grey: #ddd;
+                --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: "Roboto", "Segoe UI", sans-serif;
+            }
+
+            body {
+                color: var(--text-dark);
+                line-height: 1.6;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+
+            /* Header */
+            header {
+                background: var(--primary);
+                color: var(--white);
+                padding: 15px 0;
+                box-shadow: var(--shadow);
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+            }
+
+            .header-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .logo {
+                display: flex;
+                align-items: center;
+                font-size: 24px;
+                font-weight: bold;
+            }
+
+            .logo img {
+                height: 40px;
+                margin-right: 10px;
+            }
+
+            nav ul {
+                display: flex;
+                list-style: none;
+            }
+
+            nav ul li {
+                margin-left: 25px;
+            }
+
+            nav ul li a {
+                color: var(--white);
+                text-decoration: none;
+                font-weight: 500;
+                transition: 0.3s;
+            }
+
+            nav ul li a:hover {
+                color: var(--grey-light);
+            }
+
+            .btn {
+                display: inline-block;
+                padding: 10px 20px;
+                background: var(--secondary);
+                color: var(--white);
+                border: none;
+                border-radius: 5px;
+                font-weight: bold;
+                cursor: pointer;
+                text-decoration: none;
+                transition: 0.3s;
+            }
+
+            .btn:hover {
+                opacity: 0.9;
+                transform: translateY(-2px);
+            }
+
+            .btn-outline {
+                background: transparent;
+                border: 2px solid var(--white);
+            }
+
+            /* Hero Section */
+            .hero {
+                background: linear-gradient(
+                        rgba(0, 86, 166, 0.8),
+                        rgba(0, 86, 166, 0.9)
+                    ),
+                    url("https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/simple-icons.svg")
+                        center/cover no-repeat;
+                color: var(--white);
+                padding: 80px 0;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+                margin-bottom: 20px;
+            }
+
+            .hero p {
+                font-size: 18px;
+                max-width: 600px;
+                margin: 0 auto 30px;
+            }
+
+            /* Search Bar */
+            .search-bar {
+                background: var(--white);
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: var(--shadow);
+                margin-top: -50px;
+                position: relative;
+                z-index: 100;
+            }
+
+            .search-container {
+                display: flex;
+                gap: 15px;
+            }
+
+            .search-input {
+                flex: 1;
+                padding: 15px;
+                border: 1px solid var(--grey);
+                border-radius: 5px;
+                font-size: 16px;
+            }
+
+            /* Features */
+            .features {
+                padding: 80px 0 60px;
+            }
+
+            .section-header {
+                text-align: center;
+                margin-bottom: 50px;
+            }
+
+            .section-header h2 {
+                font-size: 32px;
+                color: var(--primary);
+                margin-bottom: 15px;
+            }
+
+            .section-header p {
+                color: var(--text-light);
+                max-width: 700px;
+                margin: 0 auto;
+            }
+
+            .features-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 30px;
+            }
+
+            .feature-card {
+                background: var(--white);
+                border-radius: 10px;
+                padding: 30px;
+                box-shadow: var(--shadow);
+                text-align: center;
+                transition: 0.3s;
+            }
+
+            .feature-card:hover {
+                transform: translateY(-10px);
+            }
+
+            .feature-icon {
+                height: 60px;
+                width: 60px;
+                background: var(--light-green);
+                border-radius: 50%;
+                margin: 0 auto 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--primary);
+                font-size: 24px;
+            }
+
+            .feature-card h3 {
+                margin-bottom: 15px;
+                color: var(--primary);
+            }
+
+            /* Services */
+            .services {
+                padding: 60px 0;
+                background: var(--light-green);
+            }
+
+            .services-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 30px;
+            }
+
+            .service-card {
+                background: var(--white);
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: var(--shadow);
+                transition: 0.3s;
+            }
+
+            .service-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            }
+
+            .service-img {
+                height: 200px;
+                background: #eee;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--primary);
+                font-size: 48px;
+            }
+
+            .service-content {
+                padding: 20px;
+            }
+
+            .service-content h3 {
+                margin-bottom: 10px;
+                color: var(--primary);
+            }
+
+            .service-content p {
+                margin-bottom: 15px;
+                color: var(--text-light);
+            }
+
+            /* Booking Process */
+            .booking-process {
+                padding: 80px 0;
+            }
+
+            .process-steps {
+                display: flex;
+                justify-content: center;
+                position: relative;
+                margin-top: 50px;
+            }
+
+            .process-step {
+                width: 220px;
+                text-align: center;
+                z-index: 1;
+            }
+
+            .step-number {
+                height: 60px;
+                width: 60px;
+                background: var(--primary);
+                color: var(--white);
+                border-radius: 50%;
+                font-size: 24px;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 20px;
+            }
+
+            .process-step h3 {
+                margin-bottom: 10px;
+                color: var(--primary);
+            }
+
+            .process-line {
+                position: absolute;
+                top: 30px;
+                left: 160px;
+                right: 160px;
+                height: 2px;
+                background: var(--primary-light);
+                z-index: 0;
+            }
+
+            /* Doctors */
+            .doctors {
+                padding: 60px 0;
+                background: var(--grey-light);
+            }
+
+            .doctors-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 30px;
+            }
+
+            .doctor-card {
+                background: var(--white);
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: var(--shadow);
+                transition: 0.3s;
+            }
+
+            .doctor-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .doctor-img {
+                height: 300px;
+                width: 100%;
+                object-fit: cover;
+            }
+
+            .doctor-info {
+                padding: 20px;
+            }
+
+            .doctor-info h3 {
+                margin-bottom: 5px;
+                color: var(--primary);
+            }
+
+            .doctor-info .specialty {
+                color: var(--text-light);
+                margin-bottom: 15px;
+                font-style: italic;
+            }
+
+            .rating {
+                color: #ffc107;
+                margin-bottom: 15px;
+            }
+
+            /* Testimonials */
+            .testimonials {
+                padding: 80px 0;
+            }
+
+            .testimonials-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 40px;
+                margin-top: 50px;
+            }
+
+            .testimonial-card {
+                background: var(--white);
+                border-radius: 10px;
+                padding: 30px;
+                box-shadow: var(--shadow);
+                position: relative;
+            }
+
+            .testimonial-card::before {
+                content: '"';
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                font-size: 60px;
+                color: var(--primary-light);
+                opacity: 0.2;
+            }
+
+            .testimonial-content {
+                margin-bottom: 20px;
+            }
+
+            .testimonial-author {
+                display: flex;
+                align-items: center;
+            }
+
+            .author-img {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-right: 15px;
+            }
+
+            .author-info h4 {
+                margin-bottom: 5px;
+            }
+
+            .author-info p {
+                color: var(--text-light);
+                font-size: 14px;
+            }
+
+            /* Blog Posts */
+            .blog {
+                padding: 60px 0;
+                background: var(--light-green);
+            }
+
+            .blog-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 30px;
+            }
+
+            .blog-card {
+                background: var(--white);
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: var(--shadow);
+            }
+
+            .blog-img {
+                height: 200px;
+                width: 100%;
+                object-fit: cover;
+            }
+
+            .blog-content {
+                padding: 20px;
+            }
+
+            .blog-date {
+                color: var(--text-light);
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+
+            .blog-card h3 {
+                margin-bottom: 10px;
+                color: var(--primary);
+            }
+
+            .blog-card p {
+                margin-bottom: 15px;
+                color: var(--text-light);
+            }
+
+            /* Stats */
+            .stats {
+                padding: 80px 0;
+                text-align: center;
+                background: var(--primary);
+                color: var(--white);
+            }
+
+            .stats-container {
+                display: flex;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                margin-top: 50px;
+            }
+
+            .stat-item {
+                padding: 20px;
+            }
+
+            .stat-number {
+                font-size: 48px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+
+            /* FAQ */
+            .faq {
+                padding: 60px 0;
+            }
+
+            .faq-container {
+                max-width: 800px;
+                margin: 50px auto 0;
+            }
+
+            .faq-item {
+                margin-bottom: 20px;
+                border-radius: 5px;
+                overflow: hidden;
+                box-shadow: var(--shadow);
+            }
+
+            .faq-question {
+                background: var(--primary-light);
+                color: var(--white);
+                padding: 15px 20px;
+                cursor: pointer;
+                font-weight: 500;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .faq-answer {
+                background: var(--white);
+                padding: 20px;
+                display: none;
+            }
+
+            .faq-item.active .faq-answer {
+                display: block;
+            }
+
+            /* CTA */
+            .cta {
+                padding: 80px 0;
+                background: linear-gradient(
+                        rgba(0, 86, 166, 0.9),
+                        rgba(0, 86, 166, 0.8)
+                    ),
+                    url("https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/simple-icons.svg")
+                        center/cover no-repeat;
+                text-align: center;
+                color: var(--white);
+            }
+
+            .cta h2 {
+                font-size: 36px;
+                margin-bottom: 20px;
+            }
+
+            .cta p {
+                max-width: 700px;
+                margin: 0 auto 30px;
+                font-size: 18px;
+            }
+
+            /* Footer */
+            footer {
+                background: #1a1a1a;
+                color: var(--grey-light);
+                padding: 60px 0 30px;
+            }
+
+            .footer-content {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 40px;
+                margin-bottom: 40px;
+            }
+
+            .footer-column h3 {
+                color: var(--white);
+                margin-bottom: 20px;
+                font-size: 18px;
+            }
+
+            .footer-column ul {
+                list-style: none;
+            }
+
+            .footer-column ul li {
+                margin-bottom: 10px;
+            }
+
+            .footer-column ul li a {
+                color: var(--grey-light);
+                text-decoration: none;
+                transition: 0.3s;
+            }
+
+            .footer-column ul li a:hover {
+                color: var(--white);
+            }
+
+            .contact-info p {
+                margin-bottom: 15px;
+                display: flex;
+                align-items: flex-start;
+            }
+
+            .contact-info p i {
+                margin-right: 10px;
+                color: var(--primary-light);
+            }
+
+            .social-icons {
+                display: flex;
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            .social-icon {
+                height: 40px;
+                width: 40px;
+                border-radius: 50%;
+                background: #333;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--white);
+                text-decoration: none;
+                transition: 0.3s;
+            }
+
+            .social-icon:hover {
+                background: var(--primary-light);
+                transform: translateY(-3px);
+            }
+
+            .footer-bottom {
+                text-align: center;
+                padding-top: 30px;
+                border-top: 1px solid #333;
+            }
+
+            /* Mobile Responsive */
+            @media (max-width: 768px) {
+                .header-content {
+                    flex-direction: column;
+                }
+
+                nav ul {
+                    margin-top: 20px;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                }
+
+                nav ul li {
+                    margin: 5px 10px;
+                }
+
+                .search-container {
+                    flex-direction: column;
+                }
+
+                .process-steps {
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                .process-step {
+                    margin-bottom: 30px;
+                }
+
+                .process-line {
+                    display: none;
+                }
+
+                .stats-container {
+                    flex-direction: column;
+                }
+
+                .stat-item {
+                    margin-bottom: 30px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Header -->
+        <header>
+            <div class="container header-content">
+                <div class="logo">
+                    <img src="/api/placeholder/40/40" alt="CodyHealth Logo" />
+                    CodyHealth
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#">Trang chủ</a></li>
+                        <li><a href="#">Dịch vụ</a></li>
+                        <li><a href="#">Bác sĩ</a></li>
+                        <li><a href="#">Bài viết</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                        <li>
+                            <a href="#" class="btn btn-outline">Đăng nhập</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Chăm sóc sức khỏe tận tâm - Đặt lịch chỉ trong 3 phút</h1>
+                <p>
+                    Nền tảng đặt lịch khám và tư vấn y tế trực tuyến hàng đầu
+                    với đội ngũ bác sĩ chuyên khoa uy tín
+                </p>
+                <a href="#" class="btn">Đặt lịch khám ngay</a>
+            </div>
+        </section>
+
+        <!-- Search Bar -->
+        <div class="container">
+            <div class="search-bar">
+                <div class="search-container">
+                    <select class="search-input">
+                        <option>Chọn chuyên khoa</option>
+                        <option>Tim mạch</option>
+                        <option>Nội tổng quát</option>
+                        <option>Da liễu</option>
+                        <option>Nhi khoa</option>
+                        <option>Sản phụ khoa</option>
+                    </select>
+                    <select class="search-input">
+                        <option>Chọn bác sĩ</option>
+                        <option>BS. Trần Minh</option>
+                        <option>BS. Lê Thị D</option>
+                        <option>BS. Phạm Văn A</option>
+                        <option>BS. Nguyễn Thị B</option>
+                    </select>
+                    <input
+                        type="date"
+                        class="search-input"
+                        placeholder="Chọn ngày khám"
+                    />
+                    <button class="btn">Tìm kiếm</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Tại sao chọn CodyHealth?</h2>
+                    <p>
+                        Chúng tôi cung cấp dịch vụ chăm sóc sức khỏe tận tâm với
+                        quy trình đơn giản, nhanh chóng và hiệu quả
+                    </p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <img
+                                src="/api/placeholder/30/30"
+                                alt="Bác sĩ chuyên khoa"
+                            />
+                        </div>
+                        <h3>Bác sĩ chuyên khoa</h3>
+                        <p>
+                            Đội ngũ y bác sĩ giàu kinh nghiệm đến từ các bệnh
+                            viện hàng đầu tại Việt Nam
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <img
+                                src="/api/placeholder/30/30"
+                                alt="Tiết kiệm thời gian"
+                            />
+                        </div>
+                        <h3>Tiết kiệm thời gian</h3>
+                        <p>
+                            Đặt lịch trước, không cần xếp hàng chờ đợi, tối ưu
+                            thời gian khám
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <img
+                                src="/api/placeholder/30/30"
+                                alt="Thanh toán dễ dàng"
+                            />
+                        </div>
+                        <h3>Thanh toán dễ dàng</h3>
+                        <p>
+                            Nhiều phương thức thanh toán an toàn và bảo mật
+                            thông tin
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <img
+                                src="/api/placeholder/30/30"
+                                alt="Hỗ trợ 24/7"
+                            />
+                        </div>
+                        <h3>Hỗ trợ 24/7</h3>
+                        <p>
+                            Đội ngũ tư vấn viên luôn sẵn sàng hỗ trợ bạn mọi lúc
+                            mọi nơi
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="services">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Dịch vụ nổi bật</h2>
+                    <p>
+                        Cung cấp đa dạng dịch vụ y tế chất lượng cao, đáp ứng
+                        mọi nhu cầu chăm sóc sức khỏe
+                    </p>
+                </div>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-img">
+                            <img
+                                src="/api/placeholder/100/100"
+                                alt="Khám tổng quát"
+                            />
+                        </div>
+                        <div class="service-content">
+                            <h3>Khám sức khỏe tổng quát</h3>
+                            <p>
+                                Gói khám toàn diện giúp đánh giá tổng thể sức
+                                khỏe và phát hiện sớm các bệnh lý tiềm ẩn
+                            </p>
+                            <a href="#" class="btn">Đặt lịch</a>
+                        </div>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-img">
+                            <img
+                                src="/api/placeholder/100/100"
+                                alt="Khám chuyên khoa"
+                            />
+                        </div>
+                        <div class="service-content">
+                            <h3>Khám chuyên khoa</h3>
+                            <p>
+                                Dịch vụ khám chuyên sâu theo từng chuyên khoa
+                                với bác sĩ có chuyên môn cao
+                            </p>
+                            <a href="#" class="btn">Đặt lịch</a>
+                        </div>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-img">
+                            <img
+                                src="/api/placeholder/100/100"
+                                alt="Tư vấn sức khỏe"
+                            />
+                        </div>
+                        <div class="service-content">
+                            <h3>Tư vấn sức khỏe online</h3>
+                            <p>
+                                Giải đáp thắc mắc sức khỏe trực tuyến, tiết kiệm
+                                thời gian di chuyển
+                            </p>
+                            <a href="#" class="btn">Đặt lịch</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Process -->
+        <section class="booking-process">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Quy trình đặt lịch đơn giản</h2>
+                    <p>
+                        Chỉ với 4 bước đơn giản, bạn có thể đặt lịch khám nhanh
+                        chóng và tiện lợi
+                    </p>
+                </div>
+                <div class="process-steps">
+                    <div class="process-line"></div>
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <h3>Chọn dịch vụ</h3>
+                        <p>
+                            Lựa chọn dịch vụ y tế hoặc chuyên khoa phù hợp với
+                            nhu cầu
+                        </p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <h3>Chọn bác sĩ</h3>
+                        <p>
+                            Lựa chọn bác sĩ phù hợp theo chuyên môn và đánh giá
+                        </p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <h3>Chọn thời gian</h3>
+                        <p>
+                            Lựa chọn ngày và giờ phù hợp với lịch trình của bạn
+                        </p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <h3>Xác nhận</h3>
+                        <p>Nhận thông báo xác nhận qua email hoặc SMS</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Doctors Section -->
+        <section class="doctors">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Đội ngũ bác sĩ</h2>
+                    <p>
+                        Đội ngũ y bác sĩ giàu kinh nghiệm và tận tâm, luôn sẵn
+                        sàng chăm sóc sức khỏe cho bạn
+                    </p>
+                </div>
+                <div class="doctors-grid">
+                    <div class="doctor-card">
+                        <img
+                            src="/api/placeholder/300/300"
+                            alt="Dr. Trần Minh"
+                            class="doctor-img"
+                        />
+                        <div class="doctor-info">
+                            <h3>Bác sĩ Trần Minh</h3>
+                            <p class="specialty">Chuyên khoa Nội tổng quát</p>
+                            <div class="rating">★★★★★</div>
+                            <p>15 năm kinh nghiệm tại các bệnh viện hàng đầu</p>
+                            <a href="#" class="btn">Đặt lịch khám</a>
+                        </div>
+                    </div>
+                    <div class="doctor-card">
+                        <img
+                            src="/api/placeholder/300/300"
+                            alt="Dr. Lê Thị D"
+                            class="doctor-img"
+                        />
+                        <div class="doctor-info">
+                            <h3>Bác sĩ Lê Thị D</h3>
+                            <p class="specialty">Chuyên khoa Tim mạch</p>
+                            <div class="rating">★★★★☆</div>
+                            <p>
+                                10 năm kinh nghiệm điều trị các bệnh lý tim mạch
+                            </p>
+                            <a href="#" class="btn">Đặt lịch khám</a>
+                        </div>
+                    </div>
+                    <div class="doctor-card">
+                        <img
+                            src="/api/placeholder/300/300"
+                            alt="Dr. Nguyễn Văn B"
+                            class="doctor-img"
+                        />
+                        <div class="doctor-info">
+                            <h3>Bác sĩ Nguyễn Văn B</h3>
+                            <p class="specialty">Chuyên khoa Nội khoa</p>
+                            <div class="rating">★★★★★</div>
+                            <p>12 năm kinh nghiệm điều trị các bệnh nội khoa</p>
+                            <a href="#" class="btn">Đặt lịch khám</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="testimonials">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Khách hàng nói gì về chúng tôi</h2>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

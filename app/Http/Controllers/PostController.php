@@ -156,56 +156,6 @@ class PostController extends Controller
         return redirect()->back()->with('success', 'Bài viết đã được cập nhật!');
     }
 
-    // public function search(Request $request)
-    // {
-    //     $query = trim($request->query('query'));
-
-    //     // Nếu từ khóa quá ngắn, không cần truy vấn database
-    //     if (strlen($query) < 2) {
-    //         return response()->json([]);
-    //     }
-
-    //     // Tối ưu truy vấn tìm kiếm
-    //     $posts = \App\Models\Post::select('id', 'title', 'summary', 'slug')
-    //         ->where(function ($q) use ($query) {
-    //             $q->where('title', 'LIKE', "%{$query}%")
-    //                 ->orWhere('summary', 'LIKE', "%{$query}%");
-    //         })
-    //         ->orderByDesc('created_at')
-    //         ->limit(10) // Dùng limit thay vì take
-    //         ->get();
-
-    //     return response()->json($posts);
-    // }
-    // public function search(Request $request)
-    // {
-    //     $query = trim($request->query('query'));
-
-    //     // Nếu từ khóa quá ngắn, không cần truy vấn database
-    //     if (strlen($query) < 2) {
-    //         return response()->json([]);
-    //     }
-
-    //     // Tối ưu truy vấn tìm kiếm
-    //     $posts = \App\Models\Post::select('id', 'title', 'summary', 'slug')
-    //         ->with(['user', 'doctor'])  // Đảm bảo Eloquent Eager Loading để lấy thông tin user/doctor
-    //         ->where(function ($q) use ($query) {
-    //             $q->where('title', 'LIKE', "%{$query}%")
-    //                 ->orWhere('summary', 'LIKE', "%{$query}%");
-    //         })
-    //         ->orderByDesc('created_at')
-    //         ->limit(10)
-    //         ->get();
-
-    //     // Lấy thông tin tác giả cho mỗi bài viết
-    //     $posts->map(function ($post) {
-    //         $post->author_info;
-    //         return $post;
-    //     });
-
-    //     return response()->json($posts);
-    // }
-
     public function searchResult(Request $request)
     {
         $q = $request->input('query');

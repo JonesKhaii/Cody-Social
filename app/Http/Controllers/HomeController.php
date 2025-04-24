@@ -14,37 +14,29 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Lấy danh sách bài viết mới nhất, chỉ lấy các cột cần thiết
-        // $posts = Post::select('id', 'title', 'slug', 'summary', 'photo', 'post_cat_id', 'post_tag_id', 'added_by', 'created_at')
-        //     ->where('status', 'active')
-        //     ->with([
-        //         'cat_info:id,title',
-        //         'tag_info:id,title',
-        //         'user:id,name',
-        //         'doctor:id,name',
-        //     ])
-        //     ->latest()
-        //     ->paginate(6);
-
-        // $posts = Post::select('id', 'title', 'slug', 'summary', 'photo', 'post_cat_id', 'post_tag_id', 'added_by', 'created_at')
-        //     ->where('status', 'active')
-        //     ->with([
-        //         'cat_info:id,title',
-        //         'doctor:id,name', // Eager load doctor
-        //         'user:id,name'
-        //     ])
-        //     ->withCount(['comments'])
-        //     ->cursorPaginate(6);
 
         $posts = Post::select('id', 'title', 'slug', 'summary', 'photo', 'post_cat_id', 'post_tag_id', 'added_by', 'created_at')
             ->where('status', 'active')
             ->with([
                 'cat_info:id,title',
-                'doctor:id,name',
-                'user:id,name'
+                'doctor:id,name,photo',
+                'user:id,name,photo'
             ])
             ->withCount(['comments'])
-            ->paginate(6);  // Use paginate instead of cursorPaginate
+            ->paginate(6);
+
+
+        $topViewedPosts = Post::select('id', 'title', 'slug', 'summary', 'photo', 'views', 'post_cat_id', 'post_tag_id', 'added_by', 'created_at')
+            ->where('status', 'active')
+            ->with([
+                'cat_info:id,title',
+                'doctor:id,name,photo',
+                'user:id,name,photo'
+            ])
+            ->orderByDesc('views')
+            ->limit(5)
+            ->get();
+
 
 
 
@@ -71,7 +63,7 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
 
-        return view('index', compact('posts', 'topDoctors', 'categories', 'popularCategories'));
+        return view('index', compact('posts', 'topDoctors', 'categories', 'popularCategories', 'topViewedPosts'));
     }
 
     public function filterPosts(Request $request)
@@ -87,7 +79,7 @@ class HomeController extends Controller
             ->with([
                 'cat_info:id,title',
                 'tag_info:id,title',
-                'author_info:id,name',
+                'author_info:id,name,photo',
             ])
             ->latest()
             ->paginate(6);

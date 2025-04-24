@@ -11,7 +11,7 @@
         </a>
 
         @if ($posts->count())
-            <div class="row">
+            <div class="result row">
                 @foreach ($posts as $post)
                     <div class="col-md-4">
                         <div class="card mb-4 shadow-sm">
@@ -44,7 +44,7 @@
                 {{ $posts->links() }}
             </div>
         @else
-            <div class="row">
+            <div class="result-row row">
                 <p>Không có bài viết nào trong danh mục <strong>{{ $category->title }}</strong>.</p>
             </div>
         @endif
@@ -53,7 +53,7 @@
 
 
 <style>
-    .row {
+    .result-row {
         min-height: 400px;
 
     }

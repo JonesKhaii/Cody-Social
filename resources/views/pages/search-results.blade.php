@@ -12,7 +12,7 @@
             <i class="fas fa-arrow-left"></i> Quay lại
         </a>
         @if ($posts->count())
-            <div class="row">
+            <div class="result row">
                 @foreach ($posts as $post)
                     <div class="col-md-4">
                         <div class="card mb-4 shadow-sm">
@@ -45,7 +45,7 @@
                 {{ $posts->links() }}
             </div>
         @else
-            <div class="row">
+            <div class="result-row row">
                 <p>Không tìm thấy kết quả nào cho từ khóa <strong>{{ $q }}</strong>.</p>
             </div>
         @endif
@@ -53,7 +53,7 @@
 @endsection
 
 <style>
-    .row {
+    .result-row {
         min-height: 400px;
 
     }

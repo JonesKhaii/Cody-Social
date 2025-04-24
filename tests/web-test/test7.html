@@ -1,0 +1,1165 @@
+@extends('layouts.master') @section('title', 'Trang Chủ')
+@section('main-content')
+<div class="container-fluid p-0">
+    <!-- Hero Section with Dual Purpose -->
+    <section class="hero-section">
+        <div class="hero-slider">
+            <div class="hero-slide active" id="slide1">
+                <div class="container h-100">
+                    <div class="row h-100 align-items-center">
+                        <div class="col-md-6">
+                            <div class="hero-content text-white">
+                                <h1 class="hero-title mb-3">
+                                    Chăm sóc sức khỏe tận tâm
+                                </h1>
+                                <p class="hero-subtitle mb-4">
+                                    Nền tảng đặt lịch khám và tư vấn y tế trực
+                                    tuyến hàng đầu với đội ngũ bác sĩ chuyên
+                                    khoa uy tín
+                                </p>
+                                <div class="hero-buttons">
+                                    <a
+                                        href="{{ route('appointment.create') }}"
+                                        class="btn btn-primary btn-lg"
+                                        >Đặt lịch ngay</a
+                                    >
+                                    <a
+                                        href="{{ route('services.index') }}"
+                                        class="btn btn-outline-light btn-lg ms-2"
+                                        >Dịch vụ của chúng tôi</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-slide" id="slide2">
+                <div class="container h-100">
+                    <div class="row h-100 align-items-center">
+                        <div class="col-md-6 offset-md-6">
+                            <div class="hero-content text-white">
+                                <h1 class="hero-title mb-3">
+                                    Thông tin y tế cập nhật
+                                </h1>
+                                <p class="hero-subtitle mb-4">
+                                    Cập nhật những thông tin y tế mới nhất, hữu
+                                    ích cho sức khỏe của bạn và gia đình
+                                </p>
+                                <div class="hero-buttons">
+                                    <a
+                                        href="{{ route('posts.index') }}"
+                                        class="btn btn-primary btn-lg"
+                                        >Xem bài viết</a
+                                    >
+                                    <a
+                                        href="{{ route('category.index') }}"
+                                        class="btn btn-outline-light btn-lg ms-2"
+                                        >Danh mục</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-controls">
+            <span class="hero-control active" data-slide="slide1"></span>
+            <span class="hero-control" data-slide="slide2"></span>
+        </div>
+    </section>
+
+    <!-- Quick Access Tabs -->
+    <section class="quick-access">
+        <div class="container">
+            <div class="quick-access-container">
+                <div class="tabs">
+                    <div class="tab active" data-tab="appointment">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Đặt lịch khám</span>
+                    </div>
+                    <div class="tab" data-tab="doctors">
+                        <i class="fas fa-user-md"></i>
+                        <span>Tìm bác sĩ</span>
+                    </div>
+                    <div class="tab" data-tab="services">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Dịch vụ y tế</span>
+                    </div>
+                    <div class="tab" data-tab="articles">
+                        <i class="fas fa-newspaper"></i>
+                        <span>Bài viết</span>
+                    </div>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="appointment">
+                        <h3>Đặt lịch khám nhanh chóng</h3>
+                        <form class="quick-form">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <select class="form-select">
+                                        <option selected>
+                                            Chọn chuyên khoa
+                                        </option>
+                                        <option>Tim mạch</option>
+                                        <option>Nội tổng quát</option>
+                                        <option>Da liễu</option>
+                                        <option>Nhi khoa</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select">
+                                        <option selected>Chọn bác sĩ</option>
+                                        <option>BS. Trần Minh</option>
+                                        <option>BS. Lê Thị D</option>
+                                        <option>BS. Nguyễn Văn B</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <input
+                                        type="date"
+                                        class="form-control"
+                                        placeholder="Chọn ngày"
+                                    />
+                                </div>
+                                <div class="col-md-3">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary w-100"
+                                    >
+                                        Tìm lịch trống
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="doctors">
+                        <h3>Tìm bác sĩ theo chuyên khoa</h3>
+                        <div class="row specialty-icons">
+                            <div class="col-4 col-md-2">
+                                <a
+                                    href="{{ route('doctors.specialty', 'tim-mach') }}"
+                                    class="specialty-link"
+                                >
+                                    <div class="specialty-icon">
+                                        <i class="fas fa-heart"></i>
+                                    </div>
+                                    <span>Tim mạch</span>
+                                </a>
+                            </div>
+                            <div class="col-4 col-md-2">
+                                <a
+                                    href="{{ route('doctors.specialty', 'noi-tong-quat') }}"
+                                    class="specialty-link"
+                                >
+                                    <div class="specialty-icon">
+                                        <i class="fas fa-stethoscope"></i>
+                                    </div>
+                                    <span>Nội tổng quát</span>
+                                </a>
+                            </div>
+                            <div class="col-4 col-md-2">
+                                <a
+                                    href="{{ route('doctors.specialty', 'da-lieu') }}"
+                                    class="specialty-link"
+                                >
+                                    <div class="specialty-icon">
+                                        <i class="fas fa-allergies"></i>
+                                    </div>
+                                    <span>Da liễu</span>
+                                </a>
+                            </div>
+                            <div class="col-4 col-md-2">
+                                <a
+                                    href="{{ route('doctors.specialty', 'nhi-khoa') }}"
+                                    class="specialty-link"
+                                >
+                                    <div class="specialty-icon">
+                                        <i class="fas fa-baby"></i>
+                                    </div>
+                                    <span>Nhi khoa</span>
+                                </a>
+                            </div>
+                            <div class="col-4 col-md-2">
+                                <a
+                                    href="{{ route('doctors.specialty', 'san-phu-khoa') }}"
+                                    class="specialty-link"
+                                >
+                                    <div class="specialty-icon">
+                                        <i class="fas fa-female"></i>
+                                    </div>
+                                    <span>Sản phụ khoa</span>
+                                </a>
+                            </div>
+                            <div class="col-4 col-md-2">
+                                <a
+                                    href="{{ route('doctors.index') }}"
+                                    class="specialty-link"
+                                >
+                                    <div class="specialty-icon">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <span>Xem tất cả</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="services">
+                        <h3>Dịch vụ y tế nổi bật</h3>
+                        <div class="row service-buttons">
+                            <div class="col-6 col-md-3 mb-3">
+                                <a
+                                    href="{{ route('services.show', 'kham-tong-quat') }}"
+                                    class="service-button"
+                                >
+                                    <i class="fas fa-clipboard-check"></i>
+                                    <span>Khám tổng quát</span>
+                                </a>
+                            </div>
+                            <div class="col-6 col-md-3 mb-3">
+                                <a
+                                    href="{{ route('services.show', 'xet-nghiem') }}"
+                                    class="service-button"
+                                >
+                                    <i class="fas fa-vial"></i>
+                                    <span>Xét nghiệm</span>
+                                </a>
+                            </div>
+                            <div class="col-6 col-md-3 mb-3">
+                                <a
+                                    href="{{ route('services.show', 'kham-chuyen-khoa') }}"
+                                    class="service-button"
+                                >
+                                    <i class="fas fa-user-md"></i>
+                                    <span>Khám chuyên khoa</span>
+                                </a>
+                            </div>
+                            <div class="col-6 col-md-3 mb-3">
+                                <a
+                                    href="{{ route('services.show', 'tu-van-online') }}"
+                                    class="service-button"
+                                >
+                                    <i class="fas fa-video"></i>
+                                    <span>Tư vấn online</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="articles">
+                        <h3>Tìm kiếm bài viết</h3>
+                        <form class="quick-form">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="Tìm theo từ khóa..."
+                                    />
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select">
+                                        <option selected>Chọn danh mục</option>
+                                        @foreach ($categories as $category)
+                                        <option value="{{ $category->title }}">
+                                            {{ $category->title }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary w-100"
+                                    >
+                                        Tìm kiếm
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container mt-5">
+        <!-- Featured Services Section -->
+        <section class="featured-services">
+            <div class="section-header">
+                <h2 class="section-title">Dịch vụ nổi bật</h2>
+                <p class="section-subtitle">
+                    Cung cấp đa dạng dịch vụ y tế chất lượng cao, đáp ứng mọi
+                    nhu cầu chăm sóc sức khỏe
+                </p>
+                <div class="section-link">
+                    <a
+                        href="{{ route('services.index') }}"
+                        class="btn btn-outline-primary"
+                        >Xem tất cả dịch vụ</a
+                    >
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h3 class="service-title">Khám sức khỏe tổng quát</h3>
+                        <p class="service-description">
+                            Gói khám toàn diện giúp đánh giá tổng thể sức khỏe
+                            và phát hiện sớm các bệnh lý tiềm ẩn
+                        </p>
+                        <div class="service-features">
+                            <span
+                                ><i class="fas fa-check"></i> Kiểm tra toàn
+                                diện</span
+                            >
+                            <span
+                                ><i class="fas fa-check"></i> Bác sĩ nhiều kinh
+                                nghiệm</span
+                            >
+                            <span
+                                ><i class="fas fa-check"></i> Kết quả chi
+                                tiết</span
+                            >
+                        </div>
+                        <div class="service-price">
+                            <span>Từ 1.500.000đ</span>
+                        </div>
+                        <a
+                            href="{{ route('services.show', 'kham-tong-quat') }}"
+                            class="btn btn-primary service-button"
+                            >Đặt lịch ngay</a
+                        >
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <h3 class="service-title">Khám chuyên khoa</h3>
+                        <p class="service-description">
+                            Dịch vụ khám chuyên sâu theo từng chuyên khoa với
+                            bác sĩ có chuyên môn cao
+                        </p>
+                        <div class="service-features">
+                            <span
+                                ><i class="fas fa-check"></i> 20+ chuyên
+                                khoa</span
+                            >
+                            <span
+                                ><i class="fas fa-check"></i> Bác sĩ chuyên môn
+                                cao</span
+                            >
+                            <span
+                                ><i class="fas fa-check"></i> Phương pháp tiên
+                                tiến</span
+                            >
+                        </div>
+                        <div class="service-price">
+                            <span>Từ 500.000đ</span>
+                        </div>
+                        <a
+                            href="{{ route('services.show', 'kham-chuyen-khoa') }}"
+                            class="btn btn-primary service-button"
+                            >Đặt lịch ngay</a
+                        >
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3 class="service-title">Tư vấn sức khỏe online</h3>
+                        <p class="service-description">
+                            Giải đáp thắc mắc sức khỏe trực tuyến, tiết kiệm
+                            thời gian di chuyển
+                        </p>
+                        <div class="service-features">
+                            <span
+                                ><i class="fas fa-check"></i> Tư vấn 24/7</span
+                            >
+                            <span
+                                ><i class="fas fa-check"></i> Bảo mật thông
+                                tin</span
+                            >
+                            <span
+                                ><i class="fas fa-check"></i> Tiết kiệm thời
+                                gian</span
+                            >
+                        </div>
+                        <div class="service-price">
+                            <span>Từ 300.000đ</span>
+                        </div>
+                        <a
+                            href="{{ route('services.show', 'tu-van-online') }}"
+                            class="btn btn-primary service-button"
+                            >Đặt lịch ngay</a
+                        >
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Promotion Banner -->
+        <section class="promotion-banner">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="promo-main">
+                        <div class="promo-content">
+                            <h2>Giảm 20% cho gói khám sức khỏe tổng quát</h2>
+                            <p>
+                                Chỉ áp dụng từ 01/04 đến 30/04/2025. Đặt lịch
+                                ngay hôm nay!
+                            </p>
+                            <a
+                                href="{{ route('promotions.details', 'kham-tong-quat-giam-gia') }}"
+                                class="btn btn-light"
+                                >Tìm hiểu thêm</a
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="promo-secondary">
+                        <div class="promo-content">
+                            <h3>Miễn phí tư vấn online</h3>
+                            <p>Cho thành viên mới</p>
+                            <a
+                                href="{{ route('register') }}"
+                                class="btn btn-sm btn-outline-light"
+                                >Đăng ký ngay</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Doctors -->
+        <section class="featured-doctors">
+            <div class="section-header">
+                <h2 class="section-title">Bác sĩ nổi bật</h2>
+                <p class="section-subtitle">
+                    Đội ngũ bác sĩ chuyên khoa giàu kinh nghiệm và tận tâm
+                </p>
+                <div class="section-link">
+                    <a
+                        href="{{ route('doctors.index') }}"
+                        class="btn btn-outline-primary"
+                        >Xem tất cả bác sĩ</a
+                    >
+                </div>
+            </div>
+            <div class="row">
+                @foreach ($topDoctors as $doctor)
+                <div class="col-6 col-md-3 mb-4">
+                    <div class="doctor-card">
+                        <div class="doctor-image">
+                            <img
+                                src="{{ asset($doctor->photo) }}"
+                                alt="{{ $doctor->name }}"
+                            />
+                            <div class="doctor-specialty">
+                                {{ $doctor->field }}
+                            </div>
+                        </div>
+                        <div class="doctor-info">
+                            <h4 class="doctor-name">{{ $doctor->name }}</h4>
+                            <div class="doctor-rating">
+                                @for ($i = 0; $i < 5; $i++) @if ($i <
+                                $doctor->rating)
+                                <i class="fas fa-star"></i>
+                                @else
+                                <i class="far fa-star"></i>
+                                @endif @endfor
+                                <span
+                                    >({{ $doctor->reviews_count }} đánh
+                                    giá)</span
+                                >
+                            </div>
+                            <div class="doctor-buttons">
+                                <a
+                                    href="{{ route('doctor.detail', $doctor->id) }}"
+                                    class="btn btn-sm btn-outline-primary"
+                                    >Xem hồ sơ</a
+                                >
+                                <a
+                                    href="{{ route('appointment.doctor', $doctor->id) }}"
+                                    class="btn btn-sm btn-primary"
+                                    >Đặt lịch</a
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </section>
+
+        <!-- Health Info Section with Infographic -->
+        <section class="health-info-section">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="health-infographic">
+                        <h3>Lợi ích của khám sức khỏe định kỳ</h3>
+                        <div class="infographic-content">
+                            <div class="info-point">
+                                <div class="info-icon">1</div>
+                                <div class="info-text">
+                                    <h4>Phát hiện sớm bệnh lý</h4>
+                                    <p>
+                                        Phát hiện các vấn đề sức khỏe từ giai
+                                        đoạn đầu, khi việc điều trị còn hiệu quả
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="info-point">
+                                <div class="info-icon">2</div>
+                                <div class="info-text">
+                                    <h4>Tiết kiệm chi phí điều trị</h4>
+                                    <p>
+                                        Phòng bệnh luôn ít tốn kém hơn điều trị
+                                        bệnh ở giai đoạn nặng
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="info-point">
+                                <div class="info-icon">3</div>
+                                <div class="info-text">
+                                    <h4>Đánh giá toàn diện sức khỏe</h4>
+                                    <p>
+                                        Đánh giá tổng thể từ thể chất đến tinh
+                                        thần
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="info-point">
+                                <div class="info-icon">4</div>
+                                <div class="info-text">
+                                    <h4>Tư vấn cá nhân hóa</h4>
+                                    <p>
+                                        Nhận được lời khuyên phù hợp cho trường
+                                        hợp cụ thể của bạn
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a
+                                href="{{ route('services.show', 'kham-dinh-ky') }}"
+                                class="btn btn-primary"
+                                >Đặt lịch khám định kỳ</a
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="health-assessment">
+                        <h3>Đánh giá nguy cơ sức khỏe tim mạch</h3>
+                        <form class="assessment-form">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label>Tuổi:</label>
+                                    <input
+                                        type="number"
+                                        class="form-control"
+                                        min="18"
+                                        max="100"
+                                    />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Giới tính:</label>
+                                    <select class="form-select">
+                                        <option>Nam</option>
+                                        <option>Nữ</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Huyết áp tâm thu (mmHg):</label>
+                                    <input type="number" class="form-control" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label>Cholesterol (mmol/L):</label>
+                                    <input
+                                        type="number"
+                                        class="form-control"
+                                        step="0.1"
+                                    />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            id="smoker"
+                                        />
+                                        <label
+                                            class="form-check-label"
+                                            for="smoker"
+                                            >Hút thuốc</label
+                                        >
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            id="diabetes"
+                                        />
+                                        <label
+                                            class="form-check-label"
+                                            for="diabetes"
+                                            >Tiểu đường</label
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                Đánh giá nguy cơ
+                            </button>
+                        </form>
+                        <div
+                            class="assessment-result mt-3"
+                            style="display: none"
+                        >
+                            <div class="alert alert-info">
+                                <h5>Kết quả đánh giá:</h5>
+                                <p>
+                                    Bạn có nguy cơ mắc bệnh tim mạch ở mức
+                                    <strong>Trung bình</strong>.
+                                </p>
+                                <p>
+                                    Bạn nên tham khảo ý kiến bác sĩ và đặt lịch
+                                    khám chuyên khoa tim mạch.
+                                </p>
+                                <a
+                                    href="{{ route('services.show', 'tim-mach') }}"
+                                    class="btn btn-sm btn-primary mt-2"
+                                    >Đặt lịch khám tim mạch</a
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Health Articles -->
+        <section class="featured-articles">
+            <div class="section-header">
+                <h2 class="section-title">Thông tin y tế nổi bật</h2>
+                <p class="section-subtitle">
+                    Cập nhật những thông tin y tế hữu ích từ đội ngũ chuyên gia
+                    CodyHealth
+                </p>
+                <div class="section-link">
+                    <a
+                        href="{{ route('posts.index') }}"
+                        class="btn btn-outline-primary"
+                        >Xem tất cả bài viết</a
+                    >
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    @php $featuredPost = $posts->first(); @endphp
+                    @if($featuredPost)
+                    <div class="article-card featured">
+                        <div class="article-image">
+                            <img
+                                src="{{ asset($featuredPost->photo) }}"
+                                alt="{{ $featuredPost->title }}"
+                            />
+                            <div class="article-badge">
+                                {{ $featuredPost->category->title }}
+                            </div>
+                        </div>
+                        <div class="article-content">
+                            <h3 class="article-title">
+                                {{ $featuredPost->title }}
+                            </h3>
+                            <div class="article-meta">
+                                <span
+                                    ><i class="far fa-calendar-alt"></i> {{
+                                    $featuredPost->created_at->format('d/m/Y')
+                                    }}</span
+                                >
+                                <span
+                                    ><i class="far fa-eye"></i> {{
+                                    $featuredPost->view_count }} lượt xem</span
+                                >
+                            </div>
+                            <p class="article-excerpt">
+                                {{ Str::limit($featuredPost->summary, 150) }}
+                            </p>
+                            <div class="article-footer">
+                                <a
+                                    href="{{ route('post.detail', $featuredPost->slug) }}"
+                                    class="btn btn-outline-primary"
+                                    >Đọc tiếp</a
+                                >
+                                <div class="related-service">
+                                    <span>Dịch vụ liên quan:</span>
+                                    <a
+                                        href="{{ route('services.show', 'kham-chuyen-khoa') }}"
+                                        >Khám {{ $featuredPost->category->title
+                                        }}</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+                <div class="col-lg-6">
+                    <div class="row">
+                        @foreach($posts->skip(1)->take(4) as $post)
+                        <div class="col-md-6 mb-4">
+                            <div class="article-card small">
+                                <div class="article-image">
+                                    <img
+                                        src="{{ asset($post->photo) }}"
+                                        alt="{{ $post->title }}"
+                                    />
+                                    <div class="article-badge">
+                                        {{ $post->category->title }}
+                                    </div>
+                                </div>
+                                <div class="article-content">
+                                    <h3 class="article-title">
+                                        {{ $post->title }}
+                                    </h3>
+                                    <div class="article-meta">
+                                        <span
+                                            ><i class="far fa-calendar-alt"></i>
+                                            {{
+                                            $post->created_at->format('d/m/Y')
+                                            }}</span
+                                        >
+                                    </div>
+                                    <a
+                                        href="{{ route('post.detail', $post->slug) }}"
+                                        class="read-more"
+                                        >Đọc tiếp
+                                        <i class="fas fa-arrow-right"></i
+                                    ></a>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Categories -->
+        <section class="popular-categories">
+            <div class="section-header">
+                <h2 class="section-title">Danh mục nổi bật</h2>
+                <p class="section-subtitle">
+                    Khám phá các chủ đề sức khỏe phổ biến
+                </p>
+            </div>
+            <div class="category-grid">
+                @foreach ($popularCategories as $category)
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i
+                            class="fas fa-{{ $category->icon ?? 'heartbeat' }}"
+                        ></i>
+                    </div>
+                    <h3 class="category-title">{{ $category->title }}</h3>
+                    <p class="category-count">
+                        {{ $category->posts_count ?? 0 }} bài viết
+                    </p>
+                    <a
+                        href="{{ route('category.show', ['slug' => $category->slug]) }}"
+                        class="btn btn-outline-primary btn-sm"
+                        >Xem bài viết</a
+                    >
+                    <a
+                        href="{{ route('services.category', $category->slug) }}"
+                        class="btn btn-primary btn-sm"
+                        >Dịch vụ liên quan</a
+                    >
+                </div>
+                @endforeach
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials">
+            <div class="section-header">
+                <h2 class="section-title">Khách hàng nói gì về chúng tôi</h2>
+                <p class="section-subtitle">
+                    Trải nghiệm thực tế từ khách hàng đã sử dụng dịch vụ tại
+                    CodyHealth
+                </p>
+            </div>
+            <div class="testimonial-slider">
+                <div class="testimonial-track">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="testimonial-quote">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <p>
+                                Tôi đã tiết kiệm rất nhiều thời gian nhờ đặt
+                                lịch trước qua CodyHealth. Bác sĩ rất chuyên
+                                nghiệp và tận tâm, giải thích chi tiết về tình
+                                trạng sức khỏe của tôi và đưa ra lời khuyên phù
+                                hợp.
+                            </p>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-img">
+                                <img
+                                    src="{{ asset('asset/images/testimonials/user1.jpg') }}"
+                                    alt="Nguyễn Văn A"
+                                />
+                            </div>
+                            <div class="author-info">
+                                <h4>Nguyễn Văn A</h4>
+                                <p>Khám Tim mạch</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="testimonial-quote">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <p>
+                                Dịch vụ khám sức khỏe tổng quát tại CodyHealth
+                                rất chuyên nghiệp. Tôi nhận được kết quả chi
+                                tiết và lời khuyên hữu ích từ bác sĩ. Đặc biệt,
+                                các bài viết y tế trên website rất bổ ích giúp
+                                tôi hiểu rõ hơn về tình trạng của mình.
+                            </p>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-img">
+                                <img
+                                    src="{{ asset('asset/images/testimonials/user2.jpg') }}"
+                                    alt="Trần Thị B"
+                                />
+                            </div>
+                            <div class="author-info">
+                                <h4>Trần Thị B</h4>
+                                <p>Khám Tổng quát</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="testimonial-quote">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <p>
+                                Con trai tôi được khám và tư vấn bởi các bác sĩ
+                                nhi khoa rất giỏi và tận tâm. Không chỉ khám
+                                chữa bệnh mà còn đưa ra nhiều lời khuyên bổ ích
+                                về chăm sóc sức khỏe cho trẻ. Tôi rất thích các
+                                bài viết về sức khỏe trẻ em trên website.
+                            </p>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-img">
+                                <img
+                                    src="{{ asset('asset/images/testimonials/user3.jpg') }}"
+                                    alt="Lê Văn C"
+                                />
+                            </div>
+                            <div class="author-info">
+                                <h4>Lê Văn C</h4>
+                                <p>Khám Nhi khoa</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-controls">
+                    <button class="testimonial-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="testimonial-dots">
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                    <button class="testimonial-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="statistics">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6 col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <div class="stat-number" data-count="50">0</div>
+                            <div class="stat-label">Bác sĩ chuyên khoa</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-number" data-count="15000">0</div>
+                            <div class="stat-label">Bệnh nhân hài lòng</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-clinic-medical"></i>
+                            </div>
+                            <div class="stat-number" data-count="20">0</div>
+                            <div class="stat-label">Chuyên khoa y tế</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="stat-number" data-count="5">0</div>
+                            <div class="stat-label">Năm kinh nghiệm</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <div class="section-header">
+                <h2 class="section-title">Câu hỏi thường gặp</h2>
+                <p class="section-subtitle">
+                    Giải đáp những thắc mắc phổ biến về dịch vụ của CodyHealth
+                </p>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span
+                                >Làm thế nào để đặt lịch khám tại
+                                CodyHealth?</span
+                            >
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                Bạn có thể đặt lịch khám thông qua website, ứng
+                                dụng di động hoặc gọi điện trực tiếp theo số
+                                hotline. Quy trình đặt lịch gồm 4 bước đơn giản:
+                                chọn dịch vụ/chuyên khoa, chọn bác sĩ, chọn thời
+                                gian và xác nhận thông tin.
+                            </p>
+                            <a
+                                href="{{ route('appointment.create') }}"
+                                class="btn btn-sm btn-primary mt-2"
+                                >Đặt lịch ngay</a
+                            >
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span
+                                >Chi phí khám bệnh tại CodyHealth như thế
+                                nào?</span
+                            >
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                Chi phí khám bệnh tại CodyHealth được niêm yết
+                                rõ ràng và công khai. Tùy thuộc vào từng dịch vụ
+                                và chuyên khoa, chi phí sẽ khác nhau. Bạn có thể
+                                xem chi tiết tại mục "Bảng giá dịch vụ" trên
+                                website hoặc liên hệ tổng đài để được tư vấn cụ
+                                thể.
+                            </p>
+                            <a
+                                href="{{ route('services.prices') }}"
+                                class="btn btn-sm btn-primary mt-2"
+                                >Xem bảng giá</a
+                            >
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Làm thế nào để hủy hoặc đổi lịch khám?</span>
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                Bạn có thể hủy hoặc đổi lịch khám dễ dàng thông
+                                qua tài khoản cá nhân trên website hoặc ứng
+                                dụng. Lưu ý việc hủy lịch nên được thực hiện
+                                trước 24 giờ so với thời gian hẹn để không bị
+                                mất phí đặt cọc (nếu có).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>CodyHealth có những chuyên khoa nào?</span>
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                CodyHealth cung cấp dịch vụ ở nhiều chuyên khoa
+                                như: Tim mạch, Nội tổng quát, Da liễu, Nhi khoa,
+                                Sản phụ khoa, Tiêu hóa, Cơ xương khớp, Thần
+                                kinh, Tai mũi họng, Mắt và nhiều chuyên khoa
+                                khác. Bạn có thể xem danh sách đầy đủ trong mục
+                                "Chuyên khoa" trên website.
+                            </p>
+                            <a
+                                href="{{ route('services.categories') }}"
+                                class="btn btn-sm btn-primary mt-2"
+                                >Xem các chuyên khoa</a
+                            >
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Làm thế nào để xem kết quả khám bệnh?</span>
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                Sau khi khám bệnh, kết quả sẽ được cập nhật trên
+                                hệ thống trong vòng 24-48 giờ. Bạn có thể xem
+                                kết quả bằng cách đăng nhập vào tài khoản cá
+                                nhân trên website hoặc ứng dụng, vào mục "Hồ sơ
+                                y tế" và chọn lịch sử khám bệnh tương ứng.
+                            </p>
+                            <a
+                                href="{{ route('patient.login') }}"
+                                class="btn btn-sm btn-primary mt-2"
+                                >Đăng nhập xem kết quả</a
+                            >
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Tôi có thể đọc bài viết y tế ở đâu?</span>
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                Bạn có thể đọc các bài viết y tế chất lượng tại
+                                mục "Thông tin y tế" trên website hoặc ứng dụng
+                                CodyHealth. Chúng tôi thường xuyên cập nhật các
+                                bài viết mới về nhiều chủ đề sức khỏe khác nhau,
+                                được viết bởi các chuyên gia y tế.
+                            </p>
+                            <a
+                                href="{{ route('posts.index') }}"
+                                class="btn btn-sm btn-primary mt-2"
+                                >Xem bài viết</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter & App Download -->
+        <section class="cta-section">
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="newsletter-box">
+                        <div class="newsletter-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Đăng ký nhận thông tin mới nhất</h3>
+                        <p>
+                            Nhận thông tin về các bài viết sức khỏe mới nhất,
+                            khuyến mãi và dịch vụ đặc biệt từ CodyHealth
+                        </p>
+                        <form class="newsletter-form">
+                            <div class="input-group">
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    placeholder="Email của bạn"
+                                />
+                                <button class="btn btn-primary" type="submit">
+                                    Đăng ký
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="app-download-box">
+                        <div class="app-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>Tải ứng dụng CodyHealth</h3>
+                        <p>
+                            Trải nghiệm dịch vụ y tế nhanh chóng và tiện lợi hơn
+                            với ứng dụng di động CodyHealth
+                        </p>
+                        <div class="app-buttons">
+                            <a href="#" class="app-btn">
+                                <i class="fab fa-google-play"></i>
+                                <div>
+                                    <span>Tải từ</span>
+                                    <strong>Google Play</strong>
+                                </div>
+                            </a>
+                            <a href="#" class="app-btn">
+                                <i class="fab fa-apple"></i>
+                                <div>
+                                    <span>Tải từ</span>
+                                    <strong>App Store</strong>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
