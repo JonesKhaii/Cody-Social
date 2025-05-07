@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\AffiliateLink;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\DB;
+use App\Models\Specialization;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use App\Helpers\NotificationHelper;
@@ -19,25 +20,45 @@ use App\Helpers\NotificationHelper;
 
 class DoctorController extends Controller
 {
+    // public function index()
+    // {
+
+    //     $doctors = Doctor::select(['id', 'name', 'specialization', 'photo', 'consultation_fee', 'location', 'rating'])->paginate(10);
+    //     $doctors->getCollection()->transform(function ($doctor) {
+    //         $doctor->city = trim(explode(',', $doctor->location)[0]);
+    //         return $doctor;
+    //     });
+
+    //     return view('pages.list-doctors', compact('doctors'));
+    // }
     public function index()
     {
+        $doctors = Doctor::with(['specializations:id,name'])
+            ->select(['id', 'name', 'photo', 'consultation_fee', 'location', 'rating'])
+            ->active()
+            ->latest('id')
+            ->paginate(10);
 
-        $doctors = Doctor::select(['id', 'name', 'specialization', 'photo'])->paginate(10);
-
-        return view('pages.list-doctors', compact('doctors'));
+        $doctors->getCollection()->transform(function ($doctor) {
+            $doctor->city = trim(explode(',', $doctor->location)[0]);
+            return $doctor;
+        });
+        $specializations = Specialization::all();
+        return view('pages.list-doctors', compact('doctors', 'specializations'));
     }
+
 
     public function profile()
     {
-        $doctor = Auth::guard('doctor')->user(); // Sử dụng guard doctor để lấy thông tin bác sĩ
+        $doctor = Auth::guard('doctor')->user();
         if (!$doctor) {
-            return redirect()->route('login'); // Nếu không phải bác sĩ, chuyển hướng về trang đăng nhập
+            return redirect()->route('login');
         }
         // dd($doctor);
         $posts = Post::where('added_by', $doctor->id)->get();
 
         if (!Auth::guard('doctor')->check()) {
-            return redirect()->route('login');  // Nếu không phải bác sĩ, điều hướng về trang đăng nhập
+            return redirect()->route('login');
         }
 
         $categories = PostCategory::where('status', 'active')->get();
@@ -276,12 +297,23 @@ class DoctorController extends Controller
     }
 
 
+    // public function showDetail($id)
+    // {
+
+    //     $doctor = Doctor::select(['id', 'name', 'specialization', 'services', 'working_hours', 'location', 'workplace', 'photo', 'email', 'phone', 'bio'])
+    //         ->with(['posts:id,added_by,title,slug,summary,photo,created_at'])
+    //         ->findOrFail($id);
+    //     return view('pages.doctor-detail', compact('doctor'));
+    // }
     public function showDetail($id)
     {
-
-        $doctor = Doctor::select(['id', 'name', 'specialization', 'services', 'working_hours', 'location', 'workplace', 'photo', 'email', 'phone', 'bio'])
-            ->with(['posts:id,added_by,title,slug,summary,photo,created_at'])
+        $doctor = Doctor::with([
+            'specializations:id,name',
+            'posts:id,added_by,title,slug,summary,photo,created_at'
+        ])
+            ->select(['id', 'name', 'services', 'working_hours', 'location', 'workplace', 'photo', 'email', 'phone', 'bio', 'consultation_fee', 'rating'])
             ->findOrFail($id);
+
         return view('pages.doctor-detail', compact('doctor'));
     }
 
@@ -598,5 +630,35 @@ class DoctorController extends Controller
         });
 
         return response()->json($formattedData);
+    }
+
+
+
+    public function listWithFilter(Request $request)
+    {
+        $query = Doctor::with('specializations');
+
+        if ($request->filled('specialization')) {
+            $query->whereHas('specializations', function ($q) use ($request) {
+                $q->where('specializations.id', $request->specialization);
+            });
+        }
+
+        if ($request->filled('city')) {
+            $query->where('city', 'like', '%' . $request->city . '%');
+        }
+
+        if ($request->filled('rating')) {
+            $query->orderBy('rating', $request->rating);
+        }
+
+        if ($request->filled('fee')) {
+            $query->orderBy('consultation_fee', $request->fee);
+        }
+
+        $doctors = $query->paginate(9);
+        $specializations = Specialization::all();
+
+        return view('pages.list-doctors', compact('doctors', 'specializations'));
     }
 }

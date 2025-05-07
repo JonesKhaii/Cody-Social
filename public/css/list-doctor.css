@@ -1,0 +1,143 @@
+.search-bar {
+    background: #f1f7ff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.search-bar input,
+.search-bar select {
+    border: none;
+    background: white;
+    padding: 10px 14px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    min-width: 200px;
+}
+
+.search-bar .search-btn {
+    background: #1565c0;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.search-bar .search-btn:hover {
+    background: #0d47a1;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.filters select {
+    flex: 1;
+    min-width: 160px;
+}
+
+.doctor-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.doctor-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-image {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    background: #f9f9f9;
+}
+
+.doctor-card:hover .doctor-image {
+    transform: scale(1.05);
+}
+
+.doctor-info {
+    padding: 15px 20px;
+}
+
+.badge-rating {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #ff5e57;
+    color: white;
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border-radius: 8px;
+}
+
+.badge-available {
+    background: #d4f8d4;
+    color: #28a745;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    margin-left: 8px;
+}
+
+.doctor-fee {
+    font-weight: bold;
+    color: #e74c3c;
+    font-size: 1.1rem;
+}
+
+.btn-book {
+    /* background-color: #1565c0; */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* .btn-book:hover {
+    background-color: #0d47a1;
+} */
+
+.specialization-label {
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.specialist-Psychologist {
+    color: #9c27b0;
+}
+
+.specialist-Cardiologist {
+    color: #e91e63;
+}
+
+.specialist-Dermatologist {
+    color: #00bcd4;
+}
+
+.specialist-Pediatrician {
+    color: #4caf50;
+}
+
+.specialist-Orthopedic {
+    color: #ff9800;
+}
+
+.specialist-General {
+    color: #1565c0;
+}

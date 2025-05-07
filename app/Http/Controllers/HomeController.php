@@ -41,11 +41,13 @@ class HomeController extends Controller
 
 
 
-        $topDoctors = Doctor::select('id', 'name', 'specialization as field', 'photo')
-            ->where('status', true) // Chỉ lấy bác sĩ đang hoạt động
-            ->orderByDesc('rating') // Lấy bác sĩ có rating cao nhất
-            ->limit(4) // Giới hạn số lượng
+        $topDoctors = Doctor::with('specializations:id,name')
+            ->select('id', 'name', 'photo', 'rating')
+            ->where('status', true)
+            ->orderByDesc('rating')
+            ->limit(4)
             ->get();
+
 
         $categories = PostCategory::select('id', 'title', 'slug')
             ->where('status', 'active') // Chỉ lấy danh mục đang hoạt động

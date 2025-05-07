@@ -1,208 +1,153 @@
 @extends('layouts.master')
 @section('title', 'Lịch khám')
+@section('page_css')
+    <link rel="stylesheet" href="{{ asset('css/appointment-user.css') }}">
+@endsection
 @section('main-content')
+    <div class="appointment-section container">
 
-    {{-- <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <div class="appointment-tabs">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="mb-0">Lịch Khám Của Tôi</h2>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookAppointmentModal">
+                    <i class="fas fa-plus-circle me-2"></i>Đặt lịch khám
+                </button>
+            </div>
 
-    <!-- Bootstrap JS và Popper.js (bắt buộc cho Bootstrap 5) -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script> --}}
+            <!-- Tab filter -->
+            <div class="tab-container">
+                <ul class="nav nav-pills appointment-filters">
+                    @foreach (['Sắp tới' => 'confirmed', 'Chờ duyệt' => 'pending', 'Hoàn thành' => 'completed', 'Đã huỷ' => 'canceled'] as $label => $tab)
+                        <li class="nav-item">
+                            <a class="nav-link {{ $loop->first ? 'active' : '' }}" data-bs-toggle="pill"
+                                href="#{{ $tab }}">
+                                {{ $label }}
+                                @if ($appointments->where('status', $label)->count() > 0)
+                                    <span class="badge">{{ $appointments->where('status', $label)->count() }}</span>
+                                @endif
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
 
-    <div class="container py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0">Lịch Khám Của Tôi</h2>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookAppointmentModal">
-                <i class="fas fa-plus-circle me-2"></i>Đặt lịch khám
-            </button>
+                <div class="appointment-date-filter">
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-outline-secondary btn-sm date-filter-btn">
+                            <i class="fas fa-calendar me-2"></i>
+                            <span id="selected-date-range">Tuần này</span>
+                            <i class="fas fa-chevron-down ms-2"></i>
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm filter-btn ms-2">
+                            <i class="fas fa-filter"></i>
+                            <span class="ms-1">Lọc</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Tabs -->
-        <ul class="nav nav-pills mb-4">
-            @foreach (['Chờ duyệt' => 'pending', 'Sắp tới' => 'confirmed', 'Hoàn thành' => 'completed', 'Đã Huỷ' => 'canceled'] as $label => $tab)
-                <li class="nav-item">
-                    <a class="nav-link {{ $loop->first ? 'active' : '' }}" data-bs-toggle="pill"
-                        href="#{{ $tab }}">
-                        <i
-                            class="fas fa-{{ $tab == 'pending' ? 'clock' : ($tab == 'confirmed' ? 'check-circle' : ($tab == 'completed' ? 'check-double' : 'times-circle')) }} me-2"></i>{{ $label }}
-                        @if ($appointments->where('status', $label)->count() > 0)
-                            <span
-                                class="badge bg-warning ms-2">{{ $appointments->where('status', $label)->count() }}</span>
-                        @endif
-                    </a>
-                </li>
-            @endforeach
-        </ul>
-
-        <!-- Tab Content -->
-        <div class="tab-content" style="min-height: 500px;">
-            @foreach (['Chờ duyệt' => 'pending', 'Sắp tới' => 'confirmed', 'Hoàn thành' => 'completed', 'Đã Huỷ' => 'canceled'] as $label => $tab)
+        <!-- Phần nội dung các tab -->
+        <div class="tab-content">
+            @foreach (['Sắp tới' => 'confirmed', 'Chờ duyệt' => 'pending', 'Hoàn thành' => 'completed', 'Đã huỷ' => 'canceled'] as $label => $tab)
                 <div id="{{ $tab }}" class="tab-pane fade {{ $loop->first ? 'show active' : '' }}">
                     @if ($appointments->where('status', $label)->count() > 0)
-                        <!-- Table Layout -->
-                        <div class="table-responsive card shadow-sm">
-                            <table class="table-hover mb-0 table align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Bác sĩ</th>
-                                        <th>Ngày giờ</th>
-                                        <th>Hình thức</th>
-                                        <th>Ghi chú</th>
-                                        <th>Chi tiết</th>
-
-                                        <th class="text-end">Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($appointments->where('status', $label) as $appointment)
-                                        <tr>
-                                            <!-- Doctor Info -->
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <img src="{{ $appointment->doctor->photo ?? '/images/default-avatar.png' }}"
-                                                        class="rounded-circle me-3" width="40" height="40"
-                                                        alt="Doctor avatar">
-                                                    <div>
-                                                        <h6 class="mb-0">Bs. {{ $appointment->doctor->name }}</h6>
-                                                        <small
-                                                            class="text-muted">{{ $appointment->doctor->specialization }}</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <!-- Date & Time -->
-                                            <td>
-                                                <div class="d-flex flex-column">
-                                                    <div><i class="fas fa-calendar-alt text-primary me-2"></i>
-                                                        {{ \Carbon\Carbon::parse($appointment->date)->format('d/m/Y') }}
-                                                    </div>
-                                                    <div><i class="fas fa-clock text-primary me-2"></i>
-                                                        {{ \Carbon\Carbon::parse($appointment->time)->format('H:i') }}
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <!-- Consultation Type -->
-                                            <td>
+                        <div class="appointment-list">
+                            @foreach ($appointments->where('status', $label) as $appointment)
+                                <div class="appointment-card">
+                                    <div class="appointment-left">
+                                        <div class="doctor-avatar">
+                                            <img src="{{ $appointment->doctor->photo ?? '/images/default-avatar.png' }}"
+                                                alt="{{ $appointment->doctor->name }}">
+                                            @if ($label == 'Sắp tới')
+                                                <span class="status-indicator online"></span>
+                                            @endif
+                                        </div>
+                                        <div class="appointment-info">
+                                            <div class="appointment-id">
+                                                #APT{{ str_pad($appointment->id, 4, '0', STR_PAD_LEFT) }}</div>
+                                            <h5 class="doctor-name">BS. {{ $appointment->doctor->name }}</h5>
+                                            <div class="appointment-type">
                                                 <span
-                                                    class="badge {{ $appointment->consultation_type === 'online' ? 'bg-info' : 'bg-success' }} text-white">
+                                                    class="badge {{ $appointment->consultation_type === 'online' ? 'badge-videocall' : 'badge-visit' }}">
                                                     <i
-                                                        class="fas fa-{{ $appointment->consultation_type === 'online' ? 'video' : 'clinic-medical' }} me-1"></i>
+                                                        class="fas fa-{{ $appointment->consultation_type === 'online' ? 'video' : 'clinic-medical' }}"></i>
                                                     {{ $appointment->consultation_type === 'online' ? 'Tư vấn trực tuyến' : 'Khám tại phòng khám' }}
                                                 </span>
-                                            </td>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                            <!-- Notes -->
-                                            <td>
-                                                @if ($appointment->notes)
-                                                    <span class="text-truncate d-inline-block" style="max-width: 150px;"
-                                                        data-bs-toggle="tooltip" title="{{ $appointment->notes }}">
-                                                        {{ Str::limit($appointment->notes, 30) }}
-                                                    </span>
-                                                @else
-                                                    <span class="text-muted fst-italic">Không có ghi chú</span>
-                                                @endif
-                                            </td>
-                                            <!-- Details Button -->
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-info"
-                                                    onclick="showAppointmentDetails({{ $appointment->id }})">
-                                                    Xem
+                                    <div class="appointment-center">
+                                        <div class="appointment-date">
+                                            <i class="far fa-calendar-alt meta-icon"></i>
+                                            <strong>{{ \Carbon\Carbon::parse($appointment->date)->format('d/m/Y') }}</strong>
+                                        </div>
+                                        <div class="appointment-time meta-icon">
+                                            <i class="far fa-clock"></i>
+                                            {{ \Carbon\Carbon::parse($appointment->time)->format('H:i') }}
+                                        </div>
+                                    </div>
+
+                                    <div class="appointment-contact">
+                                        <div class="contact-email">
+                                            <i class="far fa-envelope"></i>
+                                            {{ $appointment->doctor->email ?? 'doctor@example.com' }}
+                                        </div>
+                                        <div class="contact-phone">
+                                            <i class="fas fa-phone-alt"></i>
+                                            {{ $appointment->doctor->phone ?? '+84 123 456 789' }}
+                                        </div>
+                                    </div>
+
+                                    <div class="appointment-actions">
+                                        <a href="javascript:void(0);" class="btn-details"
+                                            onclick="showAppointmentDetails({{ $appointment->id }})">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('doctor.detail', $appointment->doctor->id) }}"
+                                            class="btn-profile">
+                                            <i class="fas fa-user-md"></i>
+                                        </a>
+                                        <a href="#" class="btn-message">
+                                            <i class="fas fa-comment-alt"></i>
+                                        </a>
+
+                                        @if ($label == 'Sắp tới' && $appointment->consultation_type === 'online')
+                                            <a href="{{ route('video-call', $appointment->id) }}"
+                                                class="btn btn-primary attend-btn">
+                                                <i class="fas fa-video me-1"></i> Tham gia
+                                            </a>
+                                        @endif
+
+                                        @if ($label == 'Chờ duyệt')
+                                            <form action="{{ route('user.appointments.cancel', $appointment->id) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-outline-danger">
+                                                    <i class="fas fa-times me-1"></i>Hủy lịch
                                                 </button>
-                                            </td>
-
-                                            <!-- Actions -->
-                                            <td class="text-end">
-                                                @if ($label === 'Chờ duyệt')
-                                                    <form
-                                                        action="{{ route('user.appointments.cancel', $appointment->id) }}"
-                                                        method="POST" class="d-inline">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit" class="btn btn-outline-danger btn-sm">
-                                                            <i class="fas fa-times me-1"></i>Hủy lịch
-                                                        </button>
-                                                    </form>
-                                                @endif
-
-                                                @if ($label === 'Sắp tới' && $appointment->consultation_type === 'online')
-                                                    <a href="{{ route('video-call', $appointment->id) }}"
-                                                        class="btn btn-primary btn-sm">
-                                                        <i class="fas fa-video me-1"></i>Vào phòng khám
-                                                    </a>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     @else
-                        <div class="card min-vh-40 py-5 text-center shadow-sm">
-                            <div class="card-body d-flex flex-column align-items-center justify-content-center py-5">
-                                <i class="fas fa-calendar-times fa-4x text-muted mb-4"></i>
-                                <h4 class="text-muted mb-3">Không có lịch khám {{ strtolower($label) }}</h4>
-                                <p class="text-muted mb-4">Bạn có thể đặt lịch mới bằng cách nhấn nút "Đặt lịch khám" ở góc
-                                    phải trên cùng.</p>
-                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-                                    data-bs-target="#bookAppointmentModal">
-                                    <i class="fas fa-plus-circle me-2"></i>Đặt lịch khám ngay
-                                </button>
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-calendar-times"></i>
                             </div>
+                            <h4>Không có lịch khám {{ strtolower($label) }}</h4>
+                            <p>Bạn có thể đặt lịch mới bằng cách nhấn nút "Đặt lịch khám"</p>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#bookAppointmentModal">
+                                <i class="fas fa-plus-circle me-2"></i>Đặt lịch khám ngay
+                            </button>
                         </div>
                     @endif
                 </div>
             @endforeach
-        </div>
-
-        <!-- Thông tin hướng dẫn -->
-        <div class="card bg-light mt-4 border-0">
-            <div class="card-body">
-                <h5 class="card-title"><i class="fas fa-info-circle text-primary me-2"></i>Hướng dẫn đặt lịch khám</h5>
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <div class="d-flex mb-3">
-                            <div class="text-primary me-3">
-                                <i class="fas fa-calendar-plus fa-2x"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-1">Đặt lịch dễ dàng</h6>
-                                <p class="text-muted small mb-0">Chọn bác sĩ, ngày giờ và hình thức khám theo nhu cầu của
-                                    bạn</p>
-                            </div>
-                        </div>
-                        <div class="d-flex mb-3">
-                            <div class="text-primary me-3">
-                                <i class="fas fa-bell fa-2x"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-1">Nhận thông báo</h6>
-                                <p class="text-muted small mb-0">Bạn sẽ nhận được thông báo khi lịch được xác nhận</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="d-flex mb-3">
-                            <div class="text-primary me-3">
-                                <i class="fas fa-video fa-2x"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-1">Khám trực tuyến tiện lợi</h6>
-                                <p class="text-muted small mb-0">Tiết kiệm thời gian với tính năng tư vấn trực tuyến</p>
-                            </div>
-                        </div>
-                        <div class="d-flex mb-3">
-                            <div class="text-primary me-3">
-                                <i class="fas fa-history fa-2x"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-1">Quản lý lịch sử khám</h6>
-                                <p class="text-muted small mb-0">Xem lại toàn bộ lịch sử khám và kết quả điều trị</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -447,7 +392,119 @@
             </div>
         </div>
     </div>
+    <!-- Modal Chi Tiết Lịch khám -->
+    {{-- <div id="appointment-details-modal" class="modal fade">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-calendar-check me-2"></i>Chi tiết lịch khám</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0" id="appointment-details-content">
+                    <div class="appointment-detail-loading" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Đang tải...</span>
+                        </div>
+                        <p class="mt-2">Đang tải thông tin...</p>
+                    </div>
 
+                    <div class="appointment-detail-content">
+                        <!-- Header với thông tin bác sĩ -->
+                        <div class="appointment-detail-header">
+                            <div class="doctor-info">
+                                <img id="detail-doctor-avatar" src="" alt="Doctor Avatar" class="doctor-avatar">
+                                <div>
+                                    <h4 id="detail-doctor-name" class="mb-1"></h4>
+                                    <p id="detail-doctor-specialization" class="text-muted mb-1"></p>
+                                    <div class="doctor-rating">
+                                        <span class="stars">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </span>
+                                        <span class="rating-value">4.8</span>
+                                        <span class="rating-count">(120+ đánh giá)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="appointment-status">
+                                <span id="detail-status-badge" class="status-badge">Hoàn thành</span>
+                            </div>
+                        </div>
+
+                        <!-- Thông tin chính của lịch khám -->
+                        <div class="appointment-main-info">
+                            <div class="info-row">
+                                <div class="info-label"><i class="fas fa-hashtag"></i> Mã lịch khám:</div>
+                                <div id="detail-appointment-id" class="info-value"></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label"><i class="fas fa-calendar-day"></i> Ngày khám:</div>
+                                <div id="detail-date" class="info-value"></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label"><i class="fas fa-clock"></i> Giờ khám:</div>
+                                <div id="detail-time" class="info-value"></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label"><i class="fas fa-stethoscope"></i> Hình thức:</div>
+                                <div id="detail-type" class="info-value"></div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label"><i class="fas fa-sticky-note"></i> Ghi chú:</div>
+                                <div id="detail-notes" class="info-value"></div>
+                            </div>
+                        </div>
+
+                        <!-- Thông tin liên hệ bác sĩ -->
+                        <div class="appointment-contact-info">
+                            <h5 class="section-title">Thông tin liên hệ</h5>
+                            <div class="contact-details">
+                                <div class="contact-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <span id="detail-email"></span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-phone-alt"></i>
+                                    <span id="detail-phone"></span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span id="detail-address">Phòng khám Cody Health, 123 Đường ABC, Quận 1, TP.HCM</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nội dung kết quả (nếu có) -->
+                        <div id="appointment-results" class="appointment-results">
+                            <h5 class="section-title">Kết quả khám</h5>
+                            <div class="results-content" id="detail-results">
+                                <div class="alert alert-info">
+                                    Kết quả khám sẽ được cập nhật sau khi buổi khám kết thúc.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="actions-left">
+                        <a href="#" class="btn btn-outline-primary btn-sm" id="detail-download-btn">
+                            <i class="fas fa-download me-1"></i> Tải kết quả
+                        </a>
+                    </div>
+                    <div class="actions-right">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <a href="#" class="btn btn-primary" id="detail-action-btn">
+                            <i class="fas fa-video me-1"></i> Tham gia cuộc hẹn
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Lưu danh sách bác sĩ để tìm kiếm
@@ -615,38 +672,134 @@
 
         function showAppointmentDetails(appointmentId) {
             const modal = new bootstrap.Modal(document.getElementById('appointment-details-modal'));
-            document.getElementById('appointment-details-content').innerHTML = '<p>Đang tải dữ liệu...</p>';
+            document.getElementById('appointment-details-content').innerHTML =
+                '<div class="p-4 text-center"><i class="fas fa-spinner fa-spin me-2"></i>Đang tải dữ liệu...</div>';
             modal.show();
 
             // Fetch chi tiết sau khi modal hiển thị
             fetch(`/appointments/${appointmentId}/details`)
                 .then(response => response.json())
                 .then(data => {
+                    // console.log('Data :', data);
+                    // Xác định class cho trạng thái
+                    let statusClass = 'badge-secondary';
+                    if (data.status === 'Hoàn thành') statusClass = 'badge-success';
+                    if (data.status === 'Sắp tới') statusClass = 'badge-primary';
+                    if (data.status === 'Chờ duyệt') statusClass = 'badge-warning';
+                    if (data.status === 'Đã hủy') statusClass = 'badge-danger';
+
+                    // Xác định loại khám
+                    let typeIcon = data.consultation_type === 'Tư vấn trực tuyến' ? 'video' : 'clinic-medical';
+                    let typeClass = data.consultation_type === 'Tư vấn trực tuyến' ? 'badge-info' : 'badge-success';
+
                     const content = `
-                <div class="d-flex align-items-center mb-3">
-                    <img src="${data.doctor_photo || '/images/default-avatar.png'}" width="60" height="60" class="rounded-circle me-3">
-                    <div>
-                        <h5>Bác sĩ: ${data.doctor_name}</h5>
-                        <small class="text-muted">${data.specialization}</small>
+                <div class="appointment-detail-wrapper">
+                    <!-- Thông tin bác sĩ -->
+                    <div class="doctor-profile">
+                        <div class="doctor-profile-inner">
+                            <img src="${data.doctor_photo || '/images/default-avatar.png'}" alt="${data.doctor_name}" class="doctor-img">
+                            <div class="doctor-info">
+                                <h5>BS. ${data.doctor_name}</h5>
+                                <p>${data.specialization}</p>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span>4.9</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appointment-badge">
+                            <span class="badge ${statusClass}">${data.status}</span>
+                        </div>
+                    </div>
+
+                    <!-- Chi tiết lịch khám -->
+                    <div class="appointment-info">
+                        <div class="appointment-id">
+                            <i class="fas fa-hashtag"></i> Mã lịch: <strong>APT${String(appointmentId).padStart(4, '0')}</strong>
+                        </div>
+                        
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="far fa-calendar-alt"></i>
+                                </div>
+                                <div>
+                                    <h6>Ngày khám</h6>
+                                    <p>${data.date}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="far fa-clock"></i>
+                                </div>
+                                <div>
+                                    <h6>Giờ khám</h6>
+                                    <p>${data.time}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-${typeIcon}"></i>
+                                </div>
+                                <div>
+                                    <h6>Hình thức</h6>
+                                    <p><span class="badge ${typeClass}">${data.consultation_type}</span></p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-sticky-note"></i>
+                                </div>
+                                <div>
+                                    <h6>Ghi chú</h6>
+                                    <p>${data.notes || 'Không có ghi chú'}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-details">
+                            <h6 class="section-header-contact">Thông tin liên hệ</h6>
+                            <div class="contact-info">
+                                <div>
+                                    <i class="fas fa-envelope"></i>
+                                    <span>${data.doctor_email || 'doctor@example.com'}</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-phone"></i>
+                                    <span>${data.doctor_phone || '+84 123 456 789'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Nút hành động -->
+                    <div class="appointment-actions">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        ${data.status === 'Sắp tới' && data.consultation_type === 'Tư vấn trực tuyến' ? 
+                        `<a href="/video-call/${appointmentId}" class="btn btn-primary"><i class="fas fa-video me-2"></i>Tham gia</a>` : ''}
+                        ${data.status === 'Chờ duyệt' ? 
+                        `<button class="btn btn-outline-danger"><i class="fas fa-times me-2"></i>Hủy lịch</button>` : ''}
                     </div>
                 </div>
-                <p><strong>Ngày:</strong> ${data.date}</p>
-                <p><strong>Giờ:</strong> ${data.time}</p>
-                <p><strong>Hình thức:</strong> ${data.consultation_type}</p>
-                <p><strong>Trạng thái:</strong> ${data.status}</p>
-                <p><strong>Ghi chú:</strong> ${data.notes || 'Không có'}</p>
             `;
                     document.getElementById('appointment-details-content').innerHTML = content;
                 })
                 .catch(() => {
                     document.getElementById('appointment-details-content').innerHTML =
-                        `<p class="text-danger">Lỗi tải dữ liệu.</p>`;
+                        `<div class="alert alert-danger m-4"><i class="fas fa-exclamation-circle me-2"></i>Lỗi tải dữ liệu. Vui lòng thử lại sau.</div>`;
                 });
         }
     </script>
 @endsection
 
-<style>
+{{-- <style>
     .doctor-avatar {
         object-fit: cover;
         border-radius: 50%;
@@ -688,7 +841,7 @@
     .modal-header {
         background-color: #2377B3 !important;
     }
-</style>
+</style> --}}
 
 @push('scripts')
     <script>

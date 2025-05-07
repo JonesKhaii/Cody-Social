@@ -21,7 +21,7 @@ class Doctor extends Model implements Authenticatable
 
     protected $fillable = [
         'name',
-        'specialization',
+        // 'specialization',
         'experience',
         'working_hours',
         'location',
@@ -76,5 +76,27 @@ class Doctor extends Model implements Authenticatable
     public function reviews()
     {
         return $this->hasMany(DoctorReview::class, 'doctorID', 'id');
+    }
+
+    public function specializations()
+    {
+        return $this->belongsToMany(Specialization::class, 'doctor_specializations');
+    }
+
+    public function timeSlots()
+    {
+        return $this->hasManyThrough(
+            TimeSlot::class,
+            DoctorTimeSlot::class,
+            'doctor_id',
+            'id',
+            'id',
+            'time_slot_id'
+        );
+    }
+
+    public function doctorTimeSlots()
+    {
+        return $this->hasMany(DoctorTimeSlot::class, 'doctor_id', 'id');
     }
 }

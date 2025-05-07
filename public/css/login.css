@@ -1,6 +1,10 @@
 /* Font Import */
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap&subset=vietnamese");
 
+body {
+    background-color: #fff !important;
+}
+
 /* Global Styles */
 * {
     margin: 0;
@@ -93,7 +97,7 @@
     margin-top: 20px;
     padding: 12px;
     width: 100%;
-    background-color: #2377b3;
+    background-color: #1565c0;
     border: none;
     color: white;
     font-size: 15px;
@@ -252,5 +256,39 @@
 
     .welcome-text h1 {
         font-size: 1.8rem;
+    }
+}
+
+/* Illustration Styles */
+.illustration {
+    margin-top: 30px;
+    text-align: center;
+    animation: float 6s ease-in-out infinite;
+}
+
+.illustration img {
+    max-width: 100%;
+    height: auto;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@media (max-width: 968px) {
+    .illustration {
+        margin-top: 20px;
+    }
+
+    .illustration img {
+        max-width: 300px;
     }
 }

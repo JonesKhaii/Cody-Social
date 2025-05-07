@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 use App\Models\Doctor;
@@ -39,11 +40,16 @@ class UserController extends Controller
 
         // Lấy danh sách lịch khám của user hiện tại, kèm thông tin bác sĩ
         $appointments = Appointment::where('user_id', $user->id)
-            ->with('doctor:id,name,specialization,photo')
+            ->with('doctor:id,name,photo,rating')
+            ->with('doctor.specializations:id,name')
             ->orderBy('date', 'asc')
             ->orderBy('time', 'asc')
             ->get();
-        $doctors = \App\Models\Doctor::all(['id', 'name', 'specialization', 'photo']);
+
+        $doctors = \App\Models\Doctor::with('specializations:id,name')
+            ->select('id', 'name', 'photo', 'rating')
+            ->get();
+
 
         return view('user.appointments', compact('appointments', 'doctors'));
     }
@@ -193,16 +199,23 @@ class UserController extends Controller
 
     public function getAppointmentDetails($id)
     {
-        $appointment = Appointment::with(['doctor:id,name,specialization,photo'])
-            ->select('id', 'doctor_id', 'date', 'time', 'consultation_type', 'status', 'notes')
+        // 
+        $appointment = Appointment::with([
+            'doctor:id,name,photo,email,phone',
+            'specialization:id,name'
+        ])
+            ->select('id', 'doctor_id', 'specialization_id', 'date', 'time', 'consultation_type', 'status', 'notes')
             ->findOrFail($id);
+
 
         return response()->json([
             'doctor_name' => $appointment->doctor->name,
-            'specialization' => $appointment->doctor->specialization,
+            'specialization' => optional($appointment->specialization)->name ?? 'Chưa xác định',
             'doctor_photo' => $appointment->doctor->photo,
-            'date' => $appointment->date,
-            'time' => $appointment->time,
+            'doctor_email' => $appointment->doctor->email ?? 'contact@codyhealth.com',
+            'doctor_phone' => $appointment->doctor->phone ?? '+84 123 456 789',
+            'date' => \Carbon\Carbon::parse($appointment->date)->format('d/m/Y'),
+            'time' => \Carbon\Carbon::parse($appointment->time)->format('g:i a'),
             'consultation_type' => $appointment->consultation_type === 'online' ? 'Tư vấn trực tuyến' : 'Khám tại phòng khám',
             'status' => $appointment->status,
             'notes' => $appointment->notes,

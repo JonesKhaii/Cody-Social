@@ -16,6 +16,7 @@ use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\BookingController;
 // AUTH--------------------------------------------------------------------------------
 // Trang đăng nhập & xử lý đăng nhập
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -85,6 +86,8 @@ Route::get('/doctor/post-interactions', [DoctorController::class, 'getPostIntera
 Route::get('/doctor/appointments-stats', [DoctorController::class, 'getAppointmentStats'])->name('doctor.appointments.stats');
 Route::get('/doctor/appointments-time', [DoctorController::class, 'getAppointmentsByTimeframe'])->name('doctor.appointmentsStats');
 Route::get('/doctor/appointments/{id}/details', [AppointmentController::class, 'showDetails'])->name('doctor.appointments.details');
+
+Route::get('/doctors/list', [DoctorController::class, 'listWithFilter'])->name('doctors.filter');
 // Affialte 
 Route::get('/affiliate/search-product', [AffiliateController::class, 'searchProduct']);
 Route::get('/affiliate/search-product-table', [ProductController::class, 'searchProductTable']);
@@ -112,10 +115,34 @@ Route::get('/user/appointments', [UserController::class, 'getAppointments'])->na
 Route::post('/user/book-appointment', [UserController::class, 'bookAppointment'])->name('user.book.appointment');
 Route::patch('/user/appointments/{id}/cancel', [UserController::class, 'cancelAppointment'])->name('user.appointments.cancel');
 Route::get('/user/search-doctors', [UserController::class, 'searchDoctors'])->name('api.search.doctors');
-// Route::middleware(['auth'])->group(function () {
-//     Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
-// });
 Route::put('/user/profile/{id}', [UserController::class, 'update'])->name('profile.update');
+
+
+// Booking appointment
+Route::prefix('booking')->name('booking.')->group(function () {
+    Route::get('/specialty', [BookingController::class, 'specialty'])->name('specialty');
+    Route::post('/service', [BookingController::class, 'service'])->name('service');
+    Route::post('/datetime', [BookingController::class, 'datetime'])->name('datetime');
+    Route::post('/information', [BookingController::class, 'information'])->name('information');
+    Route::post('/payment', [BookingController::class, 'payment'])->name('payment');
+    Route::post('/confirmation', [BookingController::class, 'confirmation'])->name('confirmation');
+});
+Route::post('/booking/start', [BookingController::class, 'start'])->name('booking.start');
+Route::get('/booking/services-by-specialization/{id}', [BookingController::class, 'getServicesBySpecialization']);
+Route::post('/booking/appointment-type', [BookingController::class, 'appointmentType'])->name('booking.appointmentType');
+
+Route::post('/booking/datetime', [BookingController::class, 'datetime'])->name('booking.datetime');
+Route::post('/booking/info', [BookingController::class, 'info'])->name('booking.info');
+// Route::post('/booking/payment', [BookingController::class, 'payment'])->name('booking.payment');
+Route::post('/booking/confirm', [BookingController::class, 'confirm'])->name('booking.confirm');
+Route::get('booking/back/{step}', [BookingController::class, 'goBack'])->name('booking.back');
+
+Route::get('/booking/appointment-type', [BookingController::class, 'appointmentTypeGet'])->name('booking.appointmentType.get');
+Route::get('/booking/datetime', [BookingController::class, 'datetimeGet'])->name('booking.datetime.get');
+Route::get('/booking/info', [BookingController::class, 'informationGet'])->name('booking.info.get');
+// Route::get('/booking/payment', [BookingController::class, 'paymentGet'])->name('booking.payment.get');
+Route::get('/booking/confirm', [BookingController::class, 'confirmationGet'])->name('booking.confirm.get');
+
 
 // Commnent
 Route::post('/post/{slug}/comment', [CommentController::class, 'store'])->name('post-comment.store');

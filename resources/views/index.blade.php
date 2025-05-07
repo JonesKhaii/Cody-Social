@@ -20,7 +20,7 @@
                                 <h1 class="hero-title">Sức khỏe là mối quan tâm hàng đầu của chúng tôi</h1>
                                 <p class="hero-description">Thông tin y tế chuẩn xác kết hợp dịch vụ khám chữa bệnh chất
                                     lượng từ đội ngũ bác sĩ chuyên khoa hàng đầu.</p>
-                                <a href="#" class="hero-button">Đặt lịch khám ngay</a>
+                                <a href="{{ route('doctors.list') }}" class="hero-button">Đặt lịch khám ngay</a>
 
                             </div>
                         </div>
@@ -220,14 +220,12 @@
             </div>
 
             <div class="explore-header d-flex justify-content-between align-items-center mb-4 pb-2">
-                <h33>Bài viết mới</h33>
+                <h3>Bài viết mới</h3>
             </div>
             <!-- Danh sách bài viết -->
             <div class="container mt-3" id="postsContainer">
                 @include('partials.posts', ['posts' => $posts])
             </div>
-
-
 
 
             @foreach ($popularCategories as $category)
@@ -279,9 +277,6 @@
                 </div>
             @endforeach
 
-
-
-
             <div class="doctor-category container mt-5">
                 <h2 class="section-title mt-5 text-center">Bác Sĩ Nổi Bật</h2>
                 <div class="row mt-4">
@@ -292,7 +287,10 @@
                                     <img src="{{ asset($doctor->photo) }}" class="doctor-photo mb-3"
                                         alt="{{ $doctor->name }}">
                                     <h5 class="mb-2">{{ $doctor->name }}</h5>
-                                    <p class="text-muted mb-0">{{ $doctor->field }}</p>
+                                    @if ($doctor->specializations->isNotEmpty())
+                                        <p class="text-muted mb-0">{{ $doctor->specializations->first()->name }}</p>
+                                    @endif
+
                                 </div>
                             </a>
                         </div>

@@ -1,219 +1,97 @@
 @extends('layouts.master')
 
 @section('title', 'Danh Sách Bác Sĩ')
+@section('page_css')
+    <link rel="stylesheet" href="{{ asset('css/list-doctor.css') }}">
+@endsection
 
 @section('main-content')
-    <style>
-        .search-bar {
-            background: #f1f7ff;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
-        }
-
-        .search-bar input,
-        .search-bar select {
-            border: none;
-            background: white;
-            padding: 10px 14px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .search-bar .search-btn {
-            background: #1565c0;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-
-        .search-bar .search-btn:hover {
-            background: #0d47a1;
-        }
-
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .filters select {
-            flex: 1;
-            min-width: 160px;
-        }
-
-        .doctor-card {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .doctor-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        }
-
-        .doctor-image {
-            width: 100%;
-            height: 240px;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-            background: #f9f9f9;
-        }
-
-        .doctor-card:hover .doctor-image {
-            transform: scale(1.05);
-        }
-
-        .doctor-info {
-            padding: 15px 20px;
-        }
-
-        .badge-rating {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: #ff5e57;
-            color: white;
-            font-size: 0.85rem;
-            padding: 4px 10px;
-            border-radius: 8px;
-        }
-
-        .badge-available {
-            background: #d4f8d4;
-            color: #28a745;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            margin-left: 8px;
-        }
-
-        .doctor-fee {
-            font-weight: bold;
-            color: #e74c3c;
-            font-size: 1.1rem;
-        }
-
-        .btn-book {
-            background-color: #1565c0;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 500;
-        }
-
-        .btn-book:hover {
-            background-color: #0d47a1;
-        }
-
-        .specialization-label {
-            font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-        }
-
-        .specialist-Psychologist {
-            color: #9c27b0;
-        }
-
-        .specialist-Cardiologist {
-            color: #e91e63;
-        }
-
-        .specialist-Dermatologist {
-            color: #00bcd4;
-        }
-
-        .specialist-Pediatrician {
-            color: #4caf50;
-        }
-
-        .specialist-Orthopedic {
-            color: #ff9800;
-        }
-
-        .specialist-General {
-            color: #1565c0;
-        }
-    </style>
-
     <div class="container mt-5">
         <h3 class="fw-bold mb-4 text-center" style="color: #2d3436;">Danh Sách Bác Sĩ</h3>
 
-        <!-- Search bar -->
-        <div class="search-bar d-flex align-items-center flex-wrap gap-3">
-            <input type="text" class="form-control" placeholder="Tìm bác sĩ, bệnh viện...">
-            <input type="text" class="form-control" placeholder="Địa điểm">
-            <input type="date" class="form-control">
-            <button class="search-btn">Tìm kiếm</button>
-        </div>
+        <!-- Filter Form -->
+        <form action="{{ route('doctors.filter') }}" method="GET" class="filters d-flex mb-4 flex-wrap gap-3">
 
-        <!-- Filter section -->
-        <div class="filters">
-            <select class="form-select">
-                <option selected>Chuyên khoa</option>
-                <option>Tâm lý</option>
-                <option>Da liễu</option>
-                <option>Nhi khoa</option>
+            <select class="form-select" name="specialization">
+                <option value="">Tất cả chuyên khoa</option>
+                @foreach ($specializations as $specialization)
+                    <option value="{{ $specialization->id }}"
+                        {{ request('specialization') == $specialization->id ? 'selected' : '' }}>
+                        {{ $specialization->name }}
+                    </option>
+                @endforeach
             </select>
-            <select class="form-select">
-                <option selected>Đánh giá</option>
-                <option>Cao đến thấp</option>
-                <option>Thấp đến cao</option>
+
+            <select class="form-select" name="rating">
+                <option value="">Sắp xếp đánh giá</option>
+                <option value="desc" {{ request('rating') == 'desc' ? 'selected' : '' }}>Cao đến thấp</option>
+                <option value="asc" {{ request('rating') == 'asc' ? 'selected' : '' }}>Thấp đến cao</option>
             </select>
-            <select class="form-select">
-                <option selected>Phòng khám</option>
-                <option>Clinic A</option>
-                <option>Clinic B</option>
+
+            <select class="form-select" name="fee">
+                <option value="">Sắp xếp giá</option>
+                <option value="asc" {{ request('fee') == 'asc' ? 'selected' : '' }}>Thấp đến cao</option>
+                <option value="desc" {{ request('fee') == 'desc' ? 'selected' : '' }}>Cao đến thấp</option>
             </select>
-            <select class="form-select">
-                <option selected>Sắp xếp</option>
-                <option>Giá thấp đến cao</option>
-                <option>Giá cao đến thấp</option>
-            </select>
-        </div>
+
+            <input type="text" name="city" class="form-control" placeholder="Địa điểm" value="{{ request('city') }}">
+
+            <button type="submit" class="btn btn-primary">Lọc</button>
+        </form>
+
 
         <div class="row g-4">
             @foreach ($doctors as $doctor)
                 <div class="col-md-6 col-lg-4">
                     <div class="doctor-card position-relative">
                         <div class="position-relative">
-                            <span class="badge-rating">★ 5.0</span>
-                            <img src="{{ $doctor->photo ?? asset('images/default-doctor.png') }}" alt="{{ $doctor->name }}"
-                                class="doctor-image">
+                            <span class="badge-rating">★ {{ $doctor->rating }}</span>
+                            <img src="{{ $doctor->photo ?? asset('images/default-doctor.png') }}"
+                                alt="{{ $doctor->name }}" class="doctor-image">
                         </div>
                         <div class="doctor-info">
                             <div class="d-flex align-items-center mb-2">
-                                <span
-                                    class="specialization-label specialist-{{ str_replace(' ', '', $doctor->specialization) }}">
-                                    {{ $doctor->specialization }}
-                                </span>
-                                <span class="badge-available">Available</span>
+                                @foreach ($doctor->specializations as $spec)
+                                    <span class="specialization-label specialist-{{ str_replace(' ', '', $spec->name) }}">
+                                        {{ $spec->name }}
+                                    </span>
+                                @endforeach
+                                <span class="badge-available ms-2">Available</span>
                             </div>
-                            <h5 class="fw-bold text-dark mb-1">{{ $doctor->name }}</h5>
-                            <p class="text-muted mb-2">
-                                <i class="bi bi-geo-alt"></i> Hà Nội &nbsp;&bull;&nbsp; 30 phút
-                            </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="doctor-fee">
-                                    ${{ $doctor->fee ?? 650 }}
+
+                            <div class="row mb-2">
+                                <div class="col-8">
+                                    <h5 class="fw-bold text-dark mb-1">{{ $doctor->name }}</h5>
+                                    <p class="text-muted d-flex align-items-center mb-0">
+                                        <i class="fa-solid fa-location-dot me-1"></i> {{ $doctor->city }}
+                                        &nbsp;&bull;&nbsp; 30 phút
+                                    </p>
                                 </div>
-                                <a href="{{ route('doctor.detail', $doctor->id) }}" class="btn btn-book">
-                                    Book Now
-                                </a>
+                                <div class="col-4 text-start">
+                                    <span class="span-fee">Phí tư vấn</span>
+                                    <div class="doctor-fee fw-bold">
+                                        Từ {{ number_format($doctor->consultation_fee ?? 650, 0, ',', '.') }} VND
+                                    </div>
+                                </div>
                             </div>
+
+                            <div class="d-flex align-items-center">
+                                <div class="btn-book d-flex ms-auto">
+                                    <a href="{{ route('doctor.detail', $doctor->id) }}"
+                                        class="btn btn-outline-primary flex-grow-1 me-2 text-center">
+                                        Thông tin
+                                    </a>
+                                    <button type="button"
+                                        class="btn btn-primary btn-open-booking-modal"
+                                        data-doctor-id="{{ $doctor->id }}"
+                                        data-doctor-name="{{ $doctor->name }}"
+                                        data-doctor-photo="{{ $doctor->photo }}"
+                                        data-doctor-specialization="{{ $doctor->specializations->pluck('name')->join(', ') }}">
+                                        Đặt lịch
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -224,4 +102,33 @@
             {{ $doctors->links() }}
         </div>
     </div>
+
+    @include('pages.booking-appointment')
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const bookingButtons = document.querySelectorAll('.btn-open-booking-modal');
+
+            bookingButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const doctorId = this.dataset.doctorId;
+                    const doctorName = this.dataset.doctorName;
+                    const doctorPhoto = this.dataset.doctorPhoto;
+                    const doctorSpec = this.dataset.doctorSpecialization;
+
+                    document.getElementById('selected_doctor_id').value = doctorId;
+                    document.getElementById('selected-doctor-name').textContent = 'Bs. ' +
+                        doctorName;
+                    document.getElementById('selected-doctor-specialization').textContent =
+                        doctorSpec;
+                    document.getElementById('selected-doctor-img').src = doctorPhoto;
+                    document.getElementById('selected-doctor-info').style.display = 'block';
+
+                    const modal = new bootstrap.Modal(document.getElementById(
+                        'bookAppointmentModal'));
+                    modal.show();
+                });
+            });
+        });
+    </script>
 @endsection

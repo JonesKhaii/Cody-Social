@@ -89,7 +89,7 @@
     font-weight: 600;
 }
 
-.nav-link:after {
+/* .nav-link:after {
     content: "";
     position: absolute;
     bottom: 5px;
@@ -99,12 +99,12 @@
     background-color: var(--white);
     transition: var(--transition);
     transform: translateX(-50%);
-}
+} */
 
-.nav-link:hover:after,
+/* .nav-link:hover:after,
 .nav-link.active:after {
     width: 60%;
-}
+} */
 
 /* Login/Logout buttons */
 .login-btn,
@@ -139,7 +139,7 @@
 }
 
 .notification-dropdown {
-    min-width: 300px;
+    min-width: 500px;
     padding: 0;
     border: none;
     margin-top: 10px;

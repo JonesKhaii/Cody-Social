@@ -27,7 +27,7 @@
                             </div>
                         </div>
                         <h3 class="article-title">{{ $post->title }}</h3>
-                        <p class="article-excerpt">{{ Str::limit(strip_tags($post->summary), 120) }}</p>
+                        <p class="article-excerpt">{{ Str::limit(strip_tags($post->summary), 80) }}</p>
                     </div>
                 </a>
             </div>

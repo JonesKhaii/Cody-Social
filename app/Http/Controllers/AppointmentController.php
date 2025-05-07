@@ -16,9 +16,6 @@ class AppointmentController extends Controller
     }
 
 
-    /**
-     * Xử lý đặt lịch hẹn và lưu vào bảng appointments
-     */
     public function store(Request $request)
     {
         // Kiểm tra nếu bác sĩ tồn tại

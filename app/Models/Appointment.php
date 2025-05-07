@@ -9,10 +9,11 @@ class Appointment extends Model
 {
     use HasFactory;
 
-    protected $table = 'appointments'; // Tên bảng trong DB
+    protected $table = 'appointments';
 
     protected $fillable = [
         'doctor_id',
+        'specialization_id',
         'user_id',
         'date',
         'time',
@@ -29,19 +30,18 @@ class Appointment extends Model
         'approval_status' => 'string',
     ];
 
-    /**
-     * Mối quan hệ với bảng Doctors
-     */
     public function doctor()
     {
         return $this->belongsTo(Doctor::class, 'doctor_id', 'id');
     }
 
-    /**
-     * Mối quan hệ với bảng Users
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function specialization()
+    {
+        return $this->belongsTo(Specialization::class, 'specialization_id', 'id');
     }
 }

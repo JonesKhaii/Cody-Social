@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
-
 use Illuminate\Support\ServiceProvider;
 use App\Models\PostCategory;
 
@@ -23,25 +23,43 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
-            $categories = \App\Models\PostCategory::select('id', 'title', 'slug')
-                ->where('status', 'active')
-                ->orderBy('title')  // Sắp xếp theo title
-                ->get();
 
+            // Lấy danh mục kèm số bài viết
+            $categories = Cache::remember('global_categories', 3600, function () {
+                return PostCategory::withCount('posts')
+                    ->addSelect(['id', 'title', 'slug'])
+                    ->where('status', 'active')
+                    ->having('posts_count', '>', 0)
+                    ->orderBy('title')
+                    ->get();
+            });
+
+
+            // Lấy menu cha/con
+            $menu_data = Cache::remember('menu_categories', 3600, function () {
+                $parent_categories = PostCategory::select('id', 'title', 'slug')
+                    ->where('status', 'active')
+                    ->whereNull('parent_id')
+                    ->orderBy('title')
+                    ->get();
+
+                $child_categories = PostCategory::select('id', 'title', 'slug', 'parent_id')
+                    ->where('status', 'active')
+                    ->whereNotNull('parent_id')
+                    ->orderBy('title')
+                    ->get()
+                    ->groupBy('parent_id');
+
+                return [
+                    'parents' => $parent_categories,
+                    'children' => $child_categories
+                ];
+            });
+
+            // Đẩy biến ra View
             $view->with('categories', $categories);
-        });
-
-        // Trong AppServiceProvider
-        View::composer(['layouts.master', 'layouts.header'], function ($view) {
-            $parentCategories = PostCategory::where('status', 'active')
-                ->whereNull('parent_id')
-                ->with(['children' => function ($query) {
-                    $query->where('status', 'active');
-                }])
-                ->orderBy('title')
-                ->get();
-
-            $view->with('parentCategories', $parentCategories);
+            $view->with('menu_categories', $menu_data);
+            $view->with('parentCategories', $menu_data['parents']);
         });
     }
 }

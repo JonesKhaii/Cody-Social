@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Post;
 use App\Models\PostCategory;
 use Illuminate\Http\Request;
@@ -22,34 +23,136 @@ class PostController extends Controller
         return view('doctor.profile', compact('categories'));
     }
 
+    // public function detail($slug)
+    // {
+    //     $post = Post::with(['user', 'doctor'])->where('slug', $slug)->where('status', 'active')->firstOrFail();
+
+    //     // $post = Post::where('slug', $slug)->firstOrFail();
+
+    //     if (!session()->has('viewed_post_' . $post->id)) {
+    //         $post->increment('views');
+    //         session()->put('viewed_post_' . $post->id, true);
+    //     }
+
+    //     // dd($post->views);
+
+    //     // Lấy các bình luận liên quan đến bài viết
+    //     $comments = $post->comments()->with('author_info', 'replies')->get();
+
+    //     // Lấy các bài viết gần đây
+    //     $recent_posts = Post::latest()->take(5)->get();
+
+    //     // Lấy danh mục bài viết
+    //     $categories = PostCategory::select('post_categories.id', 'post_categories.title', 'post_categories.slug')
+    //         ->withCount('posts') // Tính số bài viết trong từng danh mục
+    //         ->where('status', 'active') // Chỉ lấy danh mục đang hoạt động
+    //         ->orderBy('title') // Sắp xếp theo tên danh mục
+    //         ->get();
+
+
+    //     return view('pages.post-detail', compact('post', 'comments', 'recent_posts', 'categories'));
+    // }
+    // public function detail($slug)
+    // {
+    //     $post = Post::with(['user', 'doctor'])->where('slug', $slug)->where('status', 'active')->firstOrFail();
+
+    //     // Kiểm tra và lưu lượt xem
+    //     if (!session()->has('viewed_post_' . $post->id)) {
+    //         $post->increment('views');
+    //         session()->put('viewed_post_' . $post->id, true);
+    //     }
+
+    //     // Lấy thông tin tác giả (có thể là user hoặc doctor)
+    //     if ($post->added_by == 'doctor') {
+    //         $author = $post->doctor()->select('id', 'name', 'photo', 'specialization', 'short_bio', 'bio')->first();
+    //     } else {
+    //         $author = $post->user()->select('id', 'name', 'photo')->first();
+    //     }
+
+    //     $post->author_info = $author;
+
+    //     // Lấy các bình luận liên quan đến bài viết
+    //     $comments = $post->comments()->with('author_info', 'replies')->get();
+
+    //     // Lấy các bài viết gần đây
+    //     $recent_posts = Post::latest()->take(5)->get();
+
+    //     // Lấy danh mục bài viết
+    //     $categories = PostCategory::select('post_categories.id', 'post_categories.title', 'post_categories.slug')
+    //         ->withCount('posts') // Tính số bài viết trong từng danh mục
+    //         ->where('status', 'active') // Chỉ lấy danh mục đang hoạt động
+    //         ->orderBy('title') // Sắp xếp theo tên danh mục
+    //         ->get();
+
+    //     return view('pages.post-detail', compact('post', 'comments', 'recent_posts', 'categories'));
+    // }
     public function detail($slug)
     {
-        $post = Post::with(['user', 'doctor'])->where('slug', $slug)->where('status', 'active')->firstOrFail();
+        // Cache key dựa trên slug
+        $cacheKey = 'post_detail_' . $slug;
 
-        // $post = Post::where('slug', $slug)->firstOrFail();
+        // Cache view đã render
+        if (Cache::has($cacheKey) && !auth()->check() && !auth()->guard('doctor')->check()) {
+            return Cache::get($cacheKey);
+        }
 
+        // Eager load tất cả các quan hệ cần thiết
+        $post = Post::with([
+            'comments' => function ($query) {
+                $query->whereNull('parent_id')
+                    ->where('status', 'active')
+                    ->latest();
+            },
+            'comments.replies',
+            'comments.user:id,name,photo',
+            'comments.doctor:id,name,photo',
+            'comments.replies.user:id,name,photo',
+            'comments.replies.doctor:id,name,photo',
+            'cat_info:id,title,slug',
+            'user:id,name,photo',
+            'doctor:id,name,photo,specialization,short_bio,bio',
+            'likes'
+        ])
+            ->where('slug', $slug)
+            ->where('status', 'active')
+            ->firstOrFail();
+
+        // Tăng lượt xem bất đồng bộ
         if (!session()->has('viewed_post_' . $post->id)) {
-            $post->increment('views');
+            dispatch(function () use ($post) {
+                $post->increment('views');
+            })->afterResponse();
+
             session()->put('viewed_post_' . $post->id, true);
         }
 
-        // dd($post->views);
+        // Xử lý tags
+        $post_tags = array_map('trim', explode(',', $post->tags));
 
-        // Lấy các bình luận liên quan đến bài viết
-        $comments = $post->comments()->with('author_info', 'replies')->get();
-
-        // Lấy các bài viết gần đây
-        $recent_posts = Post::latest()->take(5)->get();
-
-        // Lấy danh mục bài viết
-        $categories = PostCategory::select('post_categories.id', 'post_categories.title', 'post_categories.slug')
-            ->withCount('posts') // Tính số bài viết trong từng danh mục
-            ->where('status', 'active') // Chỉ lấy danh mục đang hoạt động
-            ->orderBy('title') // Sắp xếp theo tên danh mục
-            ->get();
+        // Lấy các bài viết gần đây với caching
+        $recent_posts = Cache::remember('recent_posts_' . $post->id, 3600, function () use ($post) {
+            return Post::select('id', 'title', 'slug', 'photo', 'created_at')
+                ->where('status', 'active')
+                ->where('id', '!=', $post->id)
+                ->latest()
+                ->take(5)
+                ->get();
+        });
 
 
-        return view('pages.post-detail', compact('post', 'comments', 'recent_posts', 'categories'));
+        // Render view
+        $view = view('pages.post-detail', compact(
+            'post',
+            'recent_posts',
+            'post_tags'
+        ))->render();
+
+        // Cache view cho người dùng chưa đăng nhập
+        if (!auth()->check() && !auth()->guard('doctor')->check()) {
+            Cache::put($cacheKey, $view, 3600);
+        }
+
+        return $view;
     }
 
     public function create()

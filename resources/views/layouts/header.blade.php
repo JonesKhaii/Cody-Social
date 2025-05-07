@@ -360,7 +360,7 @@
     }
 
     .notification-dropdown {
-        min-width: 300px;
+        min-width: 500px;
         padding: 0;
         border: none;
         margin-top: 10px;

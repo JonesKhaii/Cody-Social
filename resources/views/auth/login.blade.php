@@ -1,7 +1,9 @@
 @extends('layouts.master')
 
 @section('title', 'Trang Đăng Nhập')
-
+@section('page_css')
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+@endsection
 @section('main-content')
     <!-- HTML -->
     <div class="login-container">
@@ -58,8 +60,11 @@
         <div class="welcome-text">
             <h1>Chào mừng trở lại!</h1>
             <p>Rất vui được gặp lại bạn. Hãy đăng nhập để tiếp tục trải nghiệm dịch vụ của chúng tôi và nhận được sự chăm
-                sóc
-                tốt nhất từ đội ngũ bác sĩ chuyên nghiệp.</p>
+                sóc tốt nhất từ đội ngũ bác sĩ chuyên nghiệp.</p>
+
+            <div class="illustration">
+                <img src="{{ asset('asset/images/banners/login.png') }}" alt="Healthcare Illustration">
+            </div>
         </div>
     </div>
 @endsection
