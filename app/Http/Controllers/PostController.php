@@ -161,26 +161,87 @@ class PostController extends Controller
         return view('doctor.profile', compact('categories'));
     }
 
+    // public function store(Request $request)
+    // {
+    //     // dd('Request nhận thành công'); // Nếu không thấy dòng này, request không chạy vào store()
+
+    //     $doctor = auth()->guard('doctor')->user();
+    //     // dd($doctor); // Nếu không thấy dòng này, có thể lỗi do authentication
+
+    //     if (!$doctor) {
+    //         return redirect()->back()->with('error', 'Bạn không có quyền đăng bài.');
+    //     }
+
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'summary' => 'required|string',
+    //         'description' => 'required|string',
+    //         'post_cat_id' => 'required|exists:post_categories,id',
+    //         'photo' => 'required|image|mimes:webp,jpeg,png,jpg,gif|max:2048',
+    //     ]);
+
+    //     // dd('Dữ liệu hợp lệ, tiếp tục xử lý');
+
+    //     $post = new Post();
+    //     $post->title = $request->title;
+    //     $post->slug = Str::slug($request->title);
+    //     $post->summary = $request->summary;
+    //     $post->description = $request->description;
+    //     $post->post_cat_id = $request->post_cat_id;
+    //     $post->status = 'active';
+    //     $post->added_by = $doctor->id;
+
+    //     // dd('Dữ liệu hợp lệ, tiếp tục xử lý');
+
+    //     if ($request->hasFile('photo')) {
+    //         // dd('File ảnh đã được nhận, tiếp tục upload'); // Nếu không thấy dòng này, `$request->hasFile('image')` trả về false
+    //         $imageUrl = app(ImageController::class)->uploadImage($request);
+    //         // dd($imageUrl);
+    //     } else {
+    //         dd('Không có ảnh nào được gửi');
+    //         $imageUrl = null;
+    //     }
+
+
+    //     // dd('Ảnh upload xong, tiếp tục lưu bài viết');
+
+    //     $post->photo = $imageUrl;
+
+    //     try {
+    //         $post->save();
+    //         // dd('Bài viết đã được lưu thành công!');
+    //     } catch (\Exception $e) {
+    //         dd($e->getMessage()); // Hiển thị lỗi SQL hoặc lỗi khác
+    //     }
+
+    //     return redirect()->back()->with('success', 'Bài viết đã được tạo thành công!');
+    // }
+
+
     public function store(Request $request)
     {
-        // dd('Request nhận thành công'); // Nếu không thấy dòng này, request không chạy vào store()
-
         $doctor = auth()->guard('doctor')->user();
-        // dd($doctor); // Nếu không thấy dòng này, có thể lỗi do authentication
 
         if (!$doctor) {
             return redirect()->back()->with('error', 'Bạn không có quyền đăng bài.');
         }
 
-        $request->validate([
+        // Điều chỉnh validation tùy theo lựa chọn của người dùng
+        $validationRules = [
             'title' => 'required|string|max:255',
             'summary' => 'required|string',
             'description' => 'required|string',
             'post_cat_id' => 'required|exists:post_categories,id',
-            'photo' => 'required|image|mimes:webp,jpeg,png,jpg,gif|max:2048',
-        ]);
+        ];
 
-        // dd('Dữ liệu hợp lệ, tiếp tục xử lý');
+        // Thêm validation tùy thuộc vào lựa chọn người dùng
+        if ($request->image_option == 'upload') {
+            $validationRules['photo'] = 'required|image|mimes:webp,jpeg,png,jpg,gif|max:2048';
+        } else {
+            $validationRules['photo_url'] = 'required|url';
+        }
+
+        $request->validate($validationRules);
 
         $post = new Post();
         $post->title = $request->title;
@@ -191,46 +252,86 @@ class PostController extends Controller
         $post->status = 'active';
         $post->added_by = $doctor->id;
 
-        // dd('Dữ liệu hợp lệ, tiếp tục xử lý');
-
-        if ($request->hasFile('photo')) {
-            // dd('File ảnh đã được nhận, tiếp tục upload'); // Nếu không thấy dòng này, `$request->hasFile('image')` trả về false
+        // Xử lý ảnh tùy theo lựa chọn
+        if ($request->image_option == 'upload' && $request->hasFile('photo')) {
+            // Sử dụng phương thức tải lên hiện có
             $imageUrl = app(ImageController::class)->uploadImage($request);
-            // dd($imageUrl);
+        } else if ($request->image_option == 'link' && $request->filled('photo_url')) {
+            // Sử dụng URL ảnh do người dùng cung cấp
+            $imageUrl = $request->photo_url;
         } else {
-            dd('Không có ảnh nào được gửi');
+            // Nếu không có ảnh, sử dụng ảnh mặc định hoặc để trống
             $imageUrl = null;
         }
-
-
-        // dd('Ảnh upload xong, tiếp tục lưu bài viết');
 
         $post->photo = $imageUrl;
 
         try {
             $post->save();
-            // dd('Bài viết đã được lưu thành công!');
         } catch (\Exception $e) {
-            dd($e->getMessage()); // Hiển thị lỗi SQL hoặc lỗi khác
+            return redirect()->back()->with('error', 'Lỗi khi lưu bài viết: ' . $e->getMessage());
         }
 
         return redirect()->back()->with('success', 'Bài viết đã được tạo thành công!');
     }
 
 
+    // public function update(Request $request, $id)
+    // {
+    //     // Validate dữ liệu nhập vào
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'summary' => 'required|string',
+    //         'description' => 'required|string',
+    //         'post_cat_id' => 'required|exists:post_categories,id',
+    //         'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate ảnh nếu có
+    //     ]);
 
+    //     // Lấy bài viết cần chỉnh sửa
+    //     $post = Post::findOrFail($id);
+    //     $post->title = $request->title;
+    //     $post->summary = $request->summary;
+    //     $post->description = $request->description;
+    //     $post->post_cat_id = $request->post_cat_id;
 
+    //     // Kiểm tra xem người dùng có upload ảnh mới hay không
+    //     if ($request->hasFile('photo')) {
+    //         // Xóa ảnh cũ trên S3 trước khi upload ảnh mới
+    //         if ($post->photo) {
+    //             $oldImagePath = str_replace(Storage::disk('s3')->url(''), '', $post->photo);
+    //             Storage::disk('s3')->delete($oldImagePath);
+    //         }
 
+    //         // Upload ảnh mới
+    //         $imageUrl = app(ImageController::class)->uploadImage($request);
+    //         $post->photo = $imageUrl;
+    //     }
+
+    //     // Lưu bài viết vào CSDL
+    //     $post->save();
+
+    //     // Trả về thông báo thành công
+    //     return redirect()->back()->with('success', 'Bài viết đã được cập nhật!');
+    // }
     public function update(Request $request, $id)
     {
         // Validate dữ liệu nhập vào
-        $request->validate([
+        $validationRules = [
             'title' => 'required|string|max:255',
             'summary' => 'required|string',
             'description' => 'required|string',
             'post_cat_id' => 'required|exists:post_categories,id',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate ảnh nếu có
-        ]);
+            'edit_image_option' => 'required|in:keep,upload,link',
+        ];
+
+        // Thêm validation tùy thuộc vào lựa chọn người dùng
+        if ($request->edit_image_option == 'upload') {
+            $validationRules['photo'] = 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048';
+        } else if ($request->edit_image_option == 'link') {
+            $validationRules['photo_url'] = 'required|url';
+        }
+
+        $request->validate($validationRules);
 
         // Lấy bài viết cần chỉnh sửa
         $post = Post::findOrFail($id);
@@ -239,21 +340,32 @@ class PostController extends Controller
         $post->description = $request->description;
         $post->post_cat_id = $request->post_cat_id;
 
-        // Kiểm tra xem người dùng có upload ảnh mới hay không
-        if ($request->hasFile('photo')) {
-            // Xóa ảnh cũ trên S3 trước khi upload ảnh mới
-            if ($post->photo) {
-                $oldImagePath = str_replace(Storage::disk('s3')->url(''), '', $post->photo);
-                Storage::disk('s3')->delete($oldImagePath);
+        // Xử lý ảnh tùy theo lựa chọn của người dùng
+        if ($request->edit_image_option == 'upload' && $request->hasFile('photo')) {
+            // Xóa ảnh cũ trên S3 nếu có và nếu không phải URL bên ngoài
+            if ($post->photo && !filter_var($post->photo, FILTER_VALIDATE_URL)) {
+                try {
+                    $oldImagePath = str_replace(Storage::disk('s3')->url(''), '', $post->photo);
+                    Storage::disk('s3')->delete($oldImagePath);
+                } catch (\Exception $e) {
+                    // Ghi log lỗi nhưng vẫn tiếp tục
+                    \Log::error('Không thể xóa ảnh cũ: ' . $e->getMessage());
+                }
             }
 
             // Upload ảnh mới
             $imageUrl = app(ImageController::class)->uploadImage($request);
             $post->photo = $imageUrl;
+        } else if ($request->edit_image_option == 'link' && $request->filled('photo_url')) {
+            // Cập nhật với URL ảnh mới
+            $post->photo = $request->photo_url;
         }
 
-        // Lưu bài viết vào CSDL
-        $post->save();
+        try {
+            $post->save();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Lỗi khi cập nhật bài viết: ' . $e->getMessage());
+        }
 
         // Trả về thông báo thành công
         return redirect()->back()->with('success', 'Bài viết đã được cập nhật!');
