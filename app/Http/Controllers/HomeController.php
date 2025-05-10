@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\Doctor;
-use App\Models\PostCategory;
+use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class HomeController extends Controller
         $posts = Post::select('id', 'title', 'slug', 'summary', 'photo', 'post_cat_id', 'post_tag_id', 'added_by', 'created_at')
             ->where('status', 'active')
             ->with([
-                'cat_info:id,title',
+                'cat_info:id,name as title',
                 'doctor:id,name,photo',
                 'user:id,name,photo'
             ])
@@ -29,7 +29,7 @@ class HomeController extends Controller
         $topViewedPosts = Post::select('id', 'title', 'slug', 'summary', 'photo', 'views', 'post_cat_id', 'post_tag_id', 'added_by', 'created_at')
             ->where('status', 'active')
             ->with([
-                'cat_info:id,title',
+                'cat_info:id,name as title',
                 'doctor:id,name,photo',
                 'user:id,name,photo'
             ])
@@ -41,6 +41,13 @@ class HomeController extends Controller
 
 
 
+        // $topDoctors = Doctor::with('specializations:id,name')
+        //     ->select('id', 'name', 'photo', 'rating')
+        //     ->where('status', true)
+        //     ->orderByDesc('rating')
+        //     ->limit(4)
+        //     ->get();
+
         $topDoctors = Doctor::with('specializations:id,name')
             ->select('id', 'name', 'photo', 'rating')
             ->where('status', true)
@@ -48,19 +55,19 @@ class HomeController extends Controller
             ->limit(4)
             ->get();
 
-
-        $categories = PostCategory::select('id', 'title', 'slug')
-            ->where('status', 'active') // Chỉ lấy danh mục đang hoạt động
-            ->orderBy('title') // Sắp xếp theo tên danh mục
+        $categories = Category::select('id', 'name as title', 'slug')
+            ->where('status', 'active')
+            ->where('type', 'other')
+            ->orderBy('name')
             ->get();
 
-        // Lấy danh mục phổ biến (đếm số lượng bài viết mỗi danh mục)
-        $popularCategories = PostCategory::select('post_categories.id', 'post_categories.title', 'post_categories.slug', 'post_categories.photo')
+        $popularCategories = Category::select('categories.id', 'categories.name as title', 'categories.slug', 'categories.photo')
             ->leftJoin('posts', function ($join) {
-                $join->on('post_categories.id', '=', 'posts.post_cat_id')
+                $join->on('categories.id', '=', 'posts.post_cat_id')
                     ->where('posts.status', 'active');
             })
-            ->groupBy('post_categories.id', 'post_categories.title', 'post_categories.slug', 'post_categories.photo')
+            ->where('categories.type', 'post')
+            ->groupBy('categories.id', 'categories.name', 'categories.slug', 'categories.photo')
             ->orderByRaw('COUNT(posts.id) DESC')
             ->limit(5)
             ->get();
@@ -76,10 +83,10 @@ class HomeController extends Controller
         $posts = Post::select('id', 'title', 'slug', 'summary', 'photo', 'post_cat_id', 'post_tag_id', 'added_by', 'created_at')
             ->where('status', 'active')
             ->whereHas('cat_info', function ($query) use ($categoryTitle) {
-                $query->where('title', $categoryTitle);
+                $query->where('name', $categoryTitle);
             })
             ->with([
-                'cat_info:id,title',
+                'cat_info:id,name',
                 'tag_info:id,title',
                 'author_info:id,name,photo',
             ])

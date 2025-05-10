@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Auth\Authenticatable as LaravelAuthenticatable;
 use App\Helpers\BioFormatter;
+use App\Models\Category;
 
 class Doctor extends Model implements Authenticatable
 {
@@ -73,14 +74,19 @@ class Doctor extends Model implements Authenticatable
         return BioFormatter::format($this->bio);
     }
 
-    public function reviews()
-    {
-        return $this->hasMany(DoctorReview::class, 'doctorID', 'id');
-    }
+    // public function reviews()
+    // {
+    //     return $this->hasMany(DoctorReview::class, 'doctorID', 'id');
+    // }
 
+    // public function specializations()
+    // {
+    //     return $this->belongsToMany(Specialization::class, 'doctor_specializations');
+    // }
     public function specializations()
     {
-        return $this->belongsToMany(Specialization::class, 'doctor_specializations');
+        return $this->belongsToMany(Category::class, 'doctor_specializations', 'doctor_id', 'specialization_id')
+            ->where('categories.type', 'other');
     }
 
     public function timeSlots()

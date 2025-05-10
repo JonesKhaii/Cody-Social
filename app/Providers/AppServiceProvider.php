@@ -5,7 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use App\Models\PostCategory;
+use App\Models\Category;
+use App\Http\Controllers\DropdownMenuController;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,44 +23,58 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Sử dụng một view composer duy nhất để tránh trùng lặp truy vấn
         View::composer('*', function ($view) {
+            // Sử dụng một cache key duy nhất cho tất cả dữ liệu chung
+            $globalData = Cache::remember('global_view_data', 60 * 60, function () {
+                // Tạo controller instance chỉ một lần
+                $dropdownController = new DropdownMenuController();
 
-            // Lấy danh mục kèm số bài viết
-            $categories = Cache::remember('global_categories', 3600, function () {
-                return PostCategory::withCount('posts')
-                    ->addSelect(['id', 'title', 'slug'])
+                // Lấy tất cả dữ liệu dropdown thông qua một phương thức duy nhất
+                $allDropdownData = $dropdownController->getAllDropdownData();
+
+                // Lấy danh mục kèm số bài viết
+                $categories = Category::select('id', 'name as title', 'slug')
+                    ->with(['posts' => function ($query) {
+                        $query->select('id', 'post_cat_id')
+                            ->where('status', 'active');
+                    }])
                     ->where('status', 'active')
-                    ->having('posts_count', '>', 0)
-                    ->orderBy('title')
-                    ->get();
-            });
-
-
-            // Lấy menu cha/con
-            $menu_data = Cache::remember('menu_categories', 3600, function () {
-                $parent_categories = PostCategory::select('id', 'title', 'slug')
-                    ->where('status', 'active')
-                    ->whereNull('parent_id')
-                    ->orderBy('title')
-                    ->get();
-
-                $child_categories = PostCategory::select('id', 'title', 'slug', 'parent_id')
-                    ->where('status', 'active')
-                    ->whereNotNull('parent_id')
-                    ->orderBy('title')
+                    ->where('type', 'post')
+                    ->whereHas('posts', function ($query) {
+                        $query->where('status', 'active');
+                    })
+                    ->orderBy('name')
                     ->get()
-                    ->groupBy('parent_id');
+                    ->map(function ($category) {
+                        $category->posts_count = $category->posts->count();
+                        unset($category->posts); // Loại bỏ relation để giảm kích thước
+                        return $category;
+                    });
+
+                // Lấy menu cha/con trong một lần truy vấn
+                $allCategories = Category::select('id', 'name as title', 'slug', 'parent_id')
+                    ->where('status', 'active')
+                    ->where('type', 'post')
+                    ->orderBy('name')
+                    ->get();
+
+                $parentCategories = $allCategories->whereNull('parent_id');
+                $childCategories = $allCategories->whereNotNull('parent_id')->groupBy('parent_id');
 
                 return [
-                    'parents' => $parent_categories,
-                    'children' => $child_categories
+                    'categories' => $categories,
+                    'parentCategories' => $parentCategories,
+                    'menu_categories' => [
+                        'parents' => $parentCategories,
+                        'children' => $childCategories
+                    ],
+                    'dropdownData' => $allDropdownData
                 ];
             });
 
             // Đẩy biến ra View
-            $view->with('categories', $categories);
-            $view->with('menu_categories', $menu_data);
-            $view->with('parentCategories', $menu_data['parents']);
+            $view->with($globalData);
         });
     }
 }

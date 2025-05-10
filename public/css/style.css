@@ -117,13 +117,13 @@ input.nosubmit {
 }
 
 /* Enhanced Search Input */
-.search-input-group {
+/* .search-input-group {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 10px;
     margin-bottom: 15px;
-}
+} */
 
 .search-form-control {
     flex-grow: 1;

@@ -1,17 +1,24 @@
-<!-- HTML Code -->
+<!-- HTML Code - Logo bên trái, cùng dòng với contact info -->
 <footer class="footer text-white">
     <div class="container">
         <div class="row">
-            <!-- Giới thiệu -->
+            <!-- Giới thiệu và Logo -->
             <div class="col-md-5">
                 <div class="footer-info">
-                    <h4 class="footer-title">Về Cody Health</h4>
-                    <p>Cody Health cung cấp các giải pháp y tế chuyên nghiệp, hỗ trợ sức khỏe toàn diện cho cộng đồng.
+                    <div class="footer-header d-flex align-items-center mb-3">
+                        <img src="{{ asset('asset/images/toikhoe_logo.jpg') }}" alt="Cody Health Logo"
+                            class="footer-logo me-3">
+                        <h4 class="footer-title mb-0">Về Cody Health</h4>
+                    </div>
+                    <p>ToiKhoe - nền tảng y tế trực tuyến do Cody Health phát triển, cung cấp giải pháp chăm sóc sức
+                        khỏe toàn diện và kết nối người dùng với đội ngũ y bác sĩ uy tín cùng thông tin y tế đáng tin
+                        cậy.
                     </p>
                     <div class="contact-info">
-                        <p><i class="fas fa-envelope"></i> contact@codyhealth.com</p>
-                        <p><i class="fas fa-map-marker-alt"></i> 123 Đường Sức Khỏe, Quận 1, TP.HCM</p>
-                        <p><i class="fas fa-phone"></i> +84 (28) 1234 5678</p>
+                        <p><i class="fas fa-envelope"></i> codyhealth2023@gmail.com</p>
+                        <p><i class="fas fa-map-marker-alt"></i> LK2B, licogi 13 164 Khuất Duy Tiến, Nhân Chính, Thanh
+                            Xuân, Hà Nội.</p>
+                        <p><i class="fas fa-phone"></i> 0983 691 895</p>
                     </div>
                 </div>
             </div>
@@ -56,7 +63,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <p>© 2025 Cody Health. Tất cả quyền được bảo lưu.</p>
+                    <p>© 2025 TOIKHOE. Tất cả quyền được bảo lưu.</p>
                 </div>
                 <div class="col-md-6 text-end">
                     <p><a href="#">Chính sách bảo mật</a> | <a href="#">Điều khoản sử dụng</a></p>
@@ -86,6 +93,20 @@
         background: linear-gradient(90deg, #0D47A1, #42A5F5);
     }
 
+    /* Footer header với logo */
+    .footer-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .footer-logo {
+        max-height: 60px;
+        width: auto;
+        border-radius: 50%;
+        margin-right: 15px;
+    }
+
     .footer-title {
         font-size: 22px;
         font-weight: 600;
@@ -94,15 +115,11 @@
         padding-bottom: 12px;
     }
 
-    /* .footer-title::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 50px;
-        height: 3px;
-        background-color: #90CAF9;
-    } */
+    /* Loại bỏ margin-bottom cho tiêu đề trong footer-header */
+    .footer-header .footer-title {
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
 
     .footer p {
         margin-bottom: 16px;
@@ -119,7 +136,7 @@
     .contact-info i {
         margin-right: 10px;
         width: 16px;
-        color: #90CAF9;
+        color: #ffffff;
     }
 
     .footer-links {
@@ -240,6 +257,14 @@
 
         .footer-title {
             margin-top: 20px;
+        }
+
+        .footer-header {
+            margin-bottom: 10px;
+        }
+
+        .footer-header .footer-title {
+            font-size: 20px;
         }
 
         .social-icons {

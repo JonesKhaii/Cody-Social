@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\PostCategory;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
@@ -15,9 +16,9 @@ class Post extends Model
 
     public function cat_info()
     {
-        return $this->belongsTo(\App\Models\PostCategory::class, 'post_cat_id', 'id');
+        return $this->belongsTo(Category::class, 'post_cat_id', 'id')
+            ->select('id', 'name as title', 'slug');
     }
-
     public function tag_info()
     {
         return $this->hasOne('App\Models\PostTag', 'id', 'post_tag_id');
@@ -56,9 +57,7 @@ class Post extends Model
     {
         return Post::with(['cat_info', 'author_info'])->orderBy('id', 'DESC')->paginate(10);
     }
-    // public function get_comments(){
-    //     return $this->hasMany('App\Models\PostComment','post_id','id');
-    // }
+
     public static function getPostBySlug($slug)
     {
         return Post::with(['tag_info', 'author_info'])->where('slug', $slug)->where('status', 'active')->first();

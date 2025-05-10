@@ -16,21 +16,11 @@ use App\Models\Specialization;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use App\Helpers\NotificationHelper;
-
+use App\Models\Category;
 
 class DoctorController extends Controller
 {
-    // public function index()
-    // {
 
-    //     $doctors = Doctor::select(['id', 'name', 'specialization', 'photo', 'consultation_fee', 'location', 'rating'])->paginate(10);
-    //     $doctors->getCollection()->transform(function ($doctor) {
-    //         $doctor->city = trim(explode(',', $doctor->location)[0]);
-    //         return $doctor;
-    //     });
-
-    //     return view('pages.list-doctors', compact('doctors'));
-    // }
     public function index()
     {
         $doctors = Doctor::with(['specializations:id,name'])
@@ -43,7 +33,9 @@ class DoctorController extends Controller
             $doctor->city = trim(explode(',', $doctor->location)[0]);
             return $doctor;
         });
-        $specializations = Specialization::all();
+        $specializations = Category::where('type', 'other')
+            ->where('status', 'active')
+            ->get();
         return view('pages.list-doctors', compact('doctors', 'specializations'));
     }
 

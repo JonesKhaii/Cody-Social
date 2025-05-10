@@ -17,6 +17,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DropdownMenuController;
 // AUTH--------------------------------------------------------------------------------
 // Trang đăng nhập & xử lý đăng nhập
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -55,6 +56,11 @@ Route::get('/doctors', function () {
 Route::get('/appointment', function () {
     return view('pages.booking-appointment');
 });
+
+// Dopdown
+
+Route::get('/dropdown/clinics', [DropdownMenuController::class, 'getClinicsDropdownData']);
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/post/{slug}', [PostController::class, 'detail'])->name('post.detail');

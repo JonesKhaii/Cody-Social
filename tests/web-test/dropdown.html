@@ -1,0 +1,101 @@
+<!-- PHẦN BOTTOMBAR - Với dropdown cho danh mục -->
+<div class="bottombar">
+    <div class="container">
+        <div class="popular-categories">
+            <div class="row">
+                <div class="col-md-2 d-flex align-items-center">
+                    <h6 class="popular-title mb-0">Danh mục phổ biến:</h6>
+                </div>
+                <div class="col-md-10">
+                    <ul class="category-list">
+                        @foreach ($parentCategories as $category)
+                        <li
+                            class="dropdown-category"
+                            data-category="{{ $category->id }}"
+                        >
+                            <a
+                                href="{{ route('category.show', $category->slug) }}"
+                                class="{{ request()->is('category/' . $category->slug . '*') ? 'active' : '' }}"
+                            >
+                                {{ $category->title }} @if
+                                ($category->children->count() > 0)
+                                <i class="fas fa-chevron-down small-icon"></i>
+                                @endif
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Submenu panels - cải tiến để hiển thị overlay -->
+<div class="submenu-overlay">
+    @foreach ($parentCategories as $category) @if ($category->children->count()
+    > 0)
+    <!-- Phần submenu-panel trong submenu-overlay -->
+    <div class="submenu-panel" id="submenu-panel-{{ $category->id }}">
+        <div class="container">
+            <div class="dropdown-content">
+                <div class="dropdown-header">
+                    <h6>{{ $category->title }}</h6>
+                </div>
+                <div class="dropdown-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-4">
+                            <div class="category-image">
+                                <div class="image-container">
+                                    <img
+                                        src="{{ $category->photo }}"
+                                        alt="{{ $category->title }}"
+                                        class="img-fluid w-100 object-fit-cover h-auto rounded"
+                                    />
+                                </div>
+                                <div class="category-description mt-2">
+                                    <p class="text-muted small">
+                                        {{ $category->description ?? 'Khám phá
+                                        chủ đề và bài viết về ' .
+                                        $category->title }}
+                                    </p>
+                                    <a
+                                        href="{{ route('category.show', $category->slug) }}"
+                                        class="btn btn-sm btn-outline-primary"
+                                        >Xem tất cả</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                @php $totalChildren =
+                                $category->children->count(); $perColumn =
+                                ceil($totalChildren / 3); @endphp @for ($col =
+                                0; $col < 3; $col++)
+                                <div class="col-md-4">
+                                    <ul class="submenu-list">
+                                        @foreach ($category->children as $index
+                                        => $child) @if ($index >= $col *
+                                        $perColumn && $index < ($col + 1) *
+                                        $perColumn)
+                                        <li>
+                                            <a
+                                                href="{{ route('category.show', $child->slug) }}"
+                                            >
+                                                {{ $child->title }}
+                                            </a>
+                                        </li>
+                                        @endif @endforeach
+                                    </ul>
+                                </div>
+                                @endfor
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif @endforeach
+</div>

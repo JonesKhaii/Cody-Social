@@ -3,62 +3,76 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use App\Models\Post;
 
 class Category extends Model
 {
-    protected $fillable = ['title', 'slug', 'summary', 'photo', 'status', 'is_parent', 'parent_id', 'added_by'];
+    protected $table = 'categories';
+    protected $fillable = ['name', 'slug', 'type', 'parent_id', 'icon', 'status', 'display_order', 'summary', 'photo'];
 
-    public function parent_info()
+    public function posts()
     {
-        return $this->hasOne('App\Models\Category', 'id', 'parent_id');
-    }
-    public static function getAllCategory()
-    {
-        return  Category::orderBy('id', 'DESC')->with('parent_info')->paginate(10);
+        return $this->hasMany(Post::class, 'post_cat_id', 'id')
+            ->where('status', 'active');
     }
 
-    public static function shiftChild($cat_id)
+    public function children()
     {
-        return Category::whereIn('id', $cat_id)->update(['is_parent' => 1]);
-    }
-    public static function getChildByParentID($id)
-    {
-        return Category::where('parent_id', $id)->orderBy('id', 'ASC')->pluck('title', 'id');
+        return $this->hasMany(Category::class, 'parent_id');
     }
 
-    public function child_cat()
+    public function parent()
     {
-        return $this->hasMany('App\Models\Category', 'parent_id', 'id')->where('status', 'active');
+        return $this->belongsTo(Category::class, 'parent_id');
     }
-    public static function getAllParentWithChild()
+
+
+    public function scopeOfType($query, $type)
     {
-        return Category::with('child_cat')->where('is_parent', 1)->where('status', 'active')->orderBy('title', 'ASC')->get();
+        return $query->where('type', $type);
     }
-    public function products()
+
+    public function scopeActive($query)
     {
-        return $this->hasMany('App\Models\Product', 'cat_id', 'id')->where('status', 'active');
+        return $query->where('status', 'active');
     }
-    public function sub_products()
+
+
+    public function scopeParents($query)
     {
-        return $this->hasMany('App\Models\Product', 'child_cat_id', 'id')->where('status', 'active');
+        return $query->whereNull('parent_id');
     }
-    public static function getProductByCat($slug)
+
+    public static function getPostCategories()
     {
-        // dd($slug);
-        return Category::with('products')->where('slug', $slug)->first();
-        // return Product::where('cat_id',$id)->where('child_cat_id',null)->paginate(10);
+        return self::ofType('post')
+            ->active()
+            ->parents()
+            ->with(['children' => function ($query) {
+                $query->active()->ofType('post');
+            }])
+            ->orderBy('name', 'asc')
+            ->get();
     }
-    public static function getProductBySubCat($slug)
+
+    public static function getCategoryBySlug($slug, $type = 'post')
     {
-        // return $slug;
-        return Category::with('sub_products')->where('slug', $slug)->first();
+        return self::where('slug', $slug)
+            ->where('type', $type)
+            ->first();
     }
-    public static function countActiveCategory()
+
+    public static function getCategoriesWithPostCount($type = 'post')
     {
-        $data = Category::where('status', 'active')->count();
-        if ($data) {
-            return $data;
-        }
-        return 0;
+        return self::select(
+            'categories.*',
+            DB::raw('(SELECT COUNT(*) FROM posts WHERE categories.id = posts.post_cat_id) as posts_count')
+        )
+            ->where('status', 'active')
+            ->where('type', $type)
+            ->havingRaw('posts_count > 0')
+            ->orderBy('name', 'asc')
+            ->get();
     }
 }
