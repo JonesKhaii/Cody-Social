@@ -22,7 +22,6 @@ class Doctor extends Model implements Authenticatable
 
     protected $fillable = [
         'name',
-        // 'specialization',
         'experience',
         'working_hours',
         'location',
@@ -50,6 +49,10 @@ class Doctor extends Model implements Authenticatable
         'consultation_fee' => 'decimal:2',
     ];
 
+    protected $appends = [
+        'specialization_list',  // Thêm thuộc tính tự động
+    ];
+
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = bcrypt($value);
@@ -64,6 +67,7 @@ class Doctor extends Model implements Authenticatable
     {
         return $this->hasMany(Appointment::class, 'doctorID', 'id');
     }
+
     public function posts()
     {
         return $this->hasMany(Post::class, 'added_by');
@@ -74,19 +78,21 @@ class Doctor extends Model implements Authenticatable
         return BioFormatter::format($this->bio);
     }
 
-    // public function reviews()
-    // {
-    //     return $this->hasMany(DoctorReview::class, 'doctorID', 'id');
-    // }
+    /**
+     * Lấy danh sách chuyên khoa dưới dạng chuỗi
+     */
+    public function getSpecializationListAttribute()
+    {
+        return $this->specializations->pluck('name')->implode(', ');
+    }
 
-    // public function specializations()
-    // {
-    //     return $this->belongsToMany(Specialization::class, 'doctor_specializations');
-    // }
+    /**
+     * Quan hệ với bảng categories thông qua bảng trung gian doctor_specializations
+     */
     public function specializations()
     {
         return $this->belongsToMany(Category::class, 'doctor_specializations', 'doctor_id', 'specialization_id')
-            ->where('categories.type', 'other');
+            ->where('categories.type', 'specialist');
     }
 
     public function timeSlots()

@@ -21,6 +21,74 @@ class PostController extends Controller
         return view('doctor.profile', compact('categories'));
     }
 
+    // public function detail($slug)
+    // {
+    //     // Cache key dựa trên slug
+    //     $cacheKey = 'post_detail_' . $slug;
+
+    //     // Cache view đã render
+    //     if (Cache::has($cacheKey) && !auth()->check() && !auth()->guard('doctor')->check()) {
+    //         return Cache::get($cacheKey);
+    //     }
+
+    //     // Eager load tất cả các quan hệ cần thiết
+    //     $post = Post::with([
+    //         'comments' => function ($query) {
+    //             $query->whereNull('parent_id')
+    //                 ->where('status', 'active')
+    //                 ->latest();
+    //         },
+    //         'comments.replies',
+    //         'comments.user:id,name,photo',
+    //         'comments.doctor:id,name,photo',
+    //         'comments.replies.user:id,name,photo',
+    //         'comments.replies.doctor:id,name,photo',
+    //         'cat_info:id,name as title,slug', 
+    //         'user:id,name,photo',
+    //         'doctor:id,name,photo,specialization,short_bio,bio',
+    //         'likes'
+    //     ])
+    //         ->where('slug', $slug)
+    //         ->where('status', 'active')
+    //         ->firstOrFail();
+
+    //     // Tăng lượt xem bất đồng bộ
+    //     if (!session()->has('viewed_post_' . $post->id)) {
+    //         dispatch(function () use ($post) {
+    //             $post->increment('views');
+    //         })->afterResponse();
+
+    //         session()->put('viewed_post_' . $post->id, true);
+    //     }
+
+    //     // Xử lý tags
+    //     $post_tags = array_map('trim', explode(',', $post->tags));
+
+    //     // Lấy các bài viết gần đây với caching
+    //     $recent_posts = Cache::remember('recent_posts_' . $post->id, 3600, function () use ($post) {
+    //         return Post::select('id', 'title', 'slug', 'photo', 'created_at')
+    //             ->where('status', 'active')
+    //             ->where('id', '!=', $post->id)
+    //             ->latest()
+    //             ->take(5)
+    //             ->get();
+    //     });
+
+
+    //     // Render view
+    //     $view = view('pages.post-detail', compact(
+    //         'post',
+    //         'recent_posts',
+    //         'post_tags'
+    //     ))->render();
+
+    //     // Cache view cho người dùng chưa đăng nhập
+    //     if (!auth()->check() && !auth()->guard('doctor')->check()) {
+    //         Cache::put($cacheKey, $view, 3600);
+    //     }
+
+    //     return $view;
+    // }
     public function detail($slug)
     {
         // Cache key dựa trên slug
@@ -43,9 +111,10 @@ class PostController extends Controller
             'comments.doctor:id,name,photo',
             'comments.replies.user:id,name,photo',
             'comments.replies.doctor:id,name,photo',
-            'cat_info:id,name as title,slug', // Thay đổi title thành name as title
+            'cat_info:id,name as title,slug',
             'user:id,name,photo',
-            'doctor:id,name,photo,specialization,short_bio,bio',
+            'doctor:id,name,photo,short_bio,bio',
+            'doctor.specializations:id,name,slug',
             'likes'
         ])
             ->where('slug', $slug)
@@ -74,7 +143,6 @@ class PostController extends Controller
                 ->get();
         });
 
-
         // Render view
         $view = view('pages.post-detail', compact(
             'post',
@@ -89,7 +157,6 @@ class PostController extends Controller
 
         return $view;
     }
-
     public function create()
     {
         // Thay đổi để sử dụng model Category với type = post
