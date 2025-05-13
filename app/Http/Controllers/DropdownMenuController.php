@@ -17,9 +17,9 @@ class DropdownMenuController extends Controller
     public function getDropdownData()
     {
         // Sử dụng cache để lưu kết quả (10 phút)
-        return Cache::remember('clinics_dropdown_data', 10 * 60, function () {
+        return Cache::remember('dropdown_data', 10 * 60, function () {
             // Truy vấn một lần để lấy tất cả dữ liệu cần thiết
-            $clinicsByType = Clinic::select('id', 'name', 'photo', 'type')
+            $clinicsByType = Clinic::select('id', 'name', 'slug', 'photo', 'type')
                 ->whereIn('type', ['Bệnh viện', 'Phòng khám'])
                 ->latest()
                 ->get()
@@ -44,10 +44,12 @@ class DropdownMenuController extends Controller
                 : 0;
 
             return [
-                'hospitals' => $hospitals,
-                'clinics' => $clinics,
-                'totalHospitals' => $totalHospitals,
-                'totalClinics' => $totalClinics
+                'clinics' => [
+                    'hospitals' => $hospitals,
+                    'clinics' => $clinics,
+                    'totalHospitals' => $totalHospitals,
+                    'totalClinics' => $totalClinics
+                ]
             ];
         });
     }
@@ -155,10 +157,13 @@ class DropdownMenuController extends Controller
     {
 
         return Cache::remember('all_dropdown_data', 10 * 60, function () {
-            return [
-                'clinics' => $this->getDropdownData(),
-                'posts' => $this->getPostCategoriesData(),
+            // Lấy trực tiếp nội dung bên trong, không lồng thêm cấp
+            $clinicsData = $this->getDropdownData()['clinics'];
+            $postsData = $this->getPostCategoriesData();
 
+            return [
+                'clinics' => $clinicsData,
+                'posts' => $postsData,
             ];
         });
     }

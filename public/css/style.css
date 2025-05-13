@@ -66,8 +66,8 @@ a {
 }
 
 .btn-primary {
-    background-color: #2377b3 !important;
-    border-color: #2377b3;
+    background-color: #1565c0 !important;
+    border-color: #1565c0;
     color: var(--white);
 }
 
@@ -1173,7 +1173,9 @@ footer > div > img {
     height: 3px;
     background: #2377b3;
 } */
-
+.section-title::after {
+    display: none;
+}
 .section-subtitle {
     color: #666;
     max-width: 700px;

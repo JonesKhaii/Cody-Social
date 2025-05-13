@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Clinic extends Model
 {
@@ -29,9 +30,32 @@ class Clinic extends Model
         'website',
         'photo',
         'type',
+        'slug',
         'created_at',
         'updated_at'
     ];
+
+    /**
+     * Boot model
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Tự động tạo slug khi tạo mới
+        static::creating(function ($clinic) {
+            if (!$clinic->slug) {
+                $clinic->slug = Str::slug($clinic->name);
+            }
+        });
+
+        // Tự động cập nhật slug khi cập nhật tên
+        static::updating(function ($clinic) {
+            if ($clinic->isDirty('name') && !$clinic->isDirty('slug')) {
+                $clinic->slug = Str::slug($clinic->name);
+            }
+        });
+    }
 
     /**
      * Scope lấy ra các bệnh viện
@@ -64,21 +88,19 @@ class Clinic extends Model
         return asset('storage/' . $this->photo);
     }
 
-
-    // public function reviews()
-    // {
-    //     return $this->hasMany(Review::class, 'clinic_id');
-    // }
-
-
-    public function getAverageRatingAttribute()
-    {
-        return $this->reviews()->avg('rating') ?? 0;
-    }
-
-
+    /**
+     * Relationship với bảng doctors
+     */
     public function doctors()
     {
         return $this->belongsToMany(Doctor::class, 'doctor_clinics');
+    }
+
+    /**
+     * Get clinic by slug
+     */
+    public static function findBySlug($slug)
+    {
+        return static::where('slug', $slug)->firstOrFail();
     }
 }

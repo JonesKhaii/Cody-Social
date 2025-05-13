@@ -18,6 +18,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DropdownMenuController;
+use App\Http\Controllers\ClinicController;
 // AUTH--------------------------------------------------------------------------------
 // Trang đăng nhập & xử lý đăng nhập
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -60,6 +61,20 @@ Route::get('/appointment', function () {
 // Dopdown
 
 Route::get('/dropdown/clinics', [DropdownMenuController::class, 'getClinicsDropdownData']);
+
+// Clinic
+
+Route::get('/clinics', [ClinicController::class, 'index'])->name('clinics.list');
+Route::get('/clinics/{type?}',  [ClinicController::class, 'index'])->name('clinics.list')->where('type', 'hospital|clinic');
+Route::get('/clinic/{slug}/detail', [ClinicController::class, 'show'])->name('clinics.detail');
+
+
+// Tool
+Route::view('/pages/health-tools/bmi', 'pages.health-tools.tool-BMI')->name('tools.bmi');
+Route::view('/tools/body-fat-calculator', 'pages.health-tools.tool-body-fat')->name('tools.body-fat');
+Route::view('/tools/bmr-calculator', 'pages.health-tools.tool-bmr')->name('tools.bmr');
+
+
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
