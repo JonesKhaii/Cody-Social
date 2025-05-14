@@ -283,6 +283,10 @@
             align-items: center;
             justify-content: center;
         }
+
+        .bg-primary {
+            background-color: #1565c0 !important;
+        }
     </style>
 
     <script>

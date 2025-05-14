@@ -127,7 +127,7 @@
                     alt="Chuyên môn bác sĩ" class="dropdown-image">
                 <div class="dropdown-cta">
                     <p>Khám phá và nâng cao kiến thức chuyên môn trong lĩnh vực y tế</p>
-                    <a href="/specialties" class="btn btn-primary btn-sm">Xem tất cả chuyên môn</a>
+                    <a href="{{ route('specialties.index') }}" class="btn btn-primary btn-sm">Xem tất cả chuyên môn</a>
                 </div>
             </div>
         </div>

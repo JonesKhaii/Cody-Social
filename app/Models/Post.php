@@ -11,27 +11,44 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     protected $table = 'posts';
-    protected $fillable = ['title', 'tags', 'summary', 'slug', 'description', 'photo', 'quote', 'post_cat_id', 'post_tag_id', 'added_by', 'status'];
+    protected $fillable = [
+        'title',
+        'tags',
+        'summary',
+        'slug',
+        'description',
+        'photo',
+        'quote',
+        'post_cat_id',
+        'post_tag_id',
+        'added_by',
+        'status',
+        'post_type',
+        'meta_data'
+    ];
 
+    protected $casts = [
+        'meta_data' => 'array',
+    ];
 
     public function cat_info()
     {
         return $this->belongsTo(Category::class, 'post_cat_id', 'id')
             ->select('id', 'name as title', 'slug');
     }
+
     public function tag_info()
     {
         return $this->hasOne('App\Models\PostTag', 'id', 'post_tag_id');
     }
+    public function author_info()
+    {
+        if ($this->author_type == 'doctor') {
+            return $this->belongsTo(Doctor::class, 'added_by');
+        }
 
-    // public function author_info()
-    // {
-    //     if ($this->added_by && User::find($this->added_by)) {
-    //         return $this->belongsTo(User::class, 'added_by', 'id');
-    //     }
-
-    //     return $this->belongsTo(Doctor::class, 'added_by', 'id');
-    // }
+        return $this->belongsTo(User::class, 'added_by');
+    }
 
     public function user()
     {
@@ -42,31 +59,121 @@ class Post extends Model
     {
         return $this->belongsTo(Doctor::class, 'added_by');
     }
+
     public function getAuthorInfoAttribute()
     {
-        // Ưu tiên Doctor trước
-        if ($this->doctor) {
+        if ($this->author_type == 'doctor') {
             return $this->doctor;
         }
 
-        // Nếu không có doctor, kiểm tra user
         return $this->user;
     }
-
-    public static function getAllPost()
+    // Scope lọc theo loại bài đăng
+    public function scopeOfType($query, $type)
     {
-        return Post::with(['cat_info', 'author_info'])->orderBy('id', 'DESC')->paginate(10);
+        return $query->where('post_type', $type);
+    }
+
+    // Scope lọc sự kiện sắp diễn ra
+    public function scopeUpcomingEvents($query)
+    {
+        return $query->where('post_type', 'event')
+            ->whereRaw('JSON_EXTRACT(meta_data, "$.event_start_date") > ?', [now()->format('Y-m-d H:i:s')]);
+    }
+
+    // Scope lọc sự kiện đã diễn ra
+    public function scopePastEvents($query)
+    {
+        return $query->where('post_type', 'event')
+            ->whereRaw('JSON_EXTRACT(meta_data, "$.event_end_date") < ?', [now()->format('Y-m-d H:i:s')]);
+    }
+
+    // Scope lọc các bài nổi bật
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    // Getter cho sự kiện
+    public function getEventStartDateAttribute()
+    {
+        if ($this->post_type == 'event' && isset($this->meta_data['event_start_date'])) {
+            return $this->meta_data['event_start_date'];
+        }
+        return null;
+    }
+
+    public function getEventEndDateAttribute()
+    {
+        if ($this->post_type == 'event' && isset($this->meta_data['event_end_date'])) {
+            return $this->meta_data['event_end_date'];
+        }
+        return null;
+    }
+
+    public function getLocationAttribute()
+    {
+        if ($this->post_type == 'event' && isset($this->meta_data['location'])) {
+            return $this->meta_data['location'];
+        }
+        return null;
+    }
+
+    public function getSpeakerAttribute()
+    {
+        if ($this->post_type == 'event' && isset($this->meta_data['speaker'])) {
+            return $this->meta_data['speaker'];
+        }
+        return null;
+    }
+
+    // Getter cho video
+    public function getVideoUrlAttribute()
+    {
+        if ($this->post_type == 'video' && isset($this->meta_data['video_url'])) {
+            return $this->meta_data['video_url'];
+        }
+        return null;
+    }
+
+    public function getDurationAttribute()
+    {
+        if ($this->post_type == 'video' && isset($this->meta_data['duration'])) {
+            return $this->meta_data['duration'];
+        }
+        return null;
+    }
+
+    // Getter cho nghiên cứu
+    public function getDocumentUrlAttribute()
+    {
+        if ($this->post_type == 'research' && isset($this->meta_data['document_url'])) {
+            return $this->meta_data['document_url'];
+        }
+        return null;
+    }
+
+    public static function getAllPost($type = null)
+    {
+        $query = Post::with(['cat_info'])->orderBy('id', 'DESC');
+
+        if ($type) {
+            $query->where('post_type', $type);
+        }
+
+        return $query->paginate(10);
     }
 
     public static function getPostBySlug($slug)
     {
-        return Post::with(['tag_info', 'author_info'])->where('slug', $slug)->where('status', 'active')->first();
+        return Post::with(['tag_info'])->where('slug', $slug)->where('status', 'active')->first();
     }
 
     public function comments()
     {
         return $this->hasMany(Comment::class, 'post_id')->whereNull('parent_id')->where('status', 'active')->latest();
     }
+
     public function allComments()
     {
         return $this->hasMany(PostComment::class)->where('status', 'active');
@@ -74,7 +181,6 @@ class Post extends Model
 
     public static function getBlogByTag($slug)
     {
-        // dd($slug);
         return Post::where('tags', $slug)->paginate(8);
     }
 
@@ -110,6 +216,70 @@ class Post extends Model
             ->exists();
     }
 
+    // Phương thức lấy sự kiện sắp diễn ra
+    public static function getUpcomingEvents($limit = 6)
+    {
+        return Post::ofType('event')
+            ->with(['cat_info'])
+            ->whereRaw('JSON_EXTRACT(meta_data, "$.event_start_date") > ?', [now()->format('Y-m-d H:i:s')])
+            ->orderByRaw('JSON_EXTRACT(meta_data, "$.event_start_date") ASC')
+            ->take($limit)
+            ->get();
+    }
+
+    // Phương thức lấy câu chuyện nghề y mới nhất
+    public static function getLatestStories($limit = 6)
+    {
+        return Post::ofType('story')
+            ->with(['cat_info'])
+            ->where('status', 'active')
+            ->orderBy('created_at', 'desc')
+            ->take($limit)
+            ->get();
+    }
+
+    // Phương thức lấy nghiên cứu mới nhất
+    public static function getLatestResearches($limit = 6)
+    {
+        return Post::ofType('research')
+            ->with(['cat_info'])
+            ->where('status', 'active')
+            ->orderBy('created_at', 'desc')
+            ->take($limit)
+            ->get();
+    }
+
+    // Phương thức lấy video chia sẻ chuyên môn
+    public static function getLatestVideos($limit = 6)
+    {
+        return Post::ofType('video')
+            ->with(['cat_info'])
+            ->where('status', 'active')
+            ->orderBy('created_at', 'desc')
+            ->take($limit)
+            ->get();
+    }
+
+    // Phương thức lấy bài viết theo danh mục
+    public static function getPostsByCategory($categoryId, $limit = 10)
+    {
+        return Post::where('post_cat_id', $categoryId)
+            ->with(['cat_info'])
+            ->where('status', 'active')
+            ->orderBy('created_at', 'DESC')
+            ->paginate($limit);
+    }
+
+    // Phương thức lấy bài viết liên quan
+    public static function getRelatedPosts($post, $limit = 3)
+    {
+        return Post::where('post_cat_id', $post->post_cat_id)
+            ->where('id', '!=', $post->id)
+            ->where('status', 'active')
+            ->where('post_type', $post->post_type)
+            ->take($limit)
+            ->get();
+    }
 
     // Statistic
     public function getPostInteractionTotals()
@@ -129,7 +299,6 @@ class Post extends Model
 
         return response()->json($totals);
     }
-
 
     public function getPostStatsPerPost()
     {

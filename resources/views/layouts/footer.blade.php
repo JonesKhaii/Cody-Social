@@ -8,7 +8,8 @@
                     <div class="footer-header d-flex align-items-center mb-3">
                         <img src="{{ asset('asset/images/toikhoe_logo.jpg') }}" alt="Cody Health Logo"
                             class="footer-logo me-3">
-                        <h4 class="footer-title mb-0">Về Cody Health</h4>
+                        <h4 class="footer-title mb-0">TOIKHOE - Sức khỏe của bạn cần bạn mỗi ngày</h4>
+
                     </div>
                     <p>ToiKhoe - nền tảng y tế trực tuyến do Cody Health phát triển, cung cấp giải pháp chăm sóc sức
                         khỏe toàn diện và kết nối người dùng với đội ngũ y bác sĩ uy tín cùng thông tin y tế đáng tin

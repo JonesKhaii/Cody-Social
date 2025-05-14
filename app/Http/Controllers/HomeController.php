@@ -39,15 +39,6 @@ class HomeController extends Controller
 
 
 
-
-
-        // $topDoctors = Doctor::with('specializations:id,name')
-        //     ->select('id', 'name', 'photo', 'rating')
-        //     ->where('status', true)
-        //     ->orderByDesc('rating')
-        //     ->limit(4)
-        //     ->get();
-
         $topDoctors = Doctor::with('specializations:id,name')
             ->select('id', 'name', 'photo', 'rating')
             ->where('status', true)
@@ -61,6 +52,16 @@ class HomeController extends Controller
             ->orderBy('name')
             ->get();
 
+        // $popularCategories = Category::select('categories.id', 'categories.name as title', 'categories.slug', 'categories.photo')
+        //     ->leftJoin('posts', function ($join) {
+        //         $join->on('categories.id', '=', 'posts.post_cat_id')
+        //             ->where('posts.status', 'active');
+        //     })
+        //     ->where('categories.type', 'post')
+        //     ->groupBy('categories.id', 'categories.name', 'categories.slug', 'categories.photo')
+        //     ->orderByRaw('COUNT(posts.id) DESC')
+        //     ->limit(5)
+        //     ->get();
         $popularCategories = Category::select('categories.id', 'categories.name as title', 'categories.slug', 'categories.photo')
             ->leftJoin('posts', function ($join) {
                 $join->on('categories.id', '=', 'posts.post_cat_id')
@@ -71,7 +72,6 @@ class HomeController extends Controller
             ->orderByRaw('COUNT(posts.id) DESC')
             ->limit(5)
             ->get();
-
         return view('index', compact('posts', 'topDoctors', 'categories', 'popularCategories', 'topViewedPosts'));
     }
 

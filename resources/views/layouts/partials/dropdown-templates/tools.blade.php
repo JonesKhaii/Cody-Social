@@ -60,7 +60,7 @@
                             <i class="fas fa-heartbeat me-2"></i>Sức khỏe tim mạch
                         </h6>
                         <div class="tools-list">
-                            <a href="/tools/blood-pressure"
+                            <a href="{{ route('tools.blood-pressure') }}"
                                 class="tool-item d-flex align-items-center mb-2">
                                 <div class="tool-icon-container me-2">
                                     <div class="tool-icon">
@@ -73,7 +73,8 @@
                                         đề xuất</small>
                                 </div>
                             </a>
-                            <a href="/tools/heart-risk" class="tool-item d-flex align-items-center mb-2">
+                            <a href="{{ route('tools.heart-risk') }}"
+                                class="tool-item d-flex align-items-center mb-2">
                                 <div class="tool-icon-container me-2">
                                     <div class="tool-icon">
                                         <i class="fas fa-chart-line"></i>
@@ -85,7 +86,7 @@
                                         mạch 10 năm</small>
                                 </div>
                             </a>
-                            <a href="/tools/heart-rate-zones"
+                            <a href="{{ route('tools.heart-rate-zones') }}"
                                 class="tool-item d-flex align-items-center mb-2">
                                 <div class="tool-icon-container me-2">
                                     <div class="tool-icon">
@@ -109,7 +110,7 @@
                             <i class="fas fa-apple-alt me-2"></i>Dinh dưỡng
                         </h6>
                         <div class="tools-list">
-                            <a href="/tools/calorie-needs"
+                            <a href="{{ route('tools.calorie-needs') }}"
                                 class="tool-item d-flex align-items-center mb-2">
                                 <div class="tool-icon-container me-2">
                                     <div class="tool-icon">
@@ -122,7 +123,7 @@
                                         hàng ngày</small>
                                 </div>
                             </a>
-                            <a href="/tools/water-intake"
+                            <a href="{{ route('tools.water-intake') }}"
                                 class="tool-item d-flex align-items-center mb-2">
                                 <div class="tool-icon-container me-2">
                                     <div class="tool-icon">
@@ -135,7 +136,7 @@
                                         nặng và hoạt động</small>
                                 </div>
                             </a>
-                            <a href="/tools/macro-calculator"
+                            <a href="{{ route('tools.macro-calculator') }}"
                                 class="tool-item d-flex align-items-center mb-2">
                                 <div class="tool-icon-container me-2">
                                     <div class="tool-icon">
@@ -159,7 +160,7 @@
                             <i class="fas fa-notes-medical me-2"></i>Công cụ chuyên khoa
                         </h6>
                         <div class="tools-list">
-                            <a href="/tools/pregnancy-calculator"
+                            <a href="{{ route('tools.pregnancy-calculator') }}"
                                 class="tool-item d-flex align-items-center mb-2">
                                 <div class="tool-icon-container me-2">
                                     <div class="tool-icon">
@@ -172,7 +173,7 @@
                                         thai kỳ</small>
                                 </div>
                             </a>
-                            <a href="/tools/diabetes-risk"
+                            <a href="{{ route('tools.diabetes-risk') }}"
                                 class="tool-item d-flex align-items-center mb-2">
                                 <div class="tool-icon-container me-2">
                                     <div class="tool-icon">
@@ -185,7 +186,7 @@
                                         đường type 2</small>
                                 </div>
                             </a>
-                            <a href="/tools/sleep-calculator"
+                            <a href="{{ route('tools.sleep-calculator') }}"
                                 class="tool-item d-flex align-items-center mb-2">
                                 <div class="tool-icon-container me-2">
                                     <div class="tool-icon">
@@ -212,7 +213,7 @@
                 <div class="dropdown-cta">
                     <h6 class="text-primary">Theo dõi sức khỏe của bạn</h6>
                     <p>Sử dụng các công cụ sức khỏe miễn phí để đánh giá và theo dõi sức khỏe mỗi ngày</p>
-                    <a href="/tools" class="btn btn-primary btn-sm">Xem tất cả công cụ</a>
+                    <a href="{{ route('tools.index') }}" class="btn btn-primary btn-sm">Xem tất cả công cụ</a>
                 </div>
             </div>
         </div>

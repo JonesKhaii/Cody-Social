@@ -19,6 +19,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DropdownMenuController;
 use App\Http\Controllers\ClinicController;
+use App\Http\Controllers\SpecialtyController;
+use App\Http\Controllers\ServiceController;
 // AUTH--------------------------------------------------------------------------------
 // Trang đăng nhập & xử lý đăng nhập
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -73,8 +75,42 @@ Route::get('/clinic/{slug}/detail', [ClinicController::class, 'show'])->name('cl
 Route::view('/pages/health-tools/bmi', 'pages.health-tools.tool-BMI')->name('tools.bmi');
 Route::view('/tools/body-fat-calculator', 'pages.health-tools.tool-body-fat')->name('tools.body-fat');
 Route::view('/tools/bmr-calculator', 'pages.health-tools.tool-bmr')->name('tools.bmr');
+Route::view('/tools/blood-pressure', 'pages.health-tools.tool-blood-pressure')->name('tools.blood-pressure');
+Route::view('/tools/heart-rate-zones', 'pages.health-tools.tool-heart-rate-zones')->name('tools.heart-rate-zones');
+Route::view('/tools/heart-risk', 'pages.health-tools.tool-heart-risk')->name('tools.heart-risk');
+Route::view('/tools/calorie-needs', 'pages.health-tools.tool-calorie-needs')->name('tools.calorie-needs');
+Route::view('/tools/water-intake', 'pages.health-tools.tool-water-intake')->name('tools.water-intake');
+Route::view('/tools/macro-calculator', 'pages.health-tools.tool-macro-calculator')->name('tools.macro-calculator');
+Route::view('/tools/pregnancy-calculator', 'pages.health-tools.tool-pregnancy-calculator')->name('tools.pregnancy-calculator');
+Route::view('/tools/diabetes-risk', 'pages.health-tools.tool-diabetes-risk')->name('tools.diabetes-risk');
+Route::view('/tools/sleep-calculator', 'pages.health-tools.tool-sleep-calculator')->name('tools.sleep-calculator');
+Route::view('/tools', 'pages.health-tools.all-tool')->name('tools.index');
 
 
+
+
+Route::group(['prefix' => 'specialties'], function () {
+    Route::get('/', [SpecialtyController::class, 'index'])->name('specialties.index');
+    Route::get('/lich-su-kien-chuyen-mon', [SpecialtyController::class, 'events'])->name('specialties.events');
+    Route::get('/cau-chuyen-nghe-y', [SpecialtyController::class, 'stories'])->name('specialties.stories');
+    Route::get('/thanh-tuu-nghien-cuu', [SpecialtyController::class, 'research'])->name('specialties.research');
+    Route::get('/video-chia-se-chuyen-mon', [SpecialtyController::class, 'videos'])->name('specialties.videos');
+
+    // Routes cho danh mục con nếu cần thiết
+    Route::get('/hoi-thao-dao-tao', [SpecialtyController::class, 'eventCategory'])->name('specialties.event.training');
+    Route::get('/workshop-noi-bo', [SpecialtyController::class, 'eventCategory'])->name('specialties.event.workshop');
+    // Các routes con khác...
+});
+
+
+
+
+// Routes cho phần phương pháp điều trị
+Route::group(['prefix' => 'services'], function () {
+    Route::get('/', [ServiceController::class, 'index'])->name('services.index');
+    Route::get('/detail/{slug}', [ServiceController::class, 'detail'])->name('services.detail');
+    Route::get('/{slug}', [ServiceController::class, 'category'])->name('services.category');
+});
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');

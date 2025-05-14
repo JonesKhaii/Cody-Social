@@ -405,7 +405,7 @@
 }
 
 .bottombar-dropdown.show {
-    max-height: 450px;
+    max-height: 550px;
 
     opacity: 1;
     border-top: 1px solid var(--border-color);
@@ -504,7 +504,7 @@
     }
 
     .bottombar-dropdown.show {
-        max-height: 600px;
+        max-height: 700px;
     }
 
     .dropdown-image-container {

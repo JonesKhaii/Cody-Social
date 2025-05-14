@@ -157,7 +157,7 @@ class DropdownMenuController extends Controller
     {
 
         return Cache::remember('all_dropdown_data', 10 * 60, function () {
-            // Lấy trực tiếp nội dung bên trong, không lồng thêm cấp
+
             $clinicsData = $this->getDropdownData()['clinics'];
             $postsData = $this->getPostCategoriesData();
 
