@@ -5,7 +5,7 @@
              <div class="dropdown-divider"></div>
              <div class="clinic-list">
                  @foreach ($dropdownData['clinics']['hospitals'] as $hospital)
-                     <a href="/clinic/{{ $hospital->id }}"
+                     <a href="{{ route('clinics.detail', $hospital->slug) }}"
                          class="clinic-item d-flex align-items-center mb-2">
                          <div class="clinic-logo me-2">
                              @if ($hospital->photo)
@@ -32,7 +32,7 @@
              <div class="dropdown-divider"></div>
              <div class="clinic-list">
                  @foreach ($dropdownData['clinics']['clinics'] as $clinic)
-                     <a href="/clinic/{{ $clinic->id }}"
+                     <a href="{{ route('clinics.detail', $clinic->slug) }}"
                          class="clinic-item d-flex align-items-center mb-2">
                          <div class="clinic-logo me-2">
                              @if ($clinic->photo)
