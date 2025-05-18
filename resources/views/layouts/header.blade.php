@@ -49,7 +49,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link {{ Route::currentRouteName() == 'services' ? 'active' : '' }} px-3 text-white"
-                                href="">Dịch vụ</a>
+                                href="{{ route('services') }}">Dịch vụ</a>
                         </li>
 
                         <!-- Phần dành cho bác sĩ -->
@@ -128,15 +128,6 @@
             <div class="container">
                 <!-- Phần danh mục -->
                 <div class="popular-categories d-flex align-items-center">
-                    <!-- Tiêu đề -->
-                    {{-- <div class="popular-title-container me-2">
-                        <h6 class="popular-title mb-0">Danh mục phổ biến:</h6>
-                    </div> --}}
-
-                    <!-- Nút điều hướng trái -->
-                    {{-- <button class="slider-nav slider-nav-prev me-2" id="sliderPrev">
-                        <i class="fas fa-chevron-left"></i>
-                    </button> --}}
 
                     <!-- Danh mục -->
                     <div class="category-items-container flex-grow-1">
@@ -160,27 +151,23 @@
                             </a>
                             <a href="#" class="category-item dropdown-trigger"
                                 data-category="doctor-specialties">
-                                <i class="fas fa-user-md me-2"></i>
                                 Chuyên môn bác sĩ
                                 <i class="fas fa-chevron-down small-icon ms-2"></i>
                             </a>
 
 
                             <a href="#" class="category-item dropdown-trigger" data-category="tools">
-                                {{-- <i class="fas fa-heartbeat me-2"></i> --}}
                                 Công cụ đo lường sức khỏe
                                 <i class="fas fa-chevron-down small-icon ms-2"></i>
                             </a>
 
-                            {{-- <a href="#" class="category-item dropdown-trigger"
-                                data-category="medical-specialties">
-                                Chuyên khoa
-                                <i class="fas fa-chevron-down small-icon ms-2"></i>
-                            </a> --}}
+                            <a href="#" class="category-item" id="open-ai-advisor">
+                                <i class="fas fa-robot me-1"></i> Tư vấn sức khỏe AI
+                            </a>
 
-
-
-
+                            <a href="{{ route('forum.index') }}" class="category-item">
+                                Diễn đàn
+                            </a>
                         </div>
                     </div>
 
@@ -221,3 +208,7 @@
 
 <link rel="stylesheet" href="{{ asset('css/header.css') }}">
 <script src="{{ asset('js/header.js') }}"></script>
+<script>
+    window.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    console.log('{{ csrf_token() }}');
+</script>

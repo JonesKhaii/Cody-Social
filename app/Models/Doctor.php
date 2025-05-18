@@ -111,4 +111,8 @@ class Doctor extends Model implements Authenticatable
     {
         return $this->hasMany(DoctorTimeSlot::class, 'doctor_id', 'id');
     }
+    public function isAdmin()
+    {
+        return false;
+    }
 }

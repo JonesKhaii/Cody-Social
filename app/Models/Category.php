@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\Post;
+use App\Models\ForumThread;
+use App\Models\ForumStats;
 
 class Category extends Model
 {
@@ -74,5 +76,16 @@ class Category extends Model
             ->havingRaw('posts_count > 0')
             ->orderBy('name', 'asc')
             ->get();
+    }
+
+
+    public function forumThreads()
+    {
+        return $this->hasMany(ForumThread::class, 'category_id');
+    }
+
+    public function forumStats()
+    {
+        return $this->hasOne(ForumStats::class, 'category_id');
     }
 }

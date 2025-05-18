@@ -245,6 +245,10 @@
     margin-left: 15px;
 }
 
+.commitment-title {
+    color: #ffffff !important;
+}
+
 /* Partners */
 .partner-logo {
     opacity: 0.7;

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
@@ -21,6 +22,10 @@ use App\Http\Controllers\DropdownMenuController;
 use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ForumController;
+use App\Http\Controllers\ForumPostController;
+use App\Http\Controllers\ForumThreadController;
+
 // AUTH--------------------------------------------------------------------------------
 // Trang đăng nhập & xử lý đăng nhập
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -103,14 +108,57 @@ Route::group(['prefix' => 'specialties'], function () {
 });
 
 
-
-
 // Routes cho phần phương pháp điều trị
 Route::group(['prefix' => 'services'], function () {
     Route::get('/', [ServiceController::class, 'index'])->name('services.index');
     Route::get('/detail/{slug}', [ServiceController::class, 'detail'])->name('services.detail');
     Route::get('/{slug}', [ServiceController::class, 'category'])->name('services.category');
 });
+
+
+
+
+
+/// Tranng dịch vụ tại nhà
+
+Route::get('/services', [ServiceController::class, 'index'])->name('services');
+Route::get('/services/{slug}', [ServiceController::class, 'show'])->name('services.show');
+
+
+// =====================         Forum    ===============================================
+
+
+Route::prefix('forum')->name('forum.')->group(function () {
+    // Routes công khai
+    Route::get('/', [ForumController::class, 'index'])->name('index');
+    // Route::get('/forum/category/{slug}/threads', [ForumController::class, 'categoryThreads'])->name('forum.category.threads');
+    Route::get('/category/{slug}/threads', [ForumController::class, 'categoryThreads'])->name('category.threads');
+    Route::get('/{category:slug}/{threadSlug}', [ForumThreadController::class, 'show'])->name('threads.show');
+
+
+    // Search
+    Route::get('/search', [ForumController::class, 'search'])->name('search');
+
+
+
+
+
+    // Routes cần xác thực - đổi sang kiểm tra trong controller thay vì middleware
+    Route::get('/{category:slug}/threads/create', [ForumThreadController::class, 'create'])->name('threads.create');
+    Route::post('/threads', [ForumThreadController::class, 'store'])->name('threads.store');
+    Route::get('/{category:slug}/{threadSlug}/edit', [ForumThreadController::class, 'edit'])->name('threads.edit');
+    Route::put('/{category:slug}/{threadSlug}', [ForumThreadController::class, 'update'])->name('threads.update');
+    Route::delete('/{category:slug}/{threadSlug}', [ForumThreadController::class, 'destroy'])->name('threads.destroy');
+
+    // Posts routes
+    Route::post('/{category:slug}/{threadSlug}/posts', [ForumPostController::class, 'store'])->name('posts.store');
+    Route::get('/{category:slug}/{threadSlug}/posts/{post}/edit', [ForumPostController::class, 'edit'])->name('posts.edit');
+    Route::put('/{category:slug}/{threadSlug}/posts/{post}', [ForumPostController::class, 'update'])->name('posts.update');
+    Route::delete('/{category:slug}/{threadSlug}/posts/{post}', [ForumPostController::class, 'destroy'])->name('posts.destroy');
+    Route::post('/{category:slug}/{threadSlug}/posts/{post}/like', [ForumPostController::class, 'like'])->name('posts.like');
+});
+
+
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');

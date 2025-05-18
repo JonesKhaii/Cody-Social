@@ -76,27 +76,20 @@
             </div>
 
             <!-- Mô tả chi tiết -->
-            @if (isset($clinic->description) && $clinic->description)
-                <div class="card mb-4 border shadow-sm">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Giới thiệu</h5>
-                    </div>
-                    <div class="card-body p-4">
-                        {!! $clinic->description !!}
-                    </div>
+            <div class="card mb-4 border shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Giới thiệu sơ lược</h5>
                 </div>
-            @else
-                <div class="card mb-4 border shadow-sm">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Giới thiệu</h5>
-                    </div>
-                    <div class="card-body p-4">
+                <div class="card-body p-4">
+                    @if (isset($clinic->description) && $clinic->description)
+                        {!! $clinic->description !!}
+                    @else
                         <p>{{ $clinic->name }} là một {{ strtolower($clinic->type) }} cung cấp dịch vụ y tế chất lượng
                             cao. Với đội ngũ nhân viên chuyên nghiệp và thiết bị hiện đại, {{ $clinic->name }} cam kết mang
                             đến cho bệnh nhân những dịch vụ y tế đạt tiêu chuẩn.</p>
-                    </div>
+                    @endif
                 </div>
-            @endif
+            </div>
 
             <!-- Bản đồ -->
             <div class="card border shadow-sm">

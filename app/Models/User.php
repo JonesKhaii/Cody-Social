@@ -59,4 +59,8 @@ class User extends Authenticatable
     {
         return $this->where('phone', $identifier)->first();
     }
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 }

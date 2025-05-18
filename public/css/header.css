@@ -349,19 +349,19 @@
 }
 
 /* Cải tiến cho search container */
-.search-container {
+/* .search-container {
     flex-shrink: 0;
     width: 220px;
-}
+} */
 
-.search-input-group {
+/* .search-input-group {
     display: flex;
     position: relative;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
     border-radius: 20px;
     overflow: hidden;
     height: 36px;
-}
+} */
 
 .search-form-control {
     width: 100%;
