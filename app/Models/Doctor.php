@@ -50,7 +50,7 @@ class Doctor extends Model implements Authenticatable
     ];
 
     protected $appends = [
-        'specialization_list',  // Thêm thuộc tính tự động
+        'specialization_list',
     ];
 
     public function setPasswordAttribute($value)
@@ -92,7 +92,7 @@ class Doctor extends Model implements Authenticatable
     public function specializations()
     {
         return $this->belongsToMany(Category::class, 'doctor_specializations', 'doctor_id', 'specialization_id')
-            ->where('categories.type', 'specialist');
+            ->where('categories.type', 'other');
     }
 
     public function timeSlots()

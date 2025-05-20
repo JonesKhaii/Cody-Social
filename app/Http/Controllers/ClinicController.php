@@ -38,4 +38,18 @@ class ClinicController extends Controller
 
         return view('pages.clinic-detail', compact('clinic'));
     }
+
+    public function apiList()
+    {
+        try {
+            $clinics = Clinic::select('id', 'name', 'address', 'type')
+                ->orderBy('name')
+                ->get();
+
+            return response()->json($clinics);
+        } catch (\Exception $e) {
+            \Log::error('Error in apiList:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Could not fetch clinics'], 500);
+        }
+    }
 }

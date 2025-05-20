@@ -35,7 +35,7 @@ class DoctorController extends Controller
         });
         $specializations = Category::where('type', 'other')
             ->where('status', 'active')
-            ->get();
+            ->get(['id', 'name', 'slug']);
         return view('pages.list-doctors', compact('doctors', 'specializations'));
     }
 
@@ -53,7 +53,8 @@ class DoctorController extends Controller
             return redirect()->route('login');
         }
 
-        $categories = PostCategory::where('status', 'active')->get();
+        $categories = Category::where('status', 'active')->get();
+
         $doctor_id = Auth::guard('doctor')->id();
         $products = DB::table('affiliate_links')
             ->join('products', 'affiliate_links.product_id', '=', 'products.id')
@@ -291,24 +292,26 @@ class DoctorController extends Controller
 
     // public function showDetail($id)
     // {
-
-    //     $doctor = Doctor::select(['id', 'name', 'specialization', 'services', 'working_hours', 'location', 'workplace', 'photo', 'email', 'phone', 'bio'])
-    //         ->with(['posts:id,added_by,title,slug,summary,photo,created_at'])
+    //     $doctor = Doctor::with([
+    //         'specializations:id,name',
+    //         'posts:id,added_by,title,slug,summary,photo,created_at'
+    //     ])
+    //         ->select(['id', 'name', 'services', 'working_hours', 'location', 'workplace', 'photo', 'email', 'phone', 'bio', 'consultation_fee', 'rating'])
     //         ->findOrFail($id);
+
     //     return view('pages.doctor-detail', compact('doctor'));
     // }
     public function showDetail($id)
     {
         $doctor = Doctor::with([
-            'specializations:id,name',
+            'specializations:id,name,slug',
             'posts:id,added_by,title,slug,summary,photo,created_at'
         ])
-            ->select(['id', 'name', 'services', 'working_hours', 'location', 'workplace', 'photo', 'email', 'phone', 'bio', 'consultation_fee', 'rating'])
+            ->select(['id', 'name', 'working_hours', 'location', 'workplace', 'photo', 'email', 'phone', 'bio', 'consultation_fee', 'rating'])
             ->findOrFail($id);
 
         return view('pages.doctor-detail', compact('doctor'));
     }
-
 
     // Statics 
     public function getAppointmentStats()
@@ -527,23 +530,6 @@ class DoctorController extends Controller
     //===================Appointment static============================================
 
 
-    // public function getAppointmentKPI()
-    // {
-    //     $doctorId = Auth::guard('doctor')->id();
-    //     $totalAppointments = Appointment::where('doctor_id', $doctorId)->count();
-
-    //     // Lấy số lượng các trạng thái lịch khám
-    //     $appointmentStatus = Appointment::where('doctor_id', $doctorId)
-    //         ->groupBy('status')
-    //         ->selectRaw('status, COUNT(*) as total')
-    //         ->pluck('total', 'status');  // Tối ưu bằng cách dùng pluck() để lấy kết quả theo dạng mảng
-
-    //     return response()->json([
-    //         'total_appointments' => $totalAppointments,
-    //         'appointment_status' => $appointmentStatus
-    //     ]);
-    // }
-
     public function getAppointmentKPI()
     {
         $doctorId = Auth::guard('doctor')->id();
@@ -626,18 +612,55 @@ class DoctorController extends Controller
 
 
 
+    // public function listWithFilter(Request $request)
+    // {
+    //     // Lấy danh sách bác sĩ với các bộ lọc
+    //     $query = Doctor::with('specializations');
+    //     if ($request->filled('specialization')) {
+    //         $query->whereHas('specializations', function ($q) use ($request) {
+    //             $q->where('categories.id', $request->specialization);
+    //         });
+    //     }
+
+    //     if ($request->filled('city')) {
+    //         $query->where('location', 'like', '%' . $request->city . '%');
+    //     }
+
+    //     if ($request->filled('rating')) {
+    //         $query->orderBy('rating', $request->rating);
+    //     }
+
+    //     if ($request->filled('fee')) {
+    //         $query->orderBy('consultation_fee', $request->fee);
+    //     }
+
+    //     $doctors = $query->paginate(9)->withQueryString();
+
+    //     // Xử lý thành phố từ location
+    //     $doctors->getCollection()->transform(function ($doctor) {
+    //         $doctor->city = trim(explode(',', $doctor->location)[0] ?? '');
+    //         return $doctor;
+    //     });
+
+    //     $specializations = Category::where('type', 'other')
+    //         ->where('status', 'active')
+    //         ->get(['id', 'name', 'slug']);
+
+    //     return view('pages.list-doctors', compact('doctors', 'specializations'));
+    // }
     public function listWithFilter(Request $request)
     {
-        $query = Doctor::with('specializations');
+        $query = Doctor::select('id', 'name', 'photo', 'location', 'rating', 'consultation_fee')
+            ->with(['specializations:id,name']);
 
         if ($request->filled('specialization')) {
             $query->whereHas('specializations', function ($q) use ($request) {
-                $q->where('specializations.id', $request->specialization);
+                $q->where('categories.id', $request->specialization);
             });
         }
 
         if ($request->filled('city')) {
-            $query->where('city', 'like', '%' . $request->city . '%');
+            $query->where('location', 'like', $request->city . '%');
         }
 
         if ($request->filled('rating')) {
@@ -648,8 +671,17 @@ class DoctorController extends Controller
             $query->orderBy('consultation_fee', $request->fee);
         }
 
-        $doctors = $query->paginate(9);
-        $specializations = Specialization::all();
+        $doctors = $query->paginate(9)->withQueryString();
+
+        // (Tạm giữ xử lý city nếu chưa tách trường riêng)
+        $doctors->getCollection()->transform(function ($doctor) {
+            $doctor->city = trim(explode(',', $doctor->location)[0] ?? '');
+            return $doctor;
+        });
+
+        $specializations = Category::where('type', 'other')
+            ->where('status', 'active')
+            ->get(['id', 'name', 'slug']);
 
         return view('pages.list-doctors', compact('doctors', 'specializations'));
     }

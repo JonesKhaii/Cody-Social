@@ -24,7 +24,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Sử dụng một view composer duy nhất để tránh trùng lặp truy vấn
-        View::composer('*', function ($view) {
+        View::composer([
+            'layouts.header',
+            'layouts.partials.dropdown-templates.*',
+            'pages.specialties.*',
+            'pages.post-detail'
+
+        ], function ($view) {
             // Sử dụng một cache key duy nhất cho tất cả dữ liệu chung
             $globalData = Cache::remember('global_view_data', 60 * 60, function () {
                 // Tạo controller instance chỉ một lần

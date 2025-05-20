@@ -76,6 +76,54 @@
                             </div>
                         </div>
 
+                        @if ($post->post_type == 'video' && isset($post->meta_data['video_url']))
+                            <div class="blog-video-container mb-4">
+                                @php
+                                    // Xử lý URL video từ YouTube
+                                    $videoUrl = $post->meta_data['video_url'];
+                                    $embedUrl = '';
+                                    if (strpos($videoUrl, 'youtube.com') !== false) {
+                                        preg_match(
+                                            '/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/',
+                                            $videoUrl,
+                                            $matches,
+                                        );
+                                        if (isset($matches[1])) {
+                                            $embedUrl = 'https://www.youtube.com/embed/' . $matches[1];
+                                        }
+                                    } elseif (strpos($videoUrl, 'youtu.be') !== false) {
+                                        preg_match('/youtu\.be\/([^"&?\/\s]{11})/', $videoUrl, $matches);
+                                        if (isset($matches[1])) {
+                                            $embedUrl = 'https://www.youtube.com/embed/' . $matches[1];
+                                        }
+                                    } elseif (strpos($videoUrl, 'vimeo.com') !== false) {
+                                        preg_match('/vimeo\.com\/(\d+)/', $videoUrl, $matches);
+                                        if (isset($matches[1])) {
+                                            $embedUrl = 'https://player.vimeo.com/video/' . $matches[1];
+                                        }
+                                    }
+                                @endphp
+
+                                @if ($embedUrl)
+                                    <div class="responsive-video">
+                                        <iframe src="{{ $embedUrl }}" frameborder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowfullscreen></iframe>
+                                    </div>
+
+                                    @if (isset($post->meta_data['duration']))
+                                        <div class="video-duration mt-2">
+                                            <i class="fas fa-clock"></i> Thời lượng: {{ $post->meta_data['duration'] }}
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="alert alert-warning">
+                                        URL video không hợp lệ hoặc không được hỗ trợ.
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
+
                         <div class="blog-content">
                             {!! $post->description !!}
                         </div>

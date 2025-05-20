@@ -139,22 +139,27 @@
                                 <i class="fas fa-chevron-down small-icon ms-2"></i>
                             </a>
 
-                            <a href="#" class="category-item dropdown-trigger" data-category="posts">
-                                {{-- <i class="fas fa-newspaper me-2"></i> --}}
-                                Tin tức và bài viết
-                                <i class="fas fa-chevron-down small-icon ms-2"></i>
-                            </a>
+
                             <a href="#" class="category-item dropdown-trigger" data-category="services">
                                 {{-- <i class="fas fa-procedures me-2"></i> --}}
-                                Các phương pháp chữa bệnh
+                                Phương pháp chữa bệnh
                                 <i class="fas fa-chevron-down small-icon ms-2"></i>
                             </a>
+
+                            <a href="{{ route('forum.index') }}" class="category-item">
+                                Diễn đàn
+                            </a>
+
                             <a href="#" class="category-item dropdown-trigger"
                                 data-category="doctor-specialties">
                                 Chuyên môn bác sĩ
                                 <i class="fas fa-chevron-down small-icon ms-2"></i>
                             </a>
-
+                            <a href="#" class="category-item dropdown-trigger" data-category="posts">
+                                {{-- <i class="fas fa-newspaper me-2"></i> --}}
+                                Bài viết
+                                <i class="fas fa-chevron-down small-icon ms-2"></i>
+                            </a>
 
                             <a href="#" class="category-item dropdown-trigger" data-category="tools">
                                 Công cụ đo lường sức khỏe
@@ -165,9 +170,7 @@
                                 <i class="fas fa-robot me-1"></i> Tư vấn sức khỏe AI
                             </a>
 
-                            <a href="{{ route('forum.index') }}" class="category-item">
-                                Diễn đàn
-                            </a>
+
                         </div>
                     </div>
 

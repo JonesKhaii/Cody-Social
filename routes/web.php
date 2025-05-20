@@ -109,10 +109,10 @@ Route::group(['prefix' => 'specialties'], function () {
 
 
 // Routes cho phần phương pháp điều trị
-Route::group(['prefix' => 'services'], function () {
-    Route::get('/', [ServiceController::class, 'index'])->name('services.index');
-    Route::get('/detail/{slug}', [ServiceController::class, 'detail'])->name('services.detail');
-    Route::get('/{slug}', [ServiceController::class, 'category'])->name('services.category');
+Route::group(['prefix' => 'treatment'], function () {
+    Route::get('/', [ServiceController::class, 'treatment_index'])->name('treatment.index');
+    Route::get('/detail/{slug}', [ServiceController::class, 'detail'])->name('treatment.detail');
+    Route::get('/{slug}', [ServiceController::class, 'category'])->name('treatment.category');
 });
 
 
@@ -140,17 +140,23 @@ Route::prefix('forum')->name('forum.')->group(function () {
     Route::get('/search', [ForumController::class, 'search'])->name('search');
 
 
+    // Post
+    Route::get('/post/category/{slug}', [ForumPostController::class, 'categoryPosts'])->name('posts.category');
+    Route::get('/post/{categorySlug}/{postSlug}', [ForumPostController::class, 'showCategoryPost'])->name('posts.show');
+    Route::post('/post/{categorySlug}/{postSlug}/views', [ForumPostController::class, 'incrementCategoryPostViews'])->name('posts.incrementViews');
+    Route::get('/posts/featured', [ForumPostController::class, 'getFeaturedCategoryPosts'])->name('posts.featured');
+    Route::get('/posts/search', [ForumPostController::class, 'searchCategoryPosts'])->name('posts.search');
+    Route::get('/doctor/posts/{id}/edit-data', [ForumPostController::class, 'getPostData'])->name('doctor.posts.edit-data');
 
 
-
-    // Routes cần xác thực - đổi sang kiểm tra trong controller thay vì middleware
+    // Routes cần xác thực
     Route::get('/{category:slug}/threads/create', [ForumThreadController::class, 'create'])->name('threads.create');
     Route::post('/threads', [ForumThreadController::class, 'store'])->name('threads.store');
     Route::get('/{category:slug}/{threadSlug}/edit', [ForumThreadController::class, 'edit'])->name('threads.edit');
     Route::put('/{category:slug}/{threadSlug}', [ForumThreadController::class, 'update'])->name('threads.update');
     Route::delete('/{category:slug}/{threadSlug}', [ForumThreadController::class, 'destroy'])->name('threads.destroy');
 
-    // Posts routes
+    // Cmt in thread routes
     Route::post('/{category:slug}/{threadSlug}/posts', [ForumPostController::class, 'store'])->name('posts.store');
     Route::get('/{category:slug}/{threadSlug}/posts/{post}/edit', [ForumPostController::class, 'edit'])->name('posts.edit');
     Route::put('/{category:slug}/{threadSlug}/posts/{post}', [ForumPostController::class, 'update'])->name('posts.update');

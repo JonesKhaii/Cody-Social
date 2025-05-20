@@ -79,6 +79,201 @@
             padding: 25px;
             margin-top: 30px;
         }
+
+        /* CSS cho widget bệnh viện trong sidebar */
+        .hospital-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: none;
+        }
+
+        .hospital-card .card-header {
+            background-color: #fff;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9edf3;
+        }
+
+        .hospital-card .card-header i {
+            font-size: 18px;
+            color: #1565c0;
+        }
+
+        .hospital-card .card-title {
+            font-weight: 600;
+
+        }
+
+        .hospital-list {
+            padding: 0;
+        }
+
+        .hospital-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9edf3;
+            transition: all 0.25s ease;
+        }
+
+        .hospital-item:last-child {
+            border-bottom: none;
+        }
+
+        .hospital-item:hover {
+            background-color: #f8fbff;
+        }
+
+        .hospital-info {
+            display: flex;
+            margin-bottom: 12px;
+        }
+
+        .hospital-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-right: 15px;
+            border: 1px solid #e9edf3;
+            background-color: #fff;
+            flex-shrink: 0;
+        }
+
+        .hospital-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hospital-logo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f7ff;
+            color: #1565c0;
+            font-size: 24px;
+        }
+
+        .hospital-details {
+            flex: 1;
+        }
+
+        .hospital-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1565c0;
+            margin: 0 0 4px 0;
+            line-height: 1.3;
+        }
+
+        .hospital-type {
+            display: inline-block;
+            font-size: 12px;
+            color: #556677;
+            background-color: #f0f7ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .hospital-address,
+        .hospital-phone {
+            font-size: 13px;
+            color: #556677;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .hospital-address i,
+        .hospital-phone i {
+            font-size: 12px;
+            color: #1565c0;
+            margin-right: 6px;
+            margin-top: 3px;
+            width: 14px;
+        }
+
+        .hospital-phone a {
+            color: #556677;
+            text-decoration: none;
+        }
+
+        .hospital-phone a:hover {
+            color: #1565c0;
+            text-decoration: underline;
+        }
+
+        .hospital-action {
+            text-align: right;
+        }
+
+        .btn-view-details {
+            display: inline-block;
+            color: #fff;
+            background-color: #1565c0;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-view-details:hover {
+            background-color: #0d47a1;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(21, 101, 192, 0.2);
+        }
+
+        /* Mặc định chỉ hiển thị 3 bệnh viện đầu tiên */
+        .hospital-list .hospital-item:nth-child(n+4) {
+            display: none;
+        }
+
+        /* Khi có class show-all, hiển thị tất cả */
+        .hospital-list.show-all .hospital-item {
+            display: block;
+        }
+
+        .card-footer {
+            background-color: #fff;
+            border-top: 1px solid #e9edf3;
+            padding: 10px;
+        }
+
+        .show-more-hospitals {
+            background: none;
+            border: none;
+            color: #1565c0;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: all 0.2s;
+        }
+
+        .show-more-hospitals:hover {
+            color: #0d47a1;
+        }
+
+        .show-more-hospitals i {
+            font-size: 12px;
+            margin-left: 5px;
+            transition: transform 0.2s;
+        }
+
+        .show-more-hospitals.expanded i {
+            transform: rotate(180deg);
+        }
+
+        .card-header {
+            background-color: #1565c0 !important;
+            color: #ffffff !important;
+        }
     </style>
 @endsection
 
@@ -90,10 +285,10 @@
                 <div class="col-12">
                     <ul class="bread-list">
                         <li><a href="{{ route('home') }}">Trang chủ <i class="fas fa-chevron-right mx-2"></i></a></li>
-                        <li><a href="{{ route('services.index') }}">Phương pháp điều trị <i
+                        <li><a href="{{ route('treatment.index') }}">Phương pháp điều trị <i
                                     class="fas fa-chevron-right mx-2"></i></a></li>
                         @if ($service->cat_info)
-                            <li><a href="{{ route('services.category', $service->cat_info->slug) }}">{{ $service->cat_info->name }}
+                            <li><a href="{{ route('treatment.category', $service->cat_info->slug) }}">{{ $service->cat_info->name }}
                                     <i class="fas fa-chevron-right mx-2"></i></a></li>
                         @endif
                         <li class="active"><a href="javascript:void(0);">{{ $service->title }}</a></li>
@@ -114,7 +309,7 @@
                         <div class="service-header">
                             <div class="service-category-badge">
                                 @if ($service->cat_info)
-                                    <a href="{{ route('services.category', $service->cat_info->slug) }}"
+                                    <a href="{{ route('treatment.category', $service->cat_info->slug) }}"
                                         class="category-badge">
                                         {{ $service->cat_info->name }}
                                     </a>
@@ -122,7 +317,7 @@
                             </div>
                             @if ($service->photo)
                                 <img src="{{ asset($service->photo) }}" alt="{{ $service->title }}"
-                                    class="service-featured-image img-fluid rounded">
+                                    class="service-featured-image img-fluid rounded" loading="lazy">
                             @endif
                         </div>
 
@@ -142,7 +337,7 @@
 
                             <!-- Tóm tắt dịch vụ -->
                             <div class="service-highlights">
-                                <h4>Tóm tắt dịch vụ</h4>
+                                <h4>Tóm tắt phương pháp điều trị</h4>
                                 <p>{{ $service->summary }}</p>
                             </div>
 
@@ -150,14 +345,6 @@
                             <div class="service-content">
                                 {!! $service->description !!}
                             </div>
-
-                            <!-- Call to Action -->
-                            {{-- <div class="service-cta text-center">
-                                <h3>Bạn quan tâm đến phương pháp điều trị này?</h3>
-                                <p>Hãy đặt lịch tư vấn với chuyên gia của chúng tôi để được giải đáp chi tiết.</p>
-                                <a href="{{ route('booking.appointment') }}" class="btn btn-primary btn-lg">Đặt lịch tư vấn
-                                    ngay</a>
-                            </div> --}}
 
                             <!-- Chia sẻ mạng xã hội -->
                             <div class="service-article-footer">
@@ -171,10 +358,7 @@
                                     <div class="service-tags">
                                         <h5>Thẻ:</h5>
                                         <div class="tag-inner">
-                                            @php
-                                                $tags = explode(',', $service->tags);
-                                            @endphp
-                                            @foreach ($tags as $tag)
+                                            @foreach (explode(',', $service->tags) as $tag)
                                                 <a href="javascript:void(0);">{{ trim($tag) }}</a>
                                             @endforeach
                                         </div>
@@ -185,22 +369,16 @@
                     </div>
 
                     <!-- Phần bác sĩ chuyên khoa -->
-                    <div class="specialists-section mt-5">
-                        <h3 class="section-title mb-4">Đội ngũ chuyên gia</h3>
-                        <div class="row">
-                            <!-- Hiển thị danh sách bác sĩ liên quan đến dịch vụ này (có thể thay thế bằng dữ liệu thực) -->
-                            @php
-                                // Giả định có một số bác sĩ liên quan, có thể thay bằng truy vấn thực tế
-                                $specialists = App\Models\Doctor::where('status', 'active')->take(2)->get();
-                            @endphp
-
-                            @if (isset($specialists) && $specialists->count() > 0)
+                    @if (isset($specialists) && $specialists->count() > 0)
+                        <div class="specialists-section mt-5">
+                            <h3 class="section-title mb-4">Đội ngũ chuyên gia</h3>
+                            <div class="row">
                                 @foreach ($specialists as $doctor)
                                     <div class="col-md-6 mb-4">
                                         <div class="doctor-card">
                                             <div class="doctor-info">
                                                 <img src="{{ asset($doctor->photo ?? 'images/default-doctor.jpg') }}"
-                                                    alt="{{ $doctor->name }}" class="doctor-avatar">
+                                                    alt="{{ $doctor->name }}" class="doctor-avatar" loading="lazy">
                                                 <div>
                                                     <h5 class="mb-1">{{ $doctor->name }}</h5>
                                                     <p class="text-muted mb-0">{{ $doctor->department ?? 'Chuyên khoa' }}
@@ -210,86 +388,15 @@
                                             <div class="doctor-details mt-3">
                                                 <p>{{ Str::limit($doctor->short_bio ?? 'Chuyên gia với nhiều năm kinh nghiệm.', 100) }}
                                                 </p>
-                                                <a href=""
+                                                <a href="{{ route('doctor.detail', $doctor->id) }}"
                                                     class="btn btn-outline-primary btn-sm">Xem hồ sơ</a>
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
-                            @else
-                                <div class="col-12">
-                                    <div class="alert alert-info">
-                                        Hiện chưa có thông tin về chuyên gia phụ trách dịch vụ này.
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- Form đăng ký tư vấn -->
-                    {{-- <div class="contact-form-section">
-                        <h3 class="mb-4 text-center">Đăng ký tư vấn</h3>
-                        <form action="{{ route('service.register.consultation') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="service_id" value="{{ $service->id }}">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="name" class="form-label">Họ và tên <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="name" name="name" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="phone" class="form-label">Số điện thoại <span
-                                            class="text-danger">*</span></label>
-                                    <input type="tel" class="form-control" id="phone" name="phone" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email">
-                            </div>
-                            <div class="mb-3">
-                                <label for="message" class="form-label">Nội dung tư vấn</label>
-                                <textarea class="form-control" id="message" name="message" rows="4"></textarea>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary px-4 py-2">Gửi yêu cầu tư vấn</button>
-                            </div>
-                        </form>
-                    </div> --}}
-
-                    <!-- Dịch vụ liên quan -->
-                    {{-- @if (isset($relatedServices) && $relatedServices->count() > 0)
-                        <div class="related-services mt-5">
-                            <h3 class="section-title mb-4">Phương pháp điều trị liên quan</h3>
-                            <div class="row">
-                                @foreach ($relatedServices as $related)
-                                    <div class="col-md-4 mb-4">
-                                        <div class="card related-service-card h-100">
-                                            @if ($related->photo)
-                                                <img src="{{ asset($related->photo) }}" class="card-img-top"
-                                                    alt="{{ $related->title }}"
-                                                    style="height: 180px; object-fit: cover;">
-                                            @else
-                                                <div class="card-img-top d-flex align-items-center justify-content-center bg-light"
-                                                    style="height: 180px;">
-                                                    <i class="fas fa-procedures fa-3x text-primary"></i>
-                                                </div>
-                                            @endif
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{ $related->title }}</h5>
-                                                <p class="card-text">{{ Str::limit($related->summary, 80) }}</p>
-                                            </div>
-                                            <div class="card-footer border-top-0 bg-transparent">
-                                                <a href="{{ route('services.detail', $related->slug) }}"
-                                                    class="btn btn-outline-primary btn-sm w-100">Xem chi tiết</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
                             </div>
                         </div>
-                    @endif --}}
+                    @endif
                 </div>
 
                 <!-- Sidebar -->
@@ -297,30 +404,17 @@
                     <div class="service-sidebar">
                         <!-- Widget: Danh mục dịch vụ -->
                         <div class="card mb-4">
-                            <div class="card-header bg-primary text-white">
+                            <div class="card-header">
                                 <h3 class="card-title h5 mb-0">Phương pháp điều trị</h3>
                             </div>
                             <div class="card-body p-0">
                                 <ul class="list-group list-group-flush">
-                                    @php
-                                        // Lấy danh mục cha "Phương pháp điều trị"
-                                        $parentCategory = App\Models\Category::where('slug', 'dich-vu-y-te')->first();
-
-                                        // Lấy các danh mục con
-                                        $serviceCategories = App\Models\Category::where(
-                                            'parent_id',
-                                            $parentCategory->id ?? 0,
-                                        )
-                                            ->orderBy('display_order')
-                                            ->get();
-                                    @endphp
-
                                     @foreach ($serviceCategories as $cat)
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             <a
-                                                href="{{ route('services.category', $cat->slug) }}">{{ $cat->name }}</a>
+                                                href="{{ route('treatment.category', $cat->slug) }}">{{ $cat->name }}</a>
                                             <span class="badge bg-primary rounded-pill">
-                                                {{ App\Models\Post::where('post_cat_id', $cat->id)->where('post_type', 'service')->where('status', 'active')->count() }}
+                                                {{ $cat->posts_count }}
                                             </span>
                                         </li>
                                     @endforeach
@@ -328,87 +422,105 @@
                             </div>
                         </div>
 
-                        <!-- Widget: Đặt lịch khám -->
-                        {{-- <div class="card border-primary mb-4">
-                            <div class="card-header bg-primary text-white">
-                                <h3 class="card-title h5 mb-0">Đặt lịch khám</h3>
-                            </div>
-                            <div class="card-body">
-                                <p>Đặt lịch khám với chuyên gia để được tư vấn về phương pháp điều trị này.</p>
-                                <a href="{{ route('booking.appointment') }}" class="btn btn-primary w-100">Đặt lịch
-                                    ngay</a>
-                            </div>
-                        </div> --}}
-
-                        <!-- Widget: Thông tin liên hệ -->
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <h3 class="card-title h5 mb-0">Thông tin liên hệ</h3>
-                            </div>
-                            <div class="card-body">
-                                <ul class="list-unstyled mb-0">
-                                    <li class="mb-3">
-                                        <i class="fas fa-phone-alt text-primary me-2"></i>
-                                        <a href="tel:+842838000000">028 3800 0000</a>
-                                    </li>
-                                    <li class="mb-3">
-                                        <i class="fas fa-envelope text-primary me-2"></i>
-                                        <a href="mailto:info@benhvien.com">info@benhvien.com</a>
-                                    </li>
-                                    <li>
-                                        <i class="fas fa-map-marker-alt text-primary me-2"></i>
-                                        123 Đường Lê Lợi, Quận 1, TP. Hồ Chí Minh
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Widget: Dịch vụ nổi bật -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title h5 mb-0">Dịch vụ nổi bật</h3>
-                            </div>
-                            <div class="card-body">
-                                @php
-                                    $featuredServices = App\Models\Post::where('post_type', 'service')
-                                        ->where('is_featured', true)
-                                        ->where('status', 'active')
-                                        ->where('id', '!=', $service->id)
-                                        ->take(3)
-                                        ->get();
-                                @endphp
-
-                                @foreach ($featuredServices as $featuredService)
-                                    <div class="single-post {{ $loop->last ? '' : 'border-bottom mb-3 pb-3' }}">
-                                        <div class="d-flex">
-                                            <div class="image me-3" style="flex: 0 0 80px;">
-                                                @if ($featuredService->photo)
-                                                    <img src="{{ asset($featuredService->photo) }}"
-                                                        alt="{{ $featuredService->title }}" class="img-fluid rounded"
-                                                        style="height: 60px; width: 80px; object-fit: cover;">
-                                                @else
-                                                    <div class="bg-light d-flex align-items-center justify-content-center rounded"
-                                                        style="height: 60px; width: 80px;">
-                                                        <i class="fas fa-procedures text-primary"></i>
+                        <!-- Widget: Bệnh viện/Phòng khám cung cấp -->
+                        @if ($isTreatmentPost && isset($service->clinics) && $service->clinics->count() > 0)
+                            <div class="card hospital-card mb-4">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="card-title h5 mb-0">Cơ sở y tế cung cấp</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="hospital-list">
+                                        @foreach ($service->clinics as $index => $clinic)
+                                            <div class="hospital-item {{ $index >= 3 ? 'hidden-clinic' : '' }}">
+                                                <div class="hospital-info">
+                                                    <div class="hospital-logo">
+                                                        @if ($clinic->photo)
+                                                            <img src="{{ asset($clinic->photo) }}"
+                                                                alt="{{ $clinic->name }}" loading="lazy">
+                                                        @else
+                                                            <div class="hospital-logo-placeholder">
+                                                                <i class="fas fa-hospital"></i>
+                                                            </div>
+                                                        @endif
                                                     </div>
-                                                @endif
-                                            </div>
-                                            <div class="content">
-                                                <h5 class="mb-1" style="font-size: 15px;">
-                                                    <a href="{{ route('services.detail', $featuredService->slug) }}">
-                                                        {{ Str::limit($featuredService->title, 50) }}
+                                                    <div class="hospital-details">
+                                                        <h4 class="hospital-name">{{ $clinic->name }}</h4>
+                                                        <div class="hospital-type">{{ $clinic->type }}</div>
+
+                                                        @if ($clinic->address)
+                                                            <div class="hospital-address">
+                                                                <i class="fas fa-map-marker-alt"></i>
+                                                                <span>{{ $clinic->address }}</span>
+                                                            </div>
+                                                        @endif
+
+                                                        @if ($clinic->phone)
+                                                            <div class="hospital-phone">
+                                                                <i class="fas fa-phone-alt"></i>
+                                                                <a
+                                                                    href="tel:{{ $clinic->phone }}">{{ $clinic->phone }}</a>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+
+                                                <div class="hospital-action">
+                                                    <a href="{{ route('clinics.detail', $clinic->slug) }}"
+                                                        class="btn-view-details">
+                                                        Xem chi tiết
                                                     </a>
-                                                </h5>
-                                                <div class="small text-muted">
-                                                    <i class="fas fa-calendar-alt me-1"></i>
-                                                    {{ $featuredService->created_at->format('d/m/Y') }}
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endforeach
                                     </div>
-                                @endforeach
+                                </div>
+
+                                @if ($service->clinics->count() > 3)
+                                    <div class="card-footer text-center">
+                                        <button class="show-more-hospitals" type="button">
+                                            <span class="show-more-text">Xem thêm</span>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                    </div>
+                                @endif
                             </div>
-                        </div>
+                        @endif
+
+                        <!-- Widget: Phương pháp điều trị liên quan -->
+                        @if (isset($relatedServices) && $relatedServices->count() > 0)
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h3 class="card-title h5 mb-0">Phương pháp liên quan</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <ul class="list-group list-group-flush">
+                                        @foreach ($relatedServices as $related)
+                                            <li class="list-group-item">
+                                                <div class="d-flex align-items-center">
+                                                    @if ($related->photo)
+                                                        <div class="me-3 flex-shrink-0">
+                                                            <img src="{{ asset($related->photo) }}"
+                                                                alt="{{ $related->title }}"
+                                                                class="img-fluid rounded"
+                                                                style="width: 60px; height: 45px; object-fit: cover;"
+                                                                loading="lazy">
+                                                        </div>
+                                                    @endif
+                                                    <div>
+                                                        <h6 class="mb-0">
+                                                            <a href="{{ route('treatment.detail', $related->slug) }}"
+                                                                class="text-decoration-none text-dark">
+                                                                {{ Str::limit($related->title, 50) }}
+                                                            </a>
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

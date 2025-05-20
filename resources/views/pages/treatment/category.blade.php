@@ -7,7 +7,7 @@
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb bg-transparent p-0">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}">Trang chủ</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('services.index') }}">Phương pháp điều trị</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('treatment.index') }}">Phương pháp điều trị</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $category->name }}</li>
                 </ol>
             </nav>
@@ -34,7 +34,7 @@
                                             {{ $subcategory->summary ?? 'Khám phá phương pháp điều trị tiên tiến' }}</p>
                                     </div>
                                     <div class="card-footer border-top-0 bg-transparent">
-                                        <a href="{{ route('services.category', $subcategory->slug) }}"
+                                        <a href="{{ route('treatment.category', $subcategory->slug) }}"
                                             class="btn btn-outline-primary w-100">Xem chi tiết</a>
                                     </div>
                                 </div>
@@ -67,7 +67,7 @@
                                         <p class="card-text">{{ Str::limit($service->summary, 150) }}</p>
                                     </div>
                                     <div class="card-footer border-top-0 bg-transparent">
-                                        <a href="{{ route('services.detail', $service->slug) }}"
+                                        <a href="{{ route('treatment.detail', $service->slug) }}"
                                             class="btn btn-primary w-100">Chi tiết phương pháp</a>
                                     </div>
                                 </div>
@@ -101,13 +101,13 @@
 
                     @foreach ($otherCategories as $otherCategory)
                         <div class="col-md-3 col-6 mb-3">
-                            <a href="{{ route('services.category', $otherCategory->slug) }}"
+                            <a href="{{ route('treatment.category', $otherCategory->slug) }}"
                                 class="btn btn-outline-primary w-100">{{ $otherCategory->name }}</a>
                         </div>
                     @endforeach
 
                     <div class="col-md-3 col-6 mb-3">
-                        <a href="{{ route('services.index') }}" class="btn btn-primary w-100">Xem tất cả</a>
+                        <a href="{{ route('treatment.index') }}" class="btn btn-primary w-100">Xem tất cả</a>
                     </div>
                 </div>
             </div>

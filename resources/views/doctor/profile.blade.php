@@ -26,9 +26,8 @@
                 <i class="fas fa-chevron-left"></i>
             </button>
             <div class="sidebar-header">
-                <div class="logo">
-                    <i class="fas fa-stethoscope logo-icon"></i>
-                    <span class="logo-text">Hệ thống Y tế</span>
+                <div class="logo-sidebar">
+                    <span class="logo-text">Danh mục </span>
                 </div>
             </div>
             <div class="sidebar-wrapper">

@@ -198,6 +198,20 @@ class Post extends Model
         return $this->hasMany(PostLike::class);
     }
 
+    public function clinics()
+    {
+        return $this->belongsToMany(Clinic::class, 'clinic_post', 'post_id', 'clinic_id')
+            ->withPivot('notes')
+            ->withTimestamps();
+    }
+
+    public function isTreatmentPost()
+    {
+        // Danh sách ID danh mục phương pháp điều trị
+        $treatmentCategoryIds = range(88, 100);
+        return in_array($this->post_cat_id, $treatmentCategoryIds);
+    }
+
     // Kiểm tra xem user hoặc doctor đã like bài viết chưa
     public function isLikedBy($userOrDoctor)
     {

@@ -103,4 +103,11 @@ class Clinic extends Model
     {
         return static::where('slug', $slug)->firstOrFail();
     }
+
+    public function treatmentPosts()
+    {
+        return $this->belongsToMany(Post::class, 'clinic_post')
+            ->withPivot('notes')
+            ->withTimestamps();
+    }
 }

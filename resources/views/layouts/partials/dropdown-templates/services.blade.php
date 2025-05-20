@@ -1,9 +1,7 @@
 <template id="dropdown-template-services">
     <div class="row py-4">
-        <!-- Cột bên trái: Các kỹ thuật theo chuyên ngành -->
         <div class="col-md-8">
             <div class="row">
-                <!-- Phẫu thuật và Thủ thuật -->
                 <div class="col-md-6 mb-3">
                     <div class="category-item-container">
                         <div class="d-flex align-items-center mb-2">
@@ -35,8 +33,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Chẩn đoán hình ảnh -->
                 <div class="col-md-6 mb-3">
                     <div class="category-item-container">
                         <div class="d-flex align-items-center mb-2">
@@ -69,7 +65,6 @@
                     </div>
                 </div>
 
-                <!-- Y học tái tạo -->
                 <div class="col-md-6 mb-3">
                     <div class="category-item-container">
                         <div class="d-flex align-items-center mb-2">
@@ -165,7 +160,7 @@
                     <div class="card-body p-3">
                         <h6 class="card-title text-primary">Tìm hiểu thêm</h6>
                         <p class="card-text small">Khám phá tất cả các phương pháp điều trị tiên tiến</p>
-                        <a href="/services" class="btn btn-primary btn-sm">Xem tất cả</a>
+                        <a href="{{ route('treatment.index') }}" class="btn btn-primary btn-sm">Xem tất cả</a>
                     </div>
                 </div>
             </div>

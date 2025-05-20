@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\ForumThread;
 use App\Models\ForumStats;
 use Illuminate\Http\Request;
@@ -28,6 +29,15 @@ class ForumController extends Controller
             ->with('forumStats')
             ->orderBy('display_order')
             ->get();
+
+
+        foreach ($forumCategories as $category) {
+            $category->categoryPosts = Post::where('post_cat_id', $category->id)
+                ->where('status', 'active')
+                ->select('id', 'title', 'slug')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
 
 
         // Lấy các chủ đề mới nhất

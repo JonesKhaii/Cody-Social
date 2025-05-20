@@ -8,28 +8,63 @@
         <div class="forum-content">
             <div class="container">
                 <div class="row">
-
                     <!-- LEFT COLUMN - CATEGORIES -->
                     <div class="col-lg-3">
                         <div class="forum-sidebar">
                             <div class="sidebar-block categories-block">
-                                <h3 class="block-title">Danh mục</h3>
+                                {{-- <h3 class="block-title">Danh mục</h3> --}}
                                 <ul class="category-list">
                                     @foreach ($forumCategories as $category)
-                                        <li class="category-forum-item" data-slug="{{ $category->slug }}">
-                                            <a href="#" class="filter-category">
-                                                <div class="category-info">
-                                                    <h4>
-                                                        {{ $category->name ?? ($category->title ?? 'Danh mục không tên') }}
-                                                    </h4>
-                                                    @if ($category->summary)
-                                                        <p>{{ Str::limit($category->summary, 60) }}</p>
+                                        <li class="category-forum-item">
+                                            <div class="category-header">
+                                                <a href="{{ route('forum.posts.category', $category->slug) }}"
+                                                    class="category-title">
+                                                    {{ $category->name ?? ($category->title ?? 'Danh mục không tên') }}
+                                                </a>
+                                            </div>
+
+                                            @if (isset($category->categoryPosts) && $category->categoryPosts->count() > 0)
+                                                <div class="category-posts">
+                                                    <ul class="post-list">
+                                                        @foreach ($category->categoryPosts as $index => $post)
+                                                            <li class="post-item {{ $index >= 5 ? 'hidden-post' : '' }}"
+                                                                @if ($index >= 5) style="display: none;" @endif
+                                                                data-category="{{ $category->id }}">
+
+                                                                <a href="{{ route('forum.posts.show', [$category->slug, $post->slug]) }}"
+                                                                    class="post-link" title="{{ $post->title }}">
+                                                                    {{ Str::limit($post->title, 30) }}
+                                                                </a>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+
+                                                    @if ($category->categoryPosts->count() > 5)
+                                                        <div class="view-toggle">
+                                                            <a href="#" class="show-more"
+                                                                data-category="{{ $category->id }}">
+                                                                Xem thêm <i class="fa-solid fa-angle-down"></i>
+                                                            </a>
+                                                            <a href="#" class="show-less"
+                                                                data-category="{{ $category->id }}" style="display: none;">
+                                                                Thu gọn <i class="fa-solid fa-angle-up"></i>
+                                                            </a>
+                                                        </div>
                                                     @endif
+
+                                                    <div class="view-all">
+                                                        <a href="{{ route('forum.posts.category', $category->slug) }}"
+                                                            class="view-all-link">
+                                                            Xem tất cả bài viết <span></span> <i
+                                                                class="fa-solid fa-arrow-right"></i>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <div class="category-count">
-                                                    {{ $category->forum_threads_count ?? ($category->thread_count ?? 0) }}
+                                            @else
+                                                <div class="no-posts">
+                                                    <p>Chưa có bài viết nào</p>
                                                 </div>
-                                            </a>
+                                            @endif
                                         </li>
                                     @endforeach
                                 </ul>
@@ -54,7 +89,8 @@
                             <div class="forum-tabs-container">
                                 <div class="forum-tabs">
                                     <a href="{{ route('forum.index') }}?sort=latest"
-                                        class="tab {{ request('sort', 'latest') == 'latest' ? 'active' : '' }}">Mới nhất</a>
+                                        class="tab {{ request('sort', 'latest') == 'latest' ? 'active' : '' }}">Mới
+                                        nhất</a>
                                     <a href="{{ route('forum.index') }}?sort=top"
                                         class="tab {{ request('sort') == 'top' ? 'active' : '' }}">Nổi bật</a>
                                     <a href="{{ route('forum.index') }}?sort=hot"
@@ -76,7 +112,7 @@
 
                             <!-- Create topic button for mobile -->
                             <div class="mobile-create-topic">
-                                <a href="{{ route('forum.threads.create', $categories->first()->slug ?? '') }}"
+                                <a href="{{ route('forum.threads.create', $forumCategories->first()->slug ?? '') }}"
                                     class="btn-create">
                                     <i class="fas fa-plus"></i> Tạo chủ đề
                                 </a>
@@ -239,9 +275,45 @@
                                     console.error('Search error:', err);
                                 });
                         }
-                    }, 300); // chờ 300ms sau khi gõ để tránh gửi quá nhiều request
+                    }, 300);
                 });
             }
+
+
+            document.querySelectorAll('.show-more').forEach(function(button) {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const categoryId = this.dataset.category;
+                    const hiddenPosts = document.querySelectorAll(
+                        `.post-item.hidden-post[data-category="${categoryId}"]`);
+
+                    hiddenPosts.forEach(function(post) {
+                        post.style.display = 'block';
+                    });
+
+                    this.style.display = 'none';
+                    document.querySelector(`.show-less[data-category="${categoryId}"]`).style
+                        .display = 'inline-block';
+                });
+            });
+
+            // Xử lý nút "Thu gọn"
+            document.querySelectorAll('.show-less').forEach(function(button) {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const categoryId = this.dataset.category;
+                    const hiddenPosts = document.querySelectorAll(
+                        `.post-item.hidden-post[data-category="${categoryId}"]`);
+
+                    hiddenPosts.forEach(function(post) {
+                        post.style.display = 'none';
+                    });
+
+                    this.style.display = 'none';
+                    document.querySelector(`.show-more[data-category="${categoryId}"]`).style
+                        .display = 'inline-block';
+                });
+            });
 
         });
     </script>

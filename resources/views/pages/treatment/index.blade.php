@@ -52,7 +52,7 @@
                                     </div>
                                 @endif
 
-                                <a href="{{ route('services.category', $category->slug) }}"
+                                <a href="{{ route('treatment.category', $category->slug) }}"
                                     class="btn btn-outline-primary mt-3">Xem tất cả</a>
                             </div>
                         </div>

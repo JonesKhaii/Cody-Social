@@ -175,15 +175,25 @@ class PostController extends Controller
             return redirect()->back()->with('error', 'Bạn không có quyền đăng bài.');
         }
 
-        // Điều chỉnh validation tùy theo lựa chọn của người dùng
+        // Điều chỉnh validation tùy theo loại bài viết
         $validationRules = [
             'title' => 'required|string|max:255',
             'summary' => 'required|string',
             'description' => 'required|string',
-            'post_cat_id' => 'required|exists:categories,id', // Thay đổi bảng từ post_categories thành categories
+            'post_cat_id' => 'required|exists:categories,id',
+            'post_type' => 'required|in:post,event,story,research,video',
         ];
 
-        // Thêm validation tùy thuộc vào lựa chọn người dùng
+        // Thêm validation tùy thuộc vào loại bài viết
+        if ($request->post_type == 'event') {
+            $validationRules['meta_data.event_start_date'] = 'required|date_format:Y-m-d\TH:i';
+            $validationRules['meta_data.event_end_date'] = 'required|date_format:Y-m-d\TH:i|after_or_equal:meta_data.event_start_date';
+            $validationRules['meta_data.location'] = 'required|string';
+        } else if ($request->post_type == 'video') {
+            $validationRules['meta_data.video_url'] = 'required|url';
+        }
+
+        // Thêm validation cho hình ảnh
         if ($request->image_option == 'upload') {
             $validationRules['photo'] = 'required|image|mimes:webp,jpeg,png,jpg,gif|max:2048';
         } else {
@@ -191,6 +201,24 @@ class PostController extends Controller
         }
 
         $request->validate($validationRules);
+
+        // Xử lý metadata
+        $metaData = $request->meta_data ?? [];
+
+        // Xử lý đặc biệt cho các trường dạng mảng
+        if ($request->post_type == 'research' && isset($metaData['co_authors'])) {
+            $metaData['co_authors'] = json_decode($metaData['co_authors']);
+
+            // Xử lý document file nếu có
+            if ($request->hasFile('document_file')) {
+                $file = $request->file('document_file');
+                $fileName = Str::slug($request->title) . '-' . time() . '.' . $file->getClientOriginalExtension();
+                $filePath = Storage::disk('s3')->putFileAs('documents/research', $file, $fileName, 'public');
+                $metaData['document_url'] = Storage::disk('s3')->url($filePath);
+            }
+        } else if ($request->post_type == 'video' && isset($metaData['topics'])) {
+            $metaData['topics'] = json_decode($metaData['topics']);
+        }
 
         $post = new Post();
         $post->title = $request->title;
@@ -200,6 +228,11 @@ class PostController extends Controller
         $post->post_cat_id = $request->post_cat_id;
         $post->status = 'active';
         $post->added_by = $doctor->id;
+        $post->author_type = 'doctor';
+        $post->post_type = $request->post_type;
+        $post->tags = $request->tags;
+        $post->quote = $request->quote;
+        $post->meta_data = $metaData;
 
         // Xử lý ảnh tùy theo lựa chọn
         if ($request->image_option == 'upload' && $request->hasFile('photo')) {
@@ -217,13 +250,82 @@ class PostController extends Controller
 
         try {
             $post->save();
+            if (in_array($post->post_cat_id, range(88, 100)) && $request->has('clinic_ids') && !empty($request->clinic_ids)) {
+                // Thêm log để debug
+                \Log::info('Clinic IDs received:', ['clinic_ids' => $request->clinic_ids]);
+
+                // Chuyển chuỗi IDs thành mảng và lọc các giá trị hợp lệ
+                $clinicIds = array_filter(explode(',', $request->clinic_ids), function ($id) {
+                    return is_numeric($id) && $id > 0;
+                });
+
+                if (!empty($clinicIds)) {
+                    \Log::info('Clinic IDs after filtering:', ['clinic_ids' => $clinicIds]);
+                    $post->clinics()->sync($clinicIds);
+                }
+            }
+            return redirect()->back()->with('success', 'Bài viết đã được tạo thành công!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Lỗi khi lưu bài viết: ' . $e->getMessage());
         }
-
-        return redirect()->back()->with('success', 'Bài viết đã được tạo thành công!');
     }
+    // public function update(Request $request, $id)
+    // {
+    //     // Validate dữ liệu nhập vào
+    //     $validationRules = [
+    //         'title' => 'required|string|max:255',
+    //         'summary' => 'required|string',
+    //         'description' => 'required|string',
+    //         'post_cat_id' => 'required|exists:categories,id', // Thay đổi bảng từ post_categories thành categories
+    //         'edit_image_option' => 'required|in:keep,upload,link',
+    //     ];
 
+    //     // Thêm validation tùy thuộc vào lựa chọn người dùng
+    //     if ($request->edit_image_option == 'upload') {
+    //         $validationRules['photo'] = 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048';
+    //     } else if ($request->edit_image_option == 'link') {
+    //         $validationRules['photo_url'] = 'required|url';
+    //     }
+
+    //     $request->validate($validationRules);
+
+    //     // Lấy bài viết cần chỉnh sửa
+    //     $post = Post::findOrFail($id);
+    //     $post->title = $request->title;
+    //     $post->summary = $request->summary;
+    //     $post->description = $request->description;
+    //     $post->post_cat_id = $request->post_cat_id;
+
+    //     // Xử lý ảnh tùy theo lựa chọn của người dùng
+    //     if ($request->edit_image_option == 'upload' && $request->hasFile('photo')) {
+    //         // Xóa ảnh cũ trên S3 nếu có và nếu không phải URL bên ngoài
+    //         if ($post->photo && !filter_var($post->photo, FILTER_VALIDATE_URL)) {
+    //             try {
+    //                 $oldImagePath = str_replace(Storage::disk('s3')->url(''), '', $post->photo);
+    //                 Storage::disk('s3')->delete($oldImagePath);
+    //             } catch (\Exception $e) {
+    //                 // Ghi log lỗi nhưng vẫn tiếp tục
+    //                 \Log::error('Không thể xóa ảnh cũ: ' . $e->getMessage());
+    //             }
+    //         }
+
+    //         // Upload ảnh mới
+    //         $imageUrl = app(ImageController::class)->uploadImage($request);
+    //         $post->photo = $imageUrl;
+    //     } else if ($request->edit_image_option == 'link' && $request->filled('photo_url')) {
+    //         // Cập nhật với URL ảnh mới
+    //         $post->photo = $request->photo_url;
+    //     }
+
+    //     try {
+    //         $post->save();
+    //     } catch (\Exception $e) {
+    //         return redirect()->back()->with('error', 'Lỗi khi cập nhật bài viết: ' . $e->getMessage());
+    //     }
+
+    //     // Trả về thông báo thành công
+    //     return redirect()->back()->with('success', 'Bài viết đã được cập nhật!');
+    // }
     public function update(Request $request, $id)
     {
         // Validate dữ liệu nhập vào
@@ -231,11 +333,21 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'summary' => 'required|string',
             'description' => 'required|string',
-            'post_cat_id' => 'required|exists:categories,id', // Thay đổi bảng từ post_categories thành categories
+            'post_cat_id' => 'required|exists:categories,id',
+            'post_type' => 'required|in:post,event,story,research,video',
             'edit_image_option' => 'required|in:keep,upload,link',
         ];
 
-        // Thêm validation tùy thuộc vào lựa chọn người dùng
+        // Thêm validation tùy thuộc vào loại bài viết
+        if ($request->post_type == 'event') {
+            $validationRules['meta_data.event_start_date'] = 'required|date_format:Y-m-d\TH:i';
+            $validationRules['meta_data.event_end_date'] = 'required|date_format:Y-m-d\TH:i|after_or_equal:meta_data.event_start_date';
+            $validationRules['meta_data.location'] = 'required|string';
+        } else if ($request->post_type == 'video') {
+            $validationRules['meta_data.video_url'] = 'required|url';
+        }
+
+        // Thêm validation tùy thuộc vào lựa chọn người dùng về ảnh
         if ($request->edit_image_option == 'upload') {
             $validationRules['photo'] = 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048';
         } else if ($request->edit_image_option == 'link') {
@@ -246,10 +358,48 @@ class PostController extends Controller
 
         // Lấy bài viết cần chỉnh sửa
         $post = Post::findOrFail($id);
+
+        // Cập nhật thông tin cơ bản
         $post->title = $request->title;
         $post->summary = $request->summary;
         $post->description = $request->description;
         $post->post_cat_id = $request->post_cat_id;
+        $post->post_type = $request->post_type;
+        $post->tags = $request->tags;
+        $post->quote = $request->quote;
+
+        // Xử lý metadata
+        $metaData = $request->meta_data ?? [];
+
+        // Xử lý đặc biệt cho các trường dạng mảng
+        if ($request->post_type == 'research' && isset($metaData['co_authors'])) {
+            $metaData['co_authors'] = json_decode($metaData['co_authors']);
+
+            // Xử lý document file nếu có
+            if ($request->hasFile('document_file')) {
+                // Xóa file cũ nếu có
+                if (isset($post->meta_data['document_url'])) {
+                    $oldDocPath = str_replace(Storage::disk('s3')->url(''), '', $post->meta_data['document_url']);
+                    Storage::disk('s3')->delete($oldDocPath);
+                }
+
+                // Upload file mới
+                $file = $request->file('document_file');
+                $fileName = Str::slug($request->title) . '-' . time() . '.' . $file->getClientOriginalExtension();
+                $filePath = Storage::disk('s3')->putFileAs('documents/research', $file, $fileName, 'public');
+                $metaData['document_url'] = Storage::disk('s3')->url($filePath);
+            } else {
+                // Giữ lại đường dẫn tài liệu cũ
+                if (isset($post->meta_data['document_url'])) {
+                    $metaData['document_url'] = $post->meta_data['document_url'];
+                }
+            }
+        } else if ($request->post_type == 'video' && isset($metaData['topics'])) {
+            $metaData['topics'] = json_decode($metaData['topics']);
+        }
+
+        // Cập nhật metadata
+        $post->meta_data = $metaData;
 
         // Xử lý ảnh tùy theo lựa chọn của người dùng
         if ($request->edit_image_option == 'upload' && $request->hasFile('photo')) {
@@ -271,17 +421,23 @@ class PostController extends Controller
             // Cập nhật với URL ảnh mới
             $post->photo = $request->photo_url;
         }
+        // (Nếu lựa chọn là 'keep', thì không cần thay đổi ảnh)
 
         try {
             $post->save();
+
+            // Xử lý mối quan hệ với bệnh viện/phòng khám nếu là bài viết về phương pháp điều trị
+            $treatmentCategoryIds = range(88, 100);
+            if (in_array($post->post_cat_id, $treatmentCategoryIds) && $request->has('clinic_ids')) {
+                // Nếu bạn đã tạo quan hệ trong model và migration
+                $post->clinics()->sync($request->clinic_ids);
+            }
+
+            return redirect()->back()->with('success', 'Bài viết đã được cập nhật thành công!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Lỗi khi cập nhật bài viết: ' . $e->getMessage());
         }
-
-        // Trả về thông báo thành công
-        return redirect()->back()->with('success', 'Bài viết đã được cập nhật!');
     }
-
     public function searchResult(Request $request)
     {
         $q = $request->input('query');
@@ -325,6 +481,31 @@ class PostController extends Controller
                 'success' => false,
                 'message' => 'Lỗi khi xóa bài viết: ' . $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function getPostData($id)
+    {
+        try {
+            $post = Post::with('cat_info')->findOrFail($id);
+
+            // Lấy danh sách bệnh viện liên kết nếu đây là bài viết về phương pháp điều trị
+            $clinics = [];
+            $treatmentCategoryIds = range(88, 100);
+            if (in_array($post->post_cat_id, $treatmentCategoryIds)) {
+                $clinics = $post->clinics()->get();
+            }
+
+            return response()->json([
+                'success' => true,
+                'post' => $post,
+                'clinics' => $clinics
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể lấy thông tin bài viết: ' . $e->getMessage()
+            ]);
         }
     }
 }

@@ -13,7 +13,7 @@
                         <div class="forum-breadcrumb">
                             <a href="{{ route('forum.index') }}">Diễn đàn</a>
                             <span class="separator">/</span>
-                            <a href="{{ route('forum.category', $category->slug) }}">{{ $category->name }}</a>
+                            <a href="{{ route('forum.category.threads', $category->slug) }}">{{ $category->name }}</a>
                             <span class="separator">/</span>
                             <span class="current">{{ $thread->title }}</span>
                         </div>
@@ -392,7 +392,7 @@
                         <div class="sidebar-block category-nav-block">
                             <h3 class="block-title">Điều hướng danh mục</h3>
                             <div class="category-nav">
-                                <a href="{{ route('forum.category', $category->slug) }}" class="nav-btn">
+                                <a href="{{ route('forum.category.threads', $category->slug) }}" class="nav-btn">
                                     <i class="fas fa-list"></i> Xem tất cả chủ đề
                                 </a>
                                 <a href="{{ route('forum.threads.create', $category->slug) }}" class="nav-btn">
