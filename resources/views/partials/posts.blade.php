@@ -7,7 +7,7 @@
             <div class="article-card">
                 <a href="{{ route('post.detail', ['slug' => $post->slug]) }}" class="article-link">
                     <div class="article-image-container">
-                        <img src="{{ asset($post->photo) }}" alt="{{ $post->title }}">
+                        <img src="{{ asset($post->photo) }}" alt="{{ $post->title }}" loading="lazy">
                         @if ($post->cat_info)
                             <span class="category-badge">{{ $post->cat_info->title }}</span>
                         @endif
@@ -16,10 +16,22 @@
                         <div class="article-meta">
                             <div class="author-info">
                                 <div class="author-avatar">
-                                    <img src="{{ $post->author_info->photo ?? asset('images/default-avatar.png') }}"
-                                        alt="Author">
+                                    @php
+                                        // Sử dụng author đã được eager load thay vì author_info accessor
+                                        $author = $post->author_type == 'doctor' ? $post->doctor : $post->user;
+                                        $authorPhoto = $author->photo ?? asset('images/default-avatar.png');
+                                        $authorName = $author->name ?? 'N/A';
+                                    @endphp
+                                    <img src="{{ $authorPhoto }}"
+                                        alt="{{ $post->author_type == 'doctor' ? 'Doctor' : 'Author' }}"
+                                        loading="lazy">
                                 </div>
-                                <span class="author-name">{{ $post->author_info->name ?? 'N/A' }}</span>
+                                <span class="author-name">
+                                    {{ $authorName }}
+                                    {{-- @if ($post->author_type == 'doctor')
+                                        <small>(Bác sĩ)</small>
+                                    @endif --}}
+                                </span>
                             </div>
                             <div class="date-info">
                                 <span><i class="far fa-calendar-alt"></i>
@@ -40,18 +52,17 @@
     @endif
 </div>
 
+
+
 <div class="pagination-container">
     {{ $posts->links('pagination::bootstrap-5') }}
 </div>
-
-
 
 <style>
     /* Styling for articles grid */
     .articles-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        ;
         gap: 25px;
         margin-bottom: 40px;
     }

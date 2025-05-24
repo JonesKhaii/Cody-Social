@@ -8,9 +8,9 @@
                     <div class="col-md-6 mb-3">
                         <div class="category-item-container">
                             <div class="d-flex align-items-center mb-2">
-                                @if ($category->photo)
+                                @if ($category->icon)
                                     <div class="category-image me-2">
-                                        <img src="{{ $category->photo }}" alt="{{ $category->name }}"
+                                        <img src="{{ asset('asset/images/category/' . $category->slug . '.png') }}"
                                             class="img-fluid category-thumbnail">
                                     </div>
                                 @else

@@ -438,6 +438,8 @@ class PostController extends Controller
             return redirect()->back()->with('error', 'Lỗi khi cập nhật bài viết: ' . $e->getMessage());
         }
     }
+
+
     public function searchResult(Request $request)
     {
         $q = $request->input('query');
@@ -452,31 +454,60 @@ class PostController extends Controller
 
     public function destroy($id)
     {
+        \Log::debug('Attempting to delete post: ' . $id);
+
         try {
-            // Tìm bài viết hoặc trả về lỗi 404
             $post = Post::findOrFail($id);
 
-            // Xóa ảnh trên S3 nếu tồn tại và không rỗng
-            if (!empty($post->photo) && Storage::disk('s3')->exists($post->photo)) {
-                Storage::disk('s3')->delete($post->photo);
+            // Kiểm tra quyền
+            $user = auth()->user() ?? auth()->guard('doctor')->user();
+            if (!$user || ($user->id != $post->added_by && !$user->hasRole('admin'))) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bạn không có quyền xóa bài viết này!'
+                ], 403);
             }
+
+            // Xóa ảnh nếu có
+            if (!empty($post->photo)) {
+                try {
+                    // Nếu là đường dẫn S3 đầy đủ, cần tách phần tương đối
+                    if (strpos($post->photo, 'http') === 0) {
+                        $photoPath = str_replace(Storage::disk('s3')->url(''), '', $post->photo);
+                        if (Storage::disk('s3')->exists($photoPath)) {
+                            Storage::disk('s3')->delete($photoPath);
+                        }
+                    }
+                    // Nếu là đường dẫn tương đối
+                    else if (Storage::disk('s3')->exists($post->photo)) {
+                        Storage::disk('s3')->delete($post->photo);
+                    }
+                } catch (\Exception $e) {
+                    \Log::error('Lỗi khi xóa ảnh: ' . $e->getMessage());
+                    // Tiếp tục xóa bài viết ngay cả khi không thể xóa ảnh
+                }
+            }
+
+            // Xóa các bản ghi liên quan hoặc gỡ liên kết
+            $post->likes()->delete();
+            $post->comments()->delete();
+            $post->clinics()->detach(); // Gỡ bỏ liên kết thay vì xóa
 
             // Xóa bài viết
             $post->delete();
 
-            // Trả về phản hồi JSON thành công
             return response()->json([
                 'success' => true,
                 'message' => 'Bài viết đã được xóa thành công!'
             ], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Xử lý lỗi nếu bài viết không tồn tại
+            \Log::error('Bài viết không tồn tại: ' . $id);
             return response()->json([
                 'success' => false,
                 'message' => 'Bài viết không tồn tại!'
             ], 404);
         } catch (\Exception $e) {
-            // Xử lý lỗi không xác định
+            \Log::error('Lỗi khi xóa bài viết: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
             return response()->json([
                 'success' => false,
                 'message' => 'Lỗi khi xóa bài viết: ' . $e->getMessage()

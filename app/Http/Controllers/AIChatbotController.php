@@ -19,15 +19,12 @@ class AIChatbotController extends Controller
             $message = $validated['message'];
             Log::info("Received message: " . $message);
 
-            // Lấy API key từ .env
             $apiKey = env('GOOGLE_AI_API_KEY', 'AIzaSyDthqIhuHWzYlLQDCdq2Jxr0gejccThcTA');
 
-            // Dùng mô hình gemini-1.5-flash
             $modelName = "gemini-2.0-flash";
 
             Log::info("Making request to Google AI API using model: " . $modelName);
 
-            // Tạo request body
             $requestBody = [
                 'contents' => [
                     [
@@ -46,14 +43,11 @@ class AIChatbotController extends Controller
                 ]
             ];
 
-            // Log request body for debugging
             Log::debug("Request body: " . json_encode($requestBody));
 
-            // Cấu trúc URL đúng cho Gemini API
             $url = "https://generativelanguage.googleapis.com/v1beta/models/{$modelName}:generateContent?key={$apiKey}";
             Log::debug("Request URL: " . $url);
 
-            // Gọi Google Gemini API
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
             ])->post($url, $requestBody);
@@ -62,11 +56,9 @@ class AIChatbotController extends Controller
             Log::info("Google API status code: " . $response->status());
             Log::debug("Response body: " . $response->body());
 
-            // Kiểm tra lỗi HTTP
             if ($response->failed()) {
                 Log::error("Google API error: " . $response->body());
 
-                // Nếu không thành công, thử sử dụng mock data
                 $mockResponses = [
                     "Xin chào! Tôi là trợ lý AI y tế của ToiKhoe. Tôi có thể giúp gì cho bạn?",
                     "Để có chẩn đoán chính xác, bạn nên tham khảo ý kiến bác sĩ. Tuy nhiên, tôi có thể cung cấp một số thông tin chung.",
@@ -75,7 +67,6 @@ class AIChatbotController extends Controller
                     "Tôi có thể giúp bạn cung cấp thông tin sức khỏe chung, nhưng không thể thay thế cho tư vấn y tế chuyên nghiệp."
                 ];
 
-                // Chọn ngẫu nhiên một phản hồi
                 $mockResponse = $mockResponses[array_rand($mockResponses)];
 
                 return response()->json([
@@ -87,7 +78,6 @@ class AIChatbotController extends Controller
 
             $responseData = $response->json();
 
-            // Kiểm tra cấu trúc response cho Gemini API
             if (isset($responseData['candidates'][0]['content']['parts'][0]['text'])) {
                 $aiMessage = $responseData['candidates'][0]['content']['parts'][0]['text'];
                 Log::info("AI response: " . $aiMessage);
@@ -99,7 +89,6 @@ class AIChatbotController extends Controller
             } else {
                 Log::error("Unexpected response structure: " . json_encode($responseData));
 
-                // Sử dụng mock data nếu cấu trúc response không như mong đợi
                 $mockResponses = [
                     "Xin chào! Tôi là trợ lý AI y tế của ToiKhoe. Tôi có thể giúp gì cho bạn?",
                     "Để có chẩn đoán chính xác, bạn nên tham khảo ý kiến bác sĩ. Tuy nhiên, tôi có thể cung cấp một số thông tin chung.",

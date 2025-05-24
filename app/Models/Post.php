@@ -41,15 +41,22 @@ class Post extends Model
     {
         return $this->hasOne('App\Models\PostTag', 'id', 'post_tag_id');
     }
+    // public function author_info()
+    // {
+    //     if ($this->author_type == 'doctor') {
+    //         return $this->belongsTo(Doctor::class, 'added_by');
+    //     }
+
+    //     return $this->belongsTo(User::class, 'added_by');
+    // }
     public function author_info()
     {
         if ($this->author_type == 'doctor') {
-            return $this->belongsTo(Doctor::class, 'added_by');
+            return $this->belongsTo(Doctor::class, 'added_by')->select('id', 'name', 'photo');
         }
 
-        return $this->belongsTo(User::class, 'added_by');
+        return $this->belongsTo(User::class, 'added_by')->select('id', 'name', 'photo');
     }
-
     public function user()
     {
         return $this->belongsTo(User::class, 'added_by');
@@ -60,14 +67,30 @@ class Post extends Model
         return $this->belongsTo(Doctor::class, 'added_by');
     }
 
+    // public function getAuthorInfoAttribute()
+    // {
+    //     if ($this->author_type == 'doctor') {
+    //         return $this->doctor;
+    //     }
+
+    //     return $this->user;
+    // }
     public function getAuthorInfoAttribute()
     {
-        if ($this->author_type == 'doctor') {
-            return $this->doctor;
+        // Cache trong memory để tránh query lặp lại
+        if (!array_key_exists('author_info_cached', $this->relations)) {
+            if ($this->author_type == 'doctor') {
+                $author = $this->relations['doctor'] ?? $this->doctor()->select('id', 'name', 'photo')->first();
+            } else {
+                $author = $this->relations['user'] ?? $this->user()->select('id', 'name', 'photo')->first();
+            }
+
+            $this->setRelation('author_info_cached', $author);
         }
 
-        return $this->user;
+        return $this->relations['author_info_cached'];
     }
+
     // Scope lọc theo loại bài đăng
     public function scopeOfType($query, $type)
     {

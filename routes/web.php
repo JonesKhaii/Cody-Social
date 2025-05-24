@@ -65,6 +65,10 @@ Route::get('/appointment', function () {
     return view('pages.booking-appointment');
 });
 
+Route::get('/search', [HomeController::class, 'search'])->name('search');
+Route::get('/search-results', [HomeController::class, 'searchResults'])->name('search.results');
+
+
 // Dopdown
 
 Route::get('/dropdown/clinics', [DropdownMenuController::class, 'getClinicsDropdownData']);
@@ -146,7 +150,7 @@ Route::prefix('forum')->name('forum.')->group(function () {
     Route::post('/post/{categorySlug}/{postSlug}/views', [ForumPostController::class, 'incrementCategoryPostViews'])->name('posts.incrementViews');
     Route::get('/posts/featured', [ForumPostController::class, 'getFeaturedCategoryPosts'])->name('posts.featured');
     Route::get('/posts/search', [ForumPostController::class, 'searchCategoryPosts'])->name('posts.search');
-    Route::get('/doctor/posts/{id}/edit-data', [ForumPostController::class, 'getPostData'])->name('doctor.posts.edit-data');
+
 
 
     // Routes cần xác thực
@@ -173,7 +177,7 @@ Route::get('/post/{slug}', [PostController::class, 'detail'])->name('post.detail
 Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
 //Search
 Route::get('/search', [SearchController::class, 'search'])->name('search');
-Route::get('/search-results', [SearchController::class, 'results'])->name('search.results');
+// Route::get('/search-results', [SearchController::class, 'results'])->name('search.results');
 //Filter
 Route::get('/filter-posts', [HomeController::class, 'filterPosts'])->name('filter.posts');
 
@@ -214,7 +218,7 @@ Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update
 Route::post('/post/{slug}/comment', [CommentController::class, 'store'])->name('post-comment.store');
 // Route::get('/post/{slug}', [PostController::class, 'showDoctorPost'])->name('post.detail');
 Route::get('/search/posts', [PostController::class, 'search'])->name('posts.search');
-
+Route::get('/doctor/posts/{id}/edit-data', [PostController::class, 'getPostData'])->name('doctor.posts.edit-data');
 // User
 Route::get('/user/profile', [UserController::class, 'profile'])->name('user.profile');
 Route::middleware(['auth:web'])->group(function () {

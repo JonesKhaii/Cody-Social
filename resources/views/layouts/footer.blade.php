@@ -17,7 +17,7 @@
                     </p>
                     <div class="contact-info">
                         <p><i class="fas fa-envelope"></i> codyhealth2023@gmail.com</p>
-                        <p><i class="fas fa-map-marker-alt"></i> LK2B, licogi 13 164 Khuất Duy Tiến, Nhân Chính, Thanh
+                        <p><i class="fas fa-map-marker-alt"></i> LK2B, Licogi 13 164 Khuất Duy Tiến, Nhân Chính, Thanh
                             Xuân, Hà Nội.</p>
                         <p><i class="fas fa-phone"></i> 0983 691 895</p>
                     </div>

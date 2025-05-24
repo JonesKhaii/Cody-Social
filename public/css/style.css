@@ -469,7 +469,7 @@ input.nosubmit {
 }
 
 .hero-content p {
-    font-size: 1.15rem;
+    font-size: 0.9rem;
     margin-bottom: 1.8rem;
     opacity: 0.9;
     max-width: 90%;
@@ -801,7 +801,7 @@ footer > div > img {
     }
 
     .hero-content h1 {
-        font-size: 2.5rem;
+        font-size: 1.5rem;
     }
 
     #About > div > div > div > #Ico {
@@ -1503,6 +1503,7 @@ footer > div > img {
 @media (max-width: 576px) {
     .trending-main {
         height: 250px;
+        margin-bottom: 80px;
     }
 
     .trending-main-overlay {
