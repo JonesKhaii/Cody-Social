@@ -28,11 +28,12 @@
             <div class="col-md-3">
                 <h4 class="footer-title">Liên kết hữu ích</h4>
                 <ul class="footer-links">
-                    <li><a href="#">Trang chủ</a></li>
-                    <li><a href="#">Dịch vụ</a></li>
-                    <li><a href="#">Đội ngũ bác sĩ</a></li>
+                    <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                    <li><a href="{{ route('services') }}">Dịch vụ</a></li>
+                    <li><a href="{{ route('doctors.list') }}">Đội ngũ bác sĩ</a></li>
                     <li><a href="#">Tin tức</a></li>
-                    <li><a href="#">Liên hệ</a></li>
+                    <li><a href="{{ route('about') }}">Liên hệ</a></li>
+                    <li><a href="https://toikhoe.vn/">sản phẩm của chúng tôi</a></li>
                 </ul>
             </div>
 

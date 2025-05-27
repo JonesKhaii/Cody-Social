@@ -73,7 +73,7 @@
 
                     <!-- Phân trang bài viết -->
                     <div class="d-flex justify-content-center">
-                        {{ $posts->appends(['q' => $q])->links() }}
+                        {{ $posts->appends(['q' => $q])->links('pagination::bootstrap-5') }}
                     </div>
                 @else
                     <div class="alert alert-info">
@@ -90,7 +90,8 @@
                             <div class="col-md-4 mb-4">
                                 <div class="card doctor-card">
                                     <div class="card-header p-3 text-center">
-                                        <img src="{{ asset($doctor->photo) }}" class="rounded-circle mb-2" width="100"
+                                        <img src="{{ $doctor->photo ?? asset('asset/images/users/default-doctor.png') }}"
+                                            class="rounded-circle mb-2" width="100"
                                             height="100" alt="{{ $doctor->name }}">
                                         <h5 class="card-title mb-0">{{ $doctor->name }}</h5>
                                         @if ($doctor->specializations->isNotEmpty())
@@ -130,7 +131,7 @@
 
                     <!-- Phân trang bác sĩ -->
                     <div class="d-flex justify-content-center">
-                        {{ $doctors->appends(['q' => $q])->links() }}
+                        {{ $doctors->appends(['q' => $q])->links('pagination::bootstrap-5') }}
                     </div>
                 @else
                     <div class="alert alert-info">

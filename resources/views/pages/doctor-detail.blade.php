@@ -9,7 +9,7 @@
 
 
     <div class="container mt-5">
-        <div class="row">
+        <div class="row row-infor">
             <!-- Cột thông tin bác sĩ -->
             <div class="col-md-4">
                 <div class="profile-section doctor-main-profile">

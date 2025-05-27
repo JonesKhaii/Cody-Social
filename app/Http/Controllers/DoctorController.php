@@ -290,17 +290,6 @@ class DoctorController extends Controller
     }
 
 
-    // public function showDetail($id)
-    // {
-    //     $doctor = Doctor::with([
-    //         'specializations:id,name',
-    //         'posts:id,added_by,title,slug,summary,photo,created_at'
-    //     ])
-    //         ->select(['id', 'name', 'services', 'working_hours', 'location', 'workplace', 'photo', 'email', 'phone', 'bio', 'consultation_fee', 'rating'])
-    //         ->findOrFail($id);
-
-    //     return view('pages.doctor-detail', compact('doctor'));
-    // }
     public function showDetail($id)
     {
         $doctor = Doctor::with([

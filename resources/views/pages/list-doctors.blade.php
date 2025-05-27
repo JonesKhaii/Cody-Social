@@ -99,8 +99,11 @@
         </div>
 
         <div class="d-flex justify-content-center mt-4">
-            {{ $doctors->links() }}
+            {{ $doctors->links('pagination::bootstrap-5') }}
         </div>
+        {{-- <div class="pagination-container">
+            {{ $posts->links('pagination::bootstrap-5') }}
+        </div> --}}
     </div>
 
     @include('pages.booking-appointment')

@@ -6,10 +6,10 @@
                     <div class="category-item-container">
                         <div class="d-flex align-items-center mb-2">
                             <div class="category-icon me-2">
-                                <i class="fas fa-scalpel-path"></i>
+                                <i class="fa-solid fa-syringe"></i>
                             </div>
                             <h6 class="category-title has-subcategories mb-0">
-                                <a href="/services/phau-thuat-thu-thuat" class="category-link">Phẫu thuật
+                                <a href="/treatment/phau-thuat-thu-thuat" class="category-link">Phẫu thuật
                                     và Thủ thuật tiên tiến</a>
                                 <span class="subcategory-toggle ms-1">
                                     <i class="fas fa-chevron-down small-icon"></i>
@@ -18,16 +18,16 @@
                         </div>
 
                         <div class="subcategories ms-4" style="display: none;">
-                            <a href="/services/phau-thuat-robot" class="subcategory-link d-block mb-1">
+                            <a href="/treatment/phau-thuat-robot" class="subcategory-link d-block mb-1">
                                 Phẫu thuật Robot
                             </a>
-                            <a href="/services/phau-thuat-noi-soi" class="subcategory-link d-block mb-1">
+                            <a href="/treatment/phau-thuat-noi-soi" class="subcategory-link d-block mb-1">
                                 Phẫu thuật nội soi 3D/4K
                             </a>
-                            <a href="/services/phau-thuat-laser" class="subcategory-link d-block mb-1">
+                            <a href="/treatment/phau-thuat-laser" class="subcategory-link d-block mb-1">
                                 Ứng dụng Laser trong phẫu thuật
                             </a>
-                            <a href="/services/phau-thuat-thu-thuat" class="category-view-all mt-2">
+                            <a href="/treatment/phau-thuat-thu-thuat" class="category-view-all mt-2">
                                 Xem tất cả <i class="fas fa-angle-right ms-1"></i>
                             </a>
                         </div>
@@ -40,7 +40,7 @@
                                 <i class="fas fa-x-ray"></i>
                             </div>
                             <h6 class="category-title has-subcategories mb-0">
-                                <a href="/services/chan-doan-hinh-anh" class="category-link">Chẩn đoán
+                                <a href="/treatment/chan-doan-hinh-anh" class="category-link">Chẩn đoán
                                     hình ảnh công nghệ cao</a>
                                 <span class="subcategory-toggle ms-1">
                                     <i class="fas fa-chevron-down small-icon"></i>
@@ -49,16 +49,16 @@
                         </div>
 
                         <div class="subcategories ms-4" style="display: none;">
-                            <a href="/services/pet-ct" class="subcategory-link d-block mb-1">
+                            <a href="/treatment/pet-ct" class="subcategory-link d-block mb-1">
                                 PET/CT - Chẩn đoán ung thư sớm
                             </a>
-                            <a href="/services/mri-3tesla" class="subcategory-link d-block mb-1">
+                            <a href="/treatment/mri-3tesla" class="subcategory-link d-block mb-1">
                                 MRI 3 Tesla
                             </a>
-                            <a href="/services/ai-radiology" class="subcategory-link d-block mb-1">
+                            <a href="/treatment/ai-radiology" class="subcategory-link d-block mb-1">
                                 AI trong đọc và phân tích hình ảnh
                             </a>
-                            <a href="/services/chan-doan-hinh-anh" class="category-view-all mt-2">
+                            <a href="/treatment/chan-doan-hinh-anh" class="category-view-all mt-2">
                                 Xem tất cả <i class="fas fa-angle-right ms-1"></i>
                             </a>
                         </div>
@@ -72,7 +72,7 @@
                                 <i class="fas fa-dna"></i>
                             </div>
                             <h6 class="category-title has-subcategories mb-0">
-                                <a href="/services/y-hoc-tai-tao" class="category-link">Y học tái tạo và
+                                <a href="/treatment/y-hoc-tai-tao" class="category-link">Y học tái tạo và
                                     điều trị tế bào</a>
                                 <span class="subcategory-toggle ms-1">
                                     <i class="fas fa-chevron-down small-icon"></i>
@@ -81,16 +81,16 @@
                         </div>
 
                         <div class="subcategories ms-4" style="display: none;">
-                            <a href="/services/te-bao-goc" class="subcategory-link d-block mb-1">
+                            <a href="/treatment/te-bao-goc" class="subcategory-link d-block mb-1">
                                 Liệu pháp tế bào gốc
                             </a>
-                            <a href="/services/mien-dich-tri-lieu" class="subcategory-link d-block mb-1">
+                            <a href="/treatment/mien-dich-tri-lieu" class="subcategory-link d-block mb-1">
                                 Miễn dịch trị liệu (Immunotherapy)
                             </a>
-                            <a href="/services/cong-nghe-gen" class="subcategory-link d-block mb-1">
+                            <a href="/treatment/cong-nghe-gen" class="subcategory-link d-block mb-1">
                                 Chỉnh sửa gen (CRISPR)
                             </a>
-                            <a href="/services/y-hoc-tai-tao" class="category-view-all mt-2">
+                            <a href="/treatment/y-hoc-tai-tao" class="category-view-all mt-2">
                                 Xem tất cả <i class="fas fa-angle-right ms-1"></i>
                             </a>
                         </div>
@@ -105,7 +105,7 @@
                                 <i class="fas fa-laptop-medical"></i>
                             </div>
                             <h6 class="category-title has-subcategories mb-0">
-                                <a href="/services/digital-healthcare" class="category-link">Digital
+                                <a href="/treatment/digital-healthcare" class="category-link">Digital
                                     Healthcare</a>
                                 <span class="subcategory-toggle ms-1">
                                     <i class="fas fa-chevron-down small-icon"></i>
@@ -114,25 +114,54 @@
                         </div>
 
                         <div class="subcategories ms-4" style="display: none;">
-                            <a href="/services/telemedicine" class="subcategory-link d-block mb-1">
+                            <a href="/treatment/telemedicine" class="subcategory-link d-block mb-1">
                                 Telemedicine - Khám bệnh từ xa
                             </a>
-                            <a href="/services/ai-diagnosis" class="subcategory-link d-block mb-1">
+                            <a href="/treatment/ai-diagnosis" class="subcategory-link d-block mb-1">
                                 AI trong chẩn đoán bệnh
                             </a>
-                            <a href="/services/health-monitoring" class="subcategory-link d-block mb-1">
+                            <a href="/treatment/health-monitoring" class="subcategory-link d-block mb-1">
                                 Giám sát sức khỏe từ xa
                             </a>
-                            <a href="/services/digital-healthcare" class="category-view-all mt-2">
+                            <a href="/treatment/digital-healthcare" class="category-view-all mt-2">
                                 Xem tất cả <i class="fas fa-angle-right ms-1"></i>
                             </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="category-item-container">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="category-icon me-2">
+                                <i class="fa-solid fa-pills"></i>
+                            </div>
+                            <h6 class="category-title mb-0">
+                                <a href="/specialties/video-chia-se-chuyen-mon"
+                                    class="category-link">Y học hiện đại</a>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="category-item-container">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="category-icon me-2">
+                                <i class="fa-solid fa-mortar-pestle"></i>
+                            </div>
+                            <h6 class="category-title mb-0">
+                                <a href="forum/post/category/bai-thuoc-y-hoc-co-truyen"
+                                    class="category-link">Y học cổ truyền</a>
+                            </h6>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Cột bên phải: Kỹ thuật nổi bật và đăng ký tư vấn -->
+
+
+        <!--Kỹ thuật nổi bật và đăng ký tư vấn -->
         <div class="col-md-4">
             <h6 class="dropdown-header">Phương pháp điều trị nổi bật</h6>
             <div class="dropdown-divider"></div>

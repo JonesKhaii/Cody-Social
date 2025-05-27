@@ -112,7 +112,33 @@
                             </div>
                             <h6 class="category-title mb-0">
                                 <a href="/specialties/video-chia-se-chuyen-mon"
-                                    class="category-link">Video chia sẻ chuyên môn</a>
+                                    class="category-link">Video chia sẻ chuyên môn </a>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="category-item-container">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="category-icon me-2">
+                                <i class="fa-solid fa-pills"></i>
+                            </div>
+                            <h6 class="category-title mb-0">
+                                <a href="/specialties/video-chia-se-chuyen-mon"
+                                    class="category-link">Y học hiện đại</a>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="category-item-container">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="category-icon me-2">
+                                <i class="fa-solid fa-mortar-pestle"></i>
+                            </div>
+                            <h6 class="category-title mb-0">
+                                <a href="/specialties/video-chia-se-chuyen-mon"
+                                    class="category-link">Y học cổ truyền</a>
                             </h6>
                         </div>
                     </div>

@@ -3,7 +3,6 @@
         <!-- Cột các danh mục bài viết chính -->
         <div class="col-md-8">
             <div class="row">
-                <!-- Danh mục bài viết -->
                 @foreach ($dropdownData['posts']['categories'] as $category)
                     <div class="col-md-6 mb-3">
                         <div class="category-item-container">
@@ -19,11 +18,19 @@
                                     </div>
                                 @endif
 
-                                <!-- Nếu có danh mục con thì thêm lớp dropdown -->
                                 <h6
                                     class="category-title {{ $category->children_with_posts->count() > 0 ? 'has-subcategories' : '' }} mb-0">
-                                    <a href="/category/{{ $category->slug }}"
-                                        class="category-link">{{ $category->name }}</a>
+                                    @php
+                                        // Xác định URL dựa trên type
+                                        $categoryUrl = match ($category->type) {
+                                            'forum' => "/forum/post/category/{$category->slug}",
+                                            // 'specialist' => "/specialist/category/{$category->slug}",
+                                            // 'other' => "/other/category/{$category->slug}",
+                                            default => "/category/{$category->slug}",
+                                        };
+                                    @endphp
+                                    <a href="{{ $categoryUrl }}" class="category-link">{{ $category->name }}</a>
+
                                     @if ($category->children_with_posts->count() > 0)
                                         <span class="subcategory-toggle ms-1">
                                             <i class="fas fa-chevron-down small-icon"></i>
@@ -36,15 +43,22 @@
                             @if ($category->children_with_posts->count() > 0)
                                 <div class="subcategories ms-4" style="display: none;">
                                     @foreach ($category->children_with_posts as $child)
-                                        <a href="/category/{{ $child->slug }}"
-                                            class="subcategory-link d-block mb-1">
+                                        @php
+                                            // Xác định URL cho danh mục con
+                                            $childUrl = match ($child->type) {
+                                                'forum' => "/forum/post/category/{$child->slug}",
+                                                'specialist' => "/specialist/category/{$child->slug}",
+                                                'other' => "/other/category/{$child->slug}",
+                                                default => "/category/{$child->slug}",
+                                            };
+                                        @endphp
+                                        <a href="{{ $childUrl }}" class="subcategory-link d-block mb-1">
                                             {{ $child->name }} <span
                                                 class="post-count">({{ $child->posts_count }})</span>
                                         </a>
                                     @endforeach
 
-                                    <a href="/category/{{ $category->slug }}"
-                                        class="category-view-all mt-2">
+                                    <a href="{{ $categoryUrl }}" class="category-view-all mt-2">
                                         Xem tất cả <i class="fas fa-angle-right ms-1"></i>
                                     </a>
                                 </div>

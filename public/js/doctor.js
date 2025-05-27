@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             return;
                         }
 
-                        fetch(`/doctor/posts/${postId}`, {
+                        fetch(`/posts/${postId}`, {
                             method: 'DELETE',
                             headers: {
                                 'X-CSRF-TOKEN': csrfToken.getAttribute('content'),
@@ -250,6 +250,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 tabPanes.forEach(tab => tab.classList.remove("active"));
 
                 item.classList.add('active');
+
+                // ✅ THÊM PHẦN NÀY
+                const submenu = item.closest('.submenu');
+                if (submenu) {
+                    submenu.classList.add('active');
+                    const submenuContainer = submenu.closest('.submenu-container');
+                    if (submenuContainer) {
+                        submenuContainer.classList.add('active');
+                    }
+                }
+
                 const targetElement = document.getElementById(targetId);
                 if (targetElement) {
                     targetElement.classList.add('active');
@@ -258,22 +269,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    submenuToggles.forEach(toggle => {
-        toggle.addEventListener('click', function (e) {
-            e.preventDefault();
-            const submenu = this.nextElementSibling;
-
-            if (submenu) {
-                if (submenu.classList.contains('active')) {
-                    submenu.classList.remove('active');
-                    this.classList.remove('active');
-                } else {
-                    submenu.classList.add('active');
-                    this.classList.add('active');
-                }
-            }
-        });
-    });
 
     // Xử lý modals
     const editModal = document.getElementById('edit-modal');
@@ -496,3 +491,8 @@ function addCSSRule() {
     document.getElementsByTagName('head')[0].appendChild(style);
 }
 addCSSRule();
+
+
+
+
+

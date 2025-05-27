@@ -1,11 +1,13 @@
 .profile-section {
     background: #fff;
     border-radius: 15px;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+    /* box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06); */
     padding: 25px;
     margin-bottom: 25px;
 }
-
+.row-infor {
+    background-color: #fff;
+}
 .doctor-main-profile {
     text-align: center;
 }

@@ -59,9 +59,9 @@ class HomeController extends Controller
                 $join->on('categories.id', '=', 'posts.post_cat_id')
                     ->where('posts.status', 'active');
             })
-            ->where('categories.type', 'post')
+            ->where('categories.type', 'other')
             ->groupBy('categories.id', 'categories.name', 'categories.slug', 'categories.photo')
-            ->orderByRaw('COUNT(posts.id) DESC')
+            ->orderByRaw('COUNT(posts.id) ASC')
             ->limit(5)
             ->get();
 

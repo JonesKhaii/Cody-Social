@@ -69,7 +69,7 @@ class DropdownMenuController extends Controller
     {
         return Cache::remember('post_categories_dropdown_data', 10 * 60, function () {
 
-            $parentCategories = Category::select('id', 'name', 'slug', 'photo', 'icon')
+            $parentCategories = Category::select('id', 'name', 'slug', 'photo', 'icon', 'type')
                 ->with(['posts' => function ($query) {
                     $query->select('id', 'post_cat_id')
                         ->where('status', 'active');
@@ -80,7 +80,7 @@ class DropdownMenuController extends Controller
                 ->take(8)
                 ->get();
 
-            $childCategories = Category::select('id', 'name', 'slug', 'parent_id', 'photo', 'icon')
+            $childCategories = Category::select('id', 'name', 'slug', 'parent_id', 'photo', 'icon', 'type')
                 ->with(['posts' => function ($query) {
                     $query->select('id', 'post_cat_id')
                         ->where('status', 'active');

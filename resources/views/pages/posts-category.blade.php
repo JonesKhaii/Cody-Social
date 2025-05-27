@@ -40,8 +40,8 @@
             </div>
 
             <!-- Phân trang -->
-            <div class="d-flex justify-content-center">
-                {{ $posts->links() }}
+            <div class="pagination-container">
+                {{ $posts->links('pagination::bootstrap-5') }}
             </div>
         @else
             <div class="result-row row">

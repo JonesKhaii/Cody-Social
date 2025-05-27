@@ -70,7 +70,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#statistics" data-toggle="tab" data-bs-toggle="tab">
+                                <a class="nav-link" href="#statistics" data-toggle="tab">
                                     <i class="fas fa-chart-pie"></i>
                                     <p>Báo cáo thống kê</p>
                                 </a>
@@ -255,9 +255,12 @@
                         @include('doctor.profile.affiliate')
 
                     </div>
+                    <div class="tab-pane" id="financial-stats">
+                        @include('doctor.profile.statistics')
+                    </div>
 
 
-                    @include('doctor.profile.statistics')
+
 
                     <!-- Doanh thu -->
                     {{-- <div class="tab-pane" id="income">

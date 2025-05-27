@@ -69,13 +69,15 @@ Route::get('/search', [HomeController::class, 'search'])->name('search');
 Route::get('/search-results', [HomeController::class, 'searchResults'])->name('search.results');
 
 
+Route::get('/categories', [CategoryController::class, 'allCategories'])->name('categories.all');
+
 // Dopdown
 
 Route::get('/dropdown/clinics', [DropdownMenuController::class, 'getClinicsDropdownData']);
 
 // Clinic
 
-Route::get('/clinics', [ClinicController::class, 'index'])->name('clinics.list');
+// Route::get('/clinics', [ClinicController::class, 'index'])->name('clinics.list');
 Route::get('/clinics/{type?}',  [ClinicController::class, 'index'])->name('clinics.list')->where('type', 'hospital|clinic');
 Route::get('/clinic/{slug}/detail', [ClinicController::class, 'show'])->name('clinics.detail');
 

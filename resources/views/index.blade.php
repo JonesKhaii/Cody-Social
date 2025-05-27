@@ -250,7 +250,7 @@
             <div class="explore-section mb-4 mt-5">
                 <div class="explore-header d-flex justify-content-between align-items-center mb-4 pb-2">
                     <h3 class="fw-bold mb-0">Khám phá theo danh mục</h3>
-                    <a href="" class="view-all-link">
+                    <a href="{{ route('categories.all') }}" class="view-all-link">
                         Xem tất cả <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
@@ -313,7 +313,7 @@
 
             </div>
 
-            <!-- Category Posts Sections - SỬA ĐỂ DÙNG LOADED_POSTS -->
+            <!-- Category Posts Sections - -->
             @foreach ($popularCategories as $category)
                 @if (isset($category->loaded_posts) && $category->loaded_posts->isNotEmpty())
                     <div class="category-container">
@@ -369,7 +369,8 @@
                         <div class="col-md-3 mb-4">
                             <a href="{{ route('doctor.detail', $doctor->id) }}" class="text-decoration-none">
                                 <div class="doctor-card p-4 text-center">
-                                    <img src="{{ asset($doctor->photo) }}" class="doctor-photo mb-3"
+                                    <img src="{{ $doctor->photo ?? asset('asset/images/users/default-doctor.png') }}"
+                                        class="doctor-photo mb-3"
                                         alt="{{ $doctor->name }}" loading="lazy">
                                     <h5 class="mb-2">{{ $doctor->name }}</h5>
                                     @if ($doctor->specializations->isNotEmpty())
@@ -384,7 +385,6 @@
         </div>
     </div>
 
-    <!-- OPTIMIZED JAVASCRIPT - Gộp và tối ưu tất cả scripts -->
     <script>
         $(document).ready(function() {
             // Cache DOM elements để tăng performance
