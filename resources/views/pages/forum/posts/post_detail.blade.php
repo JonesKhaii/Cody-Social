@@ -21,7 +21,7 @@
                         <!-- Post content -->
                         <article class="post-content">
                             <header class="post-header">
-                                <h1 class="post-title">{{ $categoryPost->title }}</h1>
+                                <h1 class="forum-post-title">{{ $categoryPost->title }}</h1>
                                 <div class="post-meta">
                                     <span class="meta-date"><i class="fas fa-calendar-alt"></i>
                                         {{ date('d/m/Y', strtotime($categoryPost->created_at)) }}</span>
@@ -256,7 +256,7 @@
             border-bottom: 1px solid #f0f0f0;
         }
 
-        .post-title {
+        .forum-post-title {
             font-size: 28px;
             color: #333;
             margin: 0 0 15px;

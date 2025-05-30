@@ -27,8 +27,9 @@ a {
     font-size: 18px;
     font-weight: 600;
     border-bottom: 1px solid #f0f0f0;
-    color: #2c3e50;
-    background: #f8fafd;
+    color: #ffffff;
+    /* background: #f8fafd; */
+    background: linear-gradient(135deg, #1565c0, #7388b5);
     /* Sáng hơn */
 }
 
@@ -41,9 +42,9 @@ a {
 }
 
 .category-list li {
-    border-bottom: 1px solid #e2e8f0;
+    /* border-bottom: 1px solid #e2e8f0; */
     transition: all 0.2s ease;
-    background-color: #ffffff;
+    /* background-color: #ffffff; */
 }
 
 .category-list li:last-child {
@@ -219,7 +220,7 @@ a {
 }
 
 .category-header {
-    background: linear-gradient(135deg, #4285f4, #3367d6);
+    background: linear-gradient(135deg, #1565c0, #7388b5);
     color: #ffffff;
     padding: 12px 15px;
     border-bottom: 1px solid #e0e0e0;
@@ -1027,4 +1028,382 @@ a {
     .forum-main-header h1 {
         font-size: 20px;
     }
+}
+
+/* ===== SỬA LẠI KÍCH THƯỚC FONT CHO DỄ ĐỌC ===== */
+
+/* 1. Tăng kích thước title */
+.post-title {
+    font-size: 15px; /* Tăng từ 14px lên 15px */
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+/* 2. Tăng kích thước short description */
+.post-short-desc {
+    font-size: 13px;
+    color: #718096;
+    line-height: 1.5;
+    margin-top: 6px;
+    margin-left: 12px;
+    padding-left: 8px;
+}
+
+.post-short-desc p {
+    margin: 0 0 6px 0;
+}
+
+.post-short-desc strong {
+    /* color: #4a5568; */
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.post-short-desc ul {
+    margin: 6px 0 0 0; /* Tăng margin */
+    padding-left: 18px; /* Tăng padding */
+    list-style-type: disc;
+}
+
+.post-short-desc li {
+    margin: 3px 0;
+    font-size: 12px;
+    /* color: #666; */
+    list-style-type: disc;
+    line-height: 1.4;
+}
+
+/* 4. Cập nhật responsive */
+@media (max-width: 768px) {
+    .post-title {
+        font-size: 14px; /* Mobile vẫn giữ 14px */
+    }
+
+    .post-short-desc {
+        font-size: 12px; /* Mobile 12px */
+        margin-left: 10px;
+        padding-left: 6px;
+    }
+
+    .post-short-desc li {
+        font-size: 11px; /* Mobile 11px */
+    }
+
+    .post-link-wrapper {
+        padding: 12px 15px; /* Tăng padding */
+    }
+}
+
+/* 5. Tăng kích thước tổng thể wrapper */
+.post-link-wrapper {
+    display: block;
+    padding: 14px 16px; /* Tăng padding */
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.post-link:hover .post-short-desc {
+    opacity: 1;
+}
+
+/* ===== HIỆU ỨNG MƯỢT MÀ CHO CAROUSEL ===== */
+
+/* 1. Container */
+.category-posts {
+    position: relative;
+    padding: 15px 0;
+    background-color: #ffffff;
+}
+
+/* 2. Post list */
+.post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
+
+.post-item:last-child {
+    border-bottom: none;
+}
+
+/* 4. Item đang active - smooth highlight */
+.post-item.active-item {
+    opacity: 1;
+    background: linear-gradient(90deg, #f0f4ff, rgba(240, 244, 255, 0.3));
+    border-left: 4px solid #4285f4;
+    transform: translateY(0) scale(1.02);
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.15);
+}
+
+@keyframes itemEnter {
+    0% {
+        opacity: 0.6;
+        transform: translateY(0) scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1.02);
+    }
+}
+
+@keyframes itemExit {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1.02);
+    }
+    100% {
+        opacity: 0.6;
+        transform: translateY(0) scale(0.98);
+    }
+}
+
+/* .post-item.entering {
+    animation: itemEnter 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+.post-item.exiting {
+    animation: itemExit 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+} */
+
+/* 7. Hover effects */
+.post-item:hover {
+    background-color: #e8f0fe !important;
+    opacity: 1 !important;
+    /* transform: translateX(8px) scale(1.01) !important; */
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.2) !important;
+}
+
+/* 8. Giữ nguyên style cho content */
+.post-link-wrapper {
+    display: block;
+    padding: 14px 16px;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+    width: 100%;
+}
+
+.post-link-wrapper:hover {
+    background-color: rgba(66, 133, 244, 0.08);
+    border-color: rgba(66, 133, 244, 0.2);
+    transform: translateY(-2px);
+}
+
+.post-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 6px;
+    line-height: 1.4;
+    transition: color 0.3s ease;
+}
+
+.post-short-desc {
+    font-size: 13px;
+    color: #718096;
+    line-height: 1.5;
+    margin-top: 6px;
+    margin-left: 12px;
+    padding-left: 8px;
+    /* border-left: 3px solid #4285f4; */
+    transition: all 0.3s ease;
+}
+
+.post-short-desc ul {
+    margin: 6px 0 0 0;
+    padding-left: 18px;
+    list-style-type: disc;
+}
+
+.post-short-desc li {
+    margin: 3px 0;
+    font-size: 12px;
+    /* color: #666; */
+    line-height: 1.4;
+    transition: color 0.3s ease;
+}
+
+/* 9. Hover effects cho content */
+.post-link:hover .post-title {
+    color: #4285f4;
+}
+
+.post-link:hover .post-short-desc {
+    color: #4a5568;
+    border-left-color: #1a73e8;
+}
+
+.post-link:hover .post-short-desc li {
+    color: #ddd0d0;
+}
+
+/* 10. Pulsing effect cho active item (optional) */
+.post-item.active-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(to bottom, #4285f4, #1a73e8);
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 0 rgba(66, 133, 244, 0.4);
+    }
+    50% {
+        opacity: 0.8;
+        box-shadow: 0 0 8px rgba(66, 133, 244, 0.6);
+    }
+}
+
+@keyframes itemEnter {
+    0% {
+        opacity: 0.6;
+        transform: translateY(0) scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1.02);
+    }
+}
+
+@keyframes itemExit {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1.02);
+    }
+    100% {
+        opacity: 0.6;
+        transform: translateY(0) scale(0.98);
+    }
+}
+
+/* .post-item.entering {
+    animation: itemEnter 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+.post-item.exiting {
+    animation: itemExit 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+} */
+
+/* 11. Disable animation nếu cần */
+.category-forum-item.no-animation .post-item {
+    transition: none !important;
+    animation: none !important;
+    opacity: 0.8;
+}
+
+.category-forum-item.no-animation .post-item::before {
+    display: none;
+}
+
+/* 12. Responsive */
+@media (max-width: 768px) {
+    .post-item {
+        padding: 8px 12px;
+        transition-duration: 0.4s; /* Nhanh hơn trên mobile */
+    }
+
+    .post-title {
+        font-size: 14px;
+    }
+
+    .post-short-desc {
+        font-size: 12px;
+        margin-left: 10px;
+        padding-left: 6px;
+    }
+
+    .post-link-wrapper {
+        padding: 12px 15px;
+    }
+}
+
+/* 13. Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .post-item {
+        transition: none !important;
+        animation: none !important;
+    }
+
+    .post-item::before {
+        animation: none !important;
+    }
+}
+
+/* .post-item {
+    transition: opacity 0.6s ease, transform 0.6s ease !important;
+} */
+
+/* .post-item.active-item {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1.02) !important;
+} */
+
+/* ===== POST ITEMS WITH BACKGROUND IMAGES ===== */
+.post-item {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+    margin: 8px 12px;
+    overflow: hidden;
+    min-height: 80px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    opacity: 0.6;
+    transform: translateY(0) scale(0.98);
+}
+
+.post-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.5),
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0.6)
+    );
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.post-link-wrapper {
+    position: relative;
+    z-index: 2;
+}
+
+.post-title {
+    color: #ffffff !important;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.post-short-desc {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.post-short-desc {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-top: 8px;
 }

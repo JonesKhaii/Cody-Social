@@ -251,6 +251,8 @@
                 <button type="button" class="btn btn-secondary" id="cancel-add-post">Hủy</button>
                 <button type="submit" class="btn btn-primary">Đăng bài</button>
             </div>
+            <input type="hidden" name="_method" value="POST">
+
         </form>
     </div>
 </div>

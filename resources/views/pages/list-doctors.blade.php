@@ -46,7 +46,7 @@
                     <div class="doctor-card position-relative">
                         <div class="position-relative">
                             <span class="badge-rating">★ {{ $doctor->rating }}</span>
-                            <img src="{{ $doctor->photo ?? asset('images/default-doctor.png') }}"
+                            <img src="{{ $doctor->photo ?? asset('asset/images/users/default-doctor.png') }}"
                                 alt="{{ $doctor->name }}" class="doctor-image">
                         </div>
                         <div class="doctor-info">

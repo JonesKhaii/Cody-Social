@@ -414,54 +414,61 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Datatable cho bảng sản phẩm tiếp thị
+// Datatable cho bảng sản phẩm tiếp thị
 $(document).ready(function () {
+    // Kiểm tra và khởi tạo bảng product-dataTable
     if ($.fn.DataTable && $('#product-dataTable').length) {
-        $('#product-dataTable').DataTable({
-            "processing": true,
-            "serverSide": false,
-            "searching": true,
-            "paging": true,
-            "ordering": true,
-            "info": true,
-            "language": {
-                "lengthMenu": "Hiển thị _MENU_ dòng",
-                "zeroRecords": "Không tìm thấy sản phẩm",
-                "info": "Trang _PAGE_/_PAGES_",
-                "infoEmpty": "Không có dữ liệu",
-                "search": "Tìm kiếm:",
-                "paginate": {
-                    "first": "Đầu",
-                    "last": "Cuối",
-                    "next": "Tiếp",
-                    "previous": "Trước"
+        if (!$.fn.DataTable.isDataTable('#product-dataTable')) {
+            $('#product-dataTable').DataTable({
+                "processing": true,
+                "serverSide": false,
+                "searching": true,
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "language": {
+                    "lengthMenu": "Hiển thị _MENU_ dòng",
+                    "zeroRecords": "Không tìm thấy sản phẩm",
+                    "info": "Trang _PAGE_/_PAGES_",
+                    "infoEmpty": "Không có dữ liệu",
+                    "search": "Tìm kiếm:",
+                    "paginate": {
+                        "first": "Đầu",
+                        "last": "Cuối",
+                        "next": "Tiếp",
+                        "previous": "Trước"
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
+    // Kiểm tra và khởi tạo bảng affiliate-product-dataTable
     if ($.fn.DataTable && $('#affiliate-product-dataTable').length) {
-        $('#affiliate-product-dataTable').DataTable({
-            responsive: true,
-            language: {
-                "search": "Tìm kiếm:",
-                "lengthMenu": "Hiển thị _MENU_ mục",
-                "info": "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
-                "infoEmpty": "Hiển thị 0 đến 0 của 0 mục",
-                "infoFiltered": "(lọc từ _MAX_ mục)",
-                "paginate": {
-                    "first": "Đầu",
-                    "last": "Cuối",
-                    "next": "Sau",
-                    "previous": "Trước"
+        if (!$.fn.DataTable.isDataTable('#affiliate-product-dataTable')) {
+            $('#affiliate-product-dataTable').DataTable({
+                responsive: true,
+                language: {
+                    "search": "Tìm kiếm:",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "info": "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
+                    "infoEmpty": "Hiển thị 0 đến 0 của 0 mục",
+                    "infoFiltered": "(lọc từ _MAX_ mục)",
+                    "paginate": {
+                        "first": "Đầu",
+                        "last": "Cuối",
+                        "next": "Sau",
+                        "previous": "Trước"
+                    },
+                    "zeroRecords": "Không tìm thấy kết quả phù hợp"
                 },
-                "zeroRecords": "Không tìm thấy kết quả phù hợp"
-            },
-            columnDefs: [
-                { orderable: false, targets: [0, 3] }
-            ],
-            order: [[1, 'asc']],
-            pageLength: 10
-        });
+                columnDefs: [
+                    { orderable: false, targets: [0, 3] }
+                ],
+                order: [[1, 'asc']],
+                pageLength: 10
+            });
+        }
     }
 
     $('.delete-form').on('submit', function (e) {
@@ -477,7 +484,6 @@ $(document).ready(function () {
         }
     });
 });
-
 
 document.addEventListener('DOMContentLoaded', function () {
     let originalRows = document.querySelectorAll('#product-table-body tr');

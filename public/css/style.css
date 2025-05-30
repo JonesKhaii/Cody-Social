@@ -1480,6 +1480,7 @@ footer > div > img {
 
 @media (max-width: 768px) {
     .trending-main {
+        margin-bottom: 100px;
         height: 300px;
     }
 

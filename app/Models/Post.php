@@ -7,6 +7,8 @@ use App\Models\Comment;
 use App\Models\PostCategory;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use Parsedown;
 
 class Post extends Model
 {
@@ -15,6 +17,7 @@ class Post extends Model
         'title',
         'tags',
         'summary',
+        'short_desc',
         'slug',
         'description',
         'photo',
@@ -30,6 +33,15 @@ class Post extends Model
     protected $casts = [
         'meta_data' => 'array',
     ];
+    protected static $parsedown;
+    protected static function getParsedown()
+    {
+        if (!static::$parsedown) {
+            static::$parsedown = new Parsedown();
+            static::$parsedown->setSafeMode(true);
+        }
+        return static::$parsedown;
+    }
 
     public function cat_info()
     {
@@ -67,14 +79,7 @@ class Post extends Model
         return $this->belongsTo(Doctor::class, 'added_by');
     }
 
-    // public function getAuthorInfoAttribute()
-    // {
-    //     if ($this->author_type == 'doctor') {
-    //         return $this->doctor;
-    //     }
 
-    //     return $this->user;
-    // }
     public function getAuthorInfoAttribute()
     {
         // Cache trong memory để tránh query lặp lại
@@ -355,5 +360,109 @@ class Post extends Model
             });
 
         return response()->json($posts);
+    }
+
+    public function getShortDescriptionAttribute()
+    {
+        return $this->short_desc ?: Str::limit($this->summary, 100);
+    }
+
+    // Phương thức để lấy short description với độ dài tùy chỉnh
+    public function getShortDesc($limit = 100)
+    {
+        if ($this->short_desc) {
+            return Str::limit($this->short_desc, $limit);
+        }
+
+        return Str::limit($this->summary, $limit);
+    }
+
+
+
+    public function getShortDescHtmlAttribute()
+    {
+        if (!$this->short_desc) {
+            return $this->summary ? Str::limit($this->summary, 150) : '';
+        }
+
+        return static::getParsedown()->text($this->short_desc);
+    }
+
+    // Method để hiển thị short desc với giới hạn ký tự
+    // public function getShortDescForDisplay($limit = 200)
+    // {
+    //     if (!$this->short_desc) {
+    //         return $this->summary ? Str::limit($this->summary, $limit) : '';
+    //     }
+
+    //     $html = $this->short_desc_html;
+
+    //     // Nếu HTML quá dài, cắt bớt nhưng giữ nguyên format
+    //     if (strlen(strip_tags($html)) > $limit) {
+    //         $plainText = strip_tags($html);
+    //         return Str::limit($plainText, $limit) . '...';
+    //     }
+
+    //     return $html;
+    // }
+    // Trong Post Model, thay thế method getShortDescForDisplay()
+    public function getShortDescForDisplay($limit = 200)
+    {
+        if (!$this->short_desc) {
+            return $this->summary ? Str::limit($this->summary, $limit) : '';
+        }
+
+        // Nếu có Parsedown và text có line breaks, dùng Parsedown
+        if (strpos($this->short_desc, "\n") !== false) {
+            $html = static::getParsedown()->text($this->short_desc);
+
+            // Nếu HTML quá dài, cắt bớt
+            if (strlen(strip_tags($html)) > $limit) {
+                $plainText = strip_tags($html);
+                return Str::limit($plainText, $limit) . '...';
+            }
+
+            return $html;
+        }
+
+        // Nếu text trên 1 hàng, tự động format
+        $text = $this->short_desc;
+
+        // Tách text thành các phần
+        // Tìm pattern: **text** * item * item * item
+        if (preg_match('/\*\*(.*?)\*\*(.*)/', $text, $matches)) {
+            $title = trim($matches[1]);
+            $items = trim($matches[2]);
+
+            $html = "<p><strong>{$title}</strong></p>";
+
+            // Tách các items bằng dấu *
+            if (!empty($items)) {
+                $itemList = preg_split('/\s*\*\s*/', $items);
+                $itemList = array_filter($itemList); // Bỏ empty items
+
+                if (!empty($itemList)) {
+                    $html .= '<ul>';
+                    foreach ($itemList as $item) {
+                        $item = trim($item);
+                        if (!empty($item)) {
+                            $html .= "<li>{$item}</li>";
+                        }
+                    }
+                    $html .= '</ul>';
+                }
+            }
+
+            // Kiểm tra độ dài
+            if (strlen(strip_tags($html)) > $limit) {
+                $plainText = strip_tags($html);
+                return Str::limit($plainText, $limit) . '...';
+            }
+
+            return $html;
+        }
+
+        // Nếu không match pattern trên, chỉ return text thường
+        return Str::limit($this->short_desc, $limit);
     }
 }

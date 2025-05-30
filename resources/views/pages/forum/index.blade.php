@@ -16,6 +16,7 @@
                                 <ul class="category-list">
                                     @foreach ($forumCategories as $category)
                                         <li class="category-forum-item">
+                                            {{-- <li class="category-forum-item no-animation"> --}}
                                             <div class="category-header">
                                                 <a href="{{ route('forum.posts.category', $category->slug) }}"
                                                     class="category-title">
@@ -27,14 +28,32 @@
                                                 <div class="category-posts">
                                                     <ul class="post-list">
                                                         @foreach ($category->categoryPosts as $index => $post)
+                                                            {{-- <li class="post-item {{ $index >= 5 ? 'hidden-post' : '' }}"
+                                                                @if ($index >= 5) style="display: none;" @endif
+                                                                data-category="{{ $category->id }}"> --}}
                                                             <li class="post-item {{ $index >= 5 ? 'hidden-post' : '' }}"
                                                                 @if ($index >= 5) style="display: none;" @endif
-                                                                data-category="{{ $category->id }}">
+                                                                data-category="{{ $category->id }}"
+                                                                @if ($post->photo) style="background-image: url('{{ asset($post->photo) }}'); {{ $index >= 5 ? 'display: none;' : '' }}"
+                                                                @else
+                                                                    style="background-image: url('{{ asset('images/forum/default-post.jpg') }}'); {{ $index >= 5 ? 'display: none;' : '' }}" @endif>
 
-                                                                <a href="{{ route('forum.posts.show', [$category->slug, $post->slug]) }}"
-                                                                    class="post-link" title="{{ $post->title }}">
-                                                                    {{ Str::limit($post->title, 30) }}
-                                                                </a>
+                                                                <div class="post-link-wrapper">
+                                                                    <a href="{{ route('forum.posts.show', [$category->slug, $post->slug]) }}"
+                                                                        class="post-link" title="{{ $post->title }}">
+                                                                        <div class="post-title">
+                                                                            {{ Str::limit($post->title, 30) }}
+                                                                        </div>
+
+                                                                        @if ($post->short_desc || $post->summary)
+                                                                            @if ($post->short_desc || $post->summary)
+                                                                                <div class="post-short-desc no-border">
+                                                                                    {!! $post->getShortDescForDisplay(150) !!}
+                                                                                </div>
+                                                                            @endif
+                                                                        @endif
+                                                                    </a>
+                                                                </div>
                                                             </li>
                                                         @endforeach
                                                     </ul>
@@ -202,119 +221,9 @@
         </div>
         @include('pages.forum.threads.create')
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Toggle search form
-            const searchToggle = document.getElementById('searchToggle');
-            const searchCollapse = document.getElementById('searchCollapse');
-
-            if (searchToggle && searchCollapse) {
-                searchToggle.addEventListener('click', function() {
-                    searchCollapse.classList.toggle('show');
-
-                    // Focus on input when visible
-                    if (searchCollapse.classList.contains('show')) {
-                        const searchInput = searchCollapse.querySelector('input');
-                        if (searchInput) searchInput.focus();
-                    }
-                });
-            }
+@endsection
 
 
-            document.querySelectorAll('.filter-category').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const slug = this.closest('.category-forum-item').dataset.slug;
-
-                    fetch(`/forum/category/${slug}/threads`)
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                document.getElementById('topic-list').innerHTML = data
-                                    .threads_html;
-
-                                // Active class
-                                document.querySelectorAll('.category-forum-item').forEach(li =>
-                                    li
-                                    .classList.remove('active'));
-                                this.closest('.category-forum-item').classList.add('active');
-                            }
-                        })
-                        .catch(err => {
-                            console.error('Lỗi tải chủ đề:', err);
-                            alert('Không thể tải chủ đề. Vui lòng thử lại.');
-                        });
-                });
-            });
-
-
-            const searchInput = document.getElementById('live-search-input');
-            let searchTimeout = null;
-
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const keyword = this.value.trim();
-
-                    clearTimeout(searchTimeout);
-                    searchTimeout = setTimeout(() => {
-                        if (keyword.length >= 2) {
-                            fetch(`/forum/search?q=${encodeURIComponent(keyword)}`)
-                                .then(res => res.json())
-                                .then(data => {
-                                    const topicList = document.getElementById('topic-list');
-
-                                    if (data.success) {
-                                        topicList.innerHTML = data.threads_html;
-                                    } else {
-                                        topicList.innerHTML =
-                                            `<div class="empty-topics"><p>${data.message}</p></div>`;
-                                    }
-                                })
-                                .catch(err => {
-                                    console.error('Search error:', err);
-                                });
-                        }
-                    }, 300);
-                });
-            }
-
-
-            document.querySelectorAll('.show-more').forEach(function(button) {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const categoryId = this.dataset.category;
-                    const hiddenPosts = document.querySelectorAll(
-                        `.post-item.hidden-post[data-category="${categoryId}"]`);
-
-                    hiddenPosts.forEach(function(post) {
-                        post.style.display = 'block';
-                    });
-
-                    this.style.display = 'none';
-                    document.querySelector(`.show-less[data-category="${categoryId}"]`).style
-                        .display = 'inline-block';
-                });
-            });
-
-            // Xử lý nút "Thu gọn"
-            document.querySelectorAll('.show-less').forEach(function(button) {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const categoryId = this.dataset.category;
-                    const hiddenPosts = document.querySelectorAll(
-                        `.post-item.hidden-post[data-category="${categoryId}"]`);
-
-                    hiddenPosts.forEach(function(post) {
-                        post.style.display = 'none';
-                    });
-
-                    this.style.display = 'none';
-                    document.querySelector(`.show-more[data-category="${categoryId}"]`).style
-                        .display = 'inline-block';
-                });
-            });
-
-        });
-    </script>
+@section('scripts')
+    <script src="{{ asset('js/forum.js') }}"></script>
 @endsection

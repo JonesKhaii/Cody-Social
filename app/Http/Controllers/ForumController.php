@@ -34,7 +34,7 @@ class ForumController extends Controller
         foreach ($forumCategories as $category) {
             $category->categoryPosts = Post::where('post_cat_id', $category->id)
                 ->where('status', 'active')
-                ->select('id', 'title', 'slug')
+                ->select('id', 'title', 'slug', 'photo', 'short_desc')
                 ->orderBy('created_at', 'desc')
                 ->get();
         }

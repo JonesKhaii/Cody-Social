@@ -61,7 +61,7 @@ class HomeController extends Controller
             })
             ->where('categories.type', 'other')
             ->groupBy('categories.id', 'categories.name', 'categories.slug', 'categories.photo')
-            ->orderByRaw('COUNT(posts.id) ASC')
+            ->orderByRaw('COUNT(posts.id) DESC')
             ->limit(5)
             ->get();
 

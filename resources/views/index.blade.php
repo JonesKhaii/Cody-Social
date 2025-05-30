@@ -210,13 +210,62 @@
                 </div>
             </section>
 
-            <!-- Trending Articles Section  -->
-            <div class="d-none d-md-block">
-                <div class="explore-header d-flex justify-content-between align-items-center mb-4 pb-2">
-                    <h3>Bài viết mới</h3>
-                </div>
-                <div class="container mt-3" id="postsContainer">
-                    @include('partials.posts', ['posts' => $posts])
+            <!-- Trending Articles Section -->
+            <div class="trending-articles-container">
+                <div class="container">
+                    <div class="explore-header d-flex justify-content-between align-items-center mb-4 pb-2">
+                        <h3 class="fw-bold mb-0">Bài viết nổi bật</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            @php $mainPost = $topViewedPosts->first(); @endphp
+                            @if ($mainPost)
+                                <div class="trending-main">
+                                    <div class="trending-main-image">
+                                        <img src="{{ asset($mainPost->photo) }}" alt="{{ $mainPost->title }}">
+                                    </div>
+                                    <div class="trending-main-overlay">
+                                        <div class="trending-main-content">
+                                            <a href="{{ route('post.detail', $mainPost->slug) }}"
+                                                class="trending-content d-flex flex-column align-items-start text-decoration-none mt-3">
+                                                <h2 class="trending-main-title">{{ $mainPost->title }}</h2>
+                                                <p class="trending-main-excerpt">{{ Str::limit($mainPost->summary, 130) }}
+                                                </p>
+                                            </a>
+                                            <div class="trending-author-info d-flex align-items-center mt-3">
+                                                <img src="{{ asset($mainPost->author_info->photo ?? asset('images/default-avatar.png')) }}"
+                                                    alt="{{ $mainPost->author_info->name }}"
+                                                    class="author-photo rounded-circle"
+                                                    style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
+                                                <span class="author-name">{{ $mainPost->author_info->name }}</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <div class="trending-side">
+                                @foreach ($topViewedPosts->slice(1) as $post)
+                                    <div class="trending-side-item">
+                                        <div class="trending-side-image">
+                                            <img src="{{ asset($post->photo) }}" alt="{{ $post->title }}">
+                                        </div>
+                                        <div class="trending-side-content">
+                                            <h3 class="trending-side-title">
+                                                <a href="{{ route('post.detail', $post->slug) }}">{{ $post->title }}</a>
+                                            </h3>
+                                            <p class="trending-side-excerpt">{{ Str::limit($post->summary, 60) }}</p>
+                                            <div class="trending-side-author">By {{ $post->author_info->name }}</div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -234,7 +283,8 @@
                                         </div>
                                         <div class="article-content" style="padding: 15px;">
                                             <h3 class="article-title" style="font-size: 1rem;">{{ $post->title }}</h3>
-                                            <p class="article-excerpt">{{ Str::limit(strip_tags($post->summary), 60) }}</p>
+                                            <p class="article-excerpt">{{ Str::limit(strip_tags($post->summary), 60) }}
+                                            </p>
                                         </div>
                                     </a>
                                 </div>
@@ -260,8 +310,11 @@
                             <a href="{{ route('filter.posts', ['category' => $category->title]) }}"
                                 class="explore-item text-decoration-none text-center">
                                 <div class="explore-icon">
-                                    <img src="{{ asset($category->photo ?? 'images/category-default.png') }}"
-                                        alt="{{ $category->title }}" loading="lazy">
+                                    {{-- <img src="{{ asset($category->photo ?? 'asset/images/category/category-default.png') }}"
+                                        alt="{{ $category->title }}" loading="lazy"> --}}
+                                    <img src="{{ asset('asset/images/category/' . $category->slug . '.png' ?? 'asset/images/category/category-default.png') }}"
+                                        class="img-fluid category-thumbnail" alt="{{ $category->title }}"
+                                        loading="lazy">
                                 </div>
                                 <div class="explore-label">{{ $category->title }}</div>
                             </a>
@@ -270,10 +323,7 @@
                 </div>
             </div>
 
-
-
             <!-- Latest Posts Section -->
-
             <div class="d-none d-md-block">
 
                 <div class="explore-header d-flex justify-content-between align-items-center mb-4 pb-2">

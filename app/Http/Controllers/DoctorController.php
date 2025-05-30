@@ -482,11 +482,11 @@ class DoctorController extends Controller
         $distribution = Post::select('post_cat_id', DB::raw('COUNT(*) as total'))
             ->where('added_by', $doctorId)
             ->groupBy('post_cat_id')
-            ->with('cat_info:id,title')
+            ->with('cat_info:id,name')
             ->get()
             ->map(function ($item) {
                 return [
-                    'category' => $item->cat_info->title ?? 'Không rõ',
+                    'category' => $item->cat_info->name ?? 'Không rõ',
                     'total' => $item->total
                 ];
             });

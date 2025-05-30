@@ -215,6 +215,10 @@ Route::post('/affiliate/generate-link/{product_slug}', [AffiliateController::cla
 // Post detail---------------
 Route::get('/create', [PostController::class, 'create'])->name('posts.create');
 Route::post('/posts/store', [PostController::class, 'store'])->name('posts.store');
+// Thêm vào web.php để debug
+// Route::get('/posts/store', function () {
+//     return 'Bạn đang truy cập bằng GET. Hãy sử dụng form để POST.';
+// });
 // Route::get('/posts/{slug}', [PostController::class, 'show'])->name('posts.show');
 Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update');
 Route::post('/post/{slug}/comment', [CommentController::class, 'store'])->name('post-comment.store');
