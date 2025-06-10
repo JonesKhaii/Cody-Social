@@ -10,7 +10,7 @@
                             <div class="d-flex align-items-center mb-2">
                                 @if ($category->icon)
                                     <div class="category-image me-2">
-                                        <img src="{{ asset('asset/images/category/' . $category->slug . '.png') }}"
+                                        <img src="{{ asset('asset/images/category/' . $category->slug . '.webp') }}"
                                             class="img-fluid category-thumbnail">
                                     </div>
                                 @else

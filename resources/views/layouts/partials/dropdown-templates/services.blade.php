@@ -5,8 +5,9 @@
                 <div class="col-md-6 mb-3">
                     <div class="category-item-container">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="category-icon me-2">
-                                <i class="fa-solid fa-syringe"></i>
+                            <div class="category-image me-2">
+                                <img src="{{ asset('asset/images/category/robot.webp') }}"
+                                    class="img-fluid category-thumbnail" alt="Phẫu thuật và Thủ thuật">
                             </div>
                             <h6 class="category-title has-subcategories mb-0">
                                 <a href="/treatment/phau-thuat-thu-thuat" class="category-link">Phẫu thuật
@@ -33,11 +34,13 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-md-6 mb-3">
                     <div class="category-item-container">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="category-icon me-2">
-                                <i class="fas fa-x-ray"></i>
+                            <div class="category-image me-2">
+                                <img src="{{ asset('asset/images/category/DSA.png') }}"
+                                    class="img-fluid category-thumbnail" alt="Chẩn đoán hình ảnh">
                             </div>
                             <h6 class="category-title has-subcategories mb-0">
                                 <a href="/treatment/chan-doan-hinh-anh" class="category-link">Chẩn đoán
@@ -68,8 +71,9 @@
                 <div class="col-md-6 mb-3">
                     <div class="category-item-container">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="category-icon me-2">
-                                <i class="fas fa-dna"></i>
+                            <div class="category-image me-2">
+                                <img src="{{ asset('asset/images/category/genetics.png') }}"
+                                    class="img-fluid category-thumbnail" alt="Y học tái tạo">
                             </div>
                             <h6 class="category-title has-subcategories mb-0">
                                 <a href="/treatment/y-hoc-tai-tao" class="category-link">Y học tái tạo và
@@ -101,8 +105,9 @@
                 <div class="col-md-6 mb-3">
                     <div class="category-item-container">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="category-icon me-2">
-                                <i class="fas fa-laptop-medical"></i>
+                            <div class="category-image me-2">
+                                <img src="{{ asset('asset/images/category/telehealth.png') }}"
+                                    class="img-fluid category-thumbnail" alt="Digital Healthcare">
                             </div>
                             <h6 class="category-title has-subcategories mb-0">
                                 <a href="/treatment/digital-healthcare" class="category-link">Digital
@@ -133,21 +138,24 @@
                 <div class="col-md-6 mb-3">
                     <div class="category-item-container">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="category-icon me-2">
-                                <i class="fa-solid fa-pills"></i>
+                            <div class="category-image me-2">
+                                <img src="{{ asset('asset/images/category/ministry.webp') }}"
+                                    class="img-fluid category-thumbnail" alt="Y học hiện đại">
                             </div>
                             <h6 class="category-title mb-0">
-                                <a href="/specialties/video-chia-se-chuyen-mon"
+                                <a href="/specialties/y-hoc-hien-dai"
                                     class="category-link">Y học hiện đại</a>
                             </h6>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-md-6 mb-3">
                     <div class="category-item-container">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="category-icon me-2">
-                                <i class="fa-solid fa-mortar-pestle"></i>
+                            <div class="category-image me-2">
+                                <img src="{{ asset('asset/images/category/y-hoc-co-truyen.png') }}"
+                                    class="img-fluid category-thumbnail" alt="Y học cổ truyền">
                             </div>
                             <h6 class="category-title mb-0">
                                 <a href="forum/post/category/bai-thuoc-y-hoc-co-truyen"
@@ -158,8 +166,6 @@
                 </div>
             </div>
         </div>
-
-
 
         <!--Kỹ thuật nổi bật và đăng ký tư vấn -->
         <div class="col-md-4">

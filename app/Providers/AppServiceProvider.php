@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Category;
+use App\Models\Post;
+use App\Models\Doctor;
 use App\Http\Controllers\DropdownMenuController;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,15 +25,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Sử dụng một view composer duy nhất để tránh trùng lặp truy vấn
+        // Cache global data cho header và shared components
         View::composer([
             'layouts.header',
             'layouts.partials.dropdown-templates.*',
             'pages.specialties.*',
             'pages.post-detail'
-
         ], function ($view) {
-            // Sử dụng một cache key duy nhất cho tất cả dữ liệu chung
+            // Cache global data với TTL 1 giờ
             $globalData = Cache::remember('global_view_data', 60 * 60, function () {
                 // Tạo controller instance chỉ một lần
                 $dropdownController = new DropdownMenuController();
@@ -82,5 +83,90 @@ class AppServiceProvider extends ServiceProvider
             // Đẩy biến ra View
             $view->with($globalData);
         });
+
+        // Cache site statistics cho trang chủ và footer
+        View::composer([
+            'index',
+            'layouts.footer',
+            'pages.about'
+        ], function ($view) {
+            $siteStats = Cache::remember('site_statistics', 60 * 60 * 2, function () {
+                return [
+                    'total_posts' => Post::where('status', 'active')->count(),
+                    'total_doctors' => Doctor::where('status', true)->count(),
+                    'total_categories' => Category::where('status', 'active')
+                        ->where('type', 'post')
+                        ->count(),
+                    'total_views' => Post::where('status', 'active')->sum('views'),
+                    // Thêm một số stats khác nếu cần
+                    'active_specialties' => \DB::table('doctor_specializations')
+                        ->join('doctors', 'doctors.id', '=', 'doctor_specializations.doctor_id')
+                        ->where('doctors.status', true)
+                        ->distinct('doctor_specializations.specialization_id')
+                        ->count(),
+                ];
+            });
+
+            $view->with('site_stats', $siteStats);
+        });
+
+        // Cache trending/popular content cho sidebar và recommendations
+        View::composer([
+            'layouts.sidebar',
+            'pages.post-detail',
+            'pages.category-show'
+        ], function ($view) {
+            $trendingData = Cache::remember('trending_content', 60 * 30, function () {
+                return [
+                    // Top 5 bài viết xem nhiều nhất tuần này
+                    'weekly_trending_posts' => Post::select('id', 'title', 'slug', 'photo', 'views')
+                        ->where('status', 'active')
+                        ->where('created_at', '>=', now()->subWeek())
+                        ->orderByDesc('views')
+                        ->limit(5)
+                        ->get(),
+
+                    // Top categories theo số bài viết
+                    'popular_categories' => Category::select('id', 'name as title', 'slug')
+                        ->withCount(['posts' => function ($query) {
+                            $query->where('status', 'active');
+                        }])
+                        ->where('status', 'active')
+                        ->where('type', 'post')
+                        ->having('posts_count', '>', 0)
+                        ->orderByDesc('posts_count')
+                        ->limit(8)
+                        ->get(),
+
+                    // Recent posts (cache để tránh query lặp)
+                    'recent_posts' => Post::select('id', 'title', 'slug', 'created_at')
+                        ->where('status', 'active')
+                        ->latest()
+                        ->limit(10)
+                        ->get(),
+                ];
+            });
+
+            $view->with('trending_data', $trendingData);
+        });
+
+        // Cache user preferences và settings (nếu có authentication)
+        if (auth()->check()) {
+            View::composer('*', function ($view) {
+                $userPreferences = Cache::remember(
+                    'user_preferences_' . auth()->id(),
+                    60 * 60 * 24, // Cache 24h cho user preferences
+                    function () {
+                        return [
+                            'favorite_categories' => auth()->user()->favoriteCategories ?? collect(),
+                            'reading_history' => auth()->user()->readingHistory()->limit(10)->get() ?? collect(),
+                            'bookmarked_posts' => auth()->user()->bookmarkedPosts ?? collect(),
+                        ];
+                    }
+                );
+
+                $view->with('user_preferences', $userPreferences);
+            });
+        }
     }
 }

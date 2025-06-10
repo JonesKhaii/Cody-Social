@@ -4,7 +4,7 @@
 
 @section('main-content')
     <div class="container mt-4">
-        <h3>Danh mục: {{ $category->title }}</h3>
+        <h3>Danh mục: {{ $category->name }}</h3>
 
         <a href="{{ url()->previous() }}" class="btn btn-secondary mt-2">
             <i class="fas fa-arrow-left"></i> Quay lại

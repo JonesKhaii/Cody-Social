@@ -25,7 +25,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ForumPostController;
 use App\Http\Controllers\ForumThreadController;
-
+use App\Http\Controllers\PolicyController;
 // AUTH--------------------------------------------------------------------------------
 // Trang đăng nhập & xử lý đăng nhập
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -316,3 +316,8 @@ Route::prefix('doctor')->middleware('auth:doctor')->group(function () {
     Route::get('/appointment-type-distribution', [DoctorController::class, 'getAppointmentTypeDistribution']);
     Route::get('/appointment-comparison', [DoctorController::class, 'getAppointmentComparison']);
 });
+
+
+// Policy
+Route::get('/chinh-sach-bao-mat', [PolicyController::class, 'privacyPolicy'])->name('privacy.policy');
+Route::get('/dieu-khoan-su-dung', [PolicyController::class, 'termsOfService'])->name('terms.service');

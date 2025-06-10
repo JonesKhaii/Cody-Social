@@ -388,24 +388,7 @@ class Post extends Model
         return static::getParsedown()->text($this->short_desc);
     }
 
-    // Method để hiển thị short desc với giới hạn ký tự
-    // public function getShortDescForDisplay($limit = 200)
-    // {
-    //     if (!$this->short_desc) {
-    //         return $this->summary ? Str::limit($this->summary, $limit) : '';
-    //     }
 
-    //     $html = $this->short_desc_html;
-
-    //     // Nếu HTML quá dài, cắt bớt nhưng giữ nguyên format
-    //     if (strlen(strip_tags($html)) > $limit) {
-    //         $plainText = strip_tags($html);
-    //         return Str::limit($plainText, $limit) . '...';
-    //     }
-
-    //     return $html;
-    // }
-    // Trong Post Model, thay thế method getShortDescForDisplay()
     public function getShortDescForDisplay($limit = 200)
     {
         if (!$this->short_desc) {

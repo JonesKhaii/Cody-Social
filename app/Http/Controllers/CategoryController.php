@@ -12,10 +12,10 @@ class CategoryController extends Controller
 
     public function allCategories()
     {
-        // Cache 15 phút - simple mà hiệu quả
+        // Cache 15 phút 
         $categoriesWithPosts = Cache::remember('all_categories_simple', 15 * 60, function () {
 
-            // Lấy categories có bài viết (1 query)
+            // Lấy categories có bài viết 
             $categories = Category::select('id', 'name', 'slug', 'photo', 'summary')
                 ->whereHas('posts', function ($query) {
                     $query->where('status', 'active');
@@ -25,7 +25,7 @@ class CategoryController extends Controller
                 ->orderBy('id')
                 ->get();
 
-            // Lấy tất cả posts cần thiết (1 query thay vì N queries)
+            // Lấy tất cả posts cần thiết 
             $categoryIds = $categories->pluck('id');
 
             $allPosts = Post::select('id', 'title', 'slug', 'photo', 'summary', 'description', 'post_cat_id', 'created_at', 'views')

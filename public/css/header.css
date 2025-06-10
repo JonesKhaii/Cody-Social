@@ -34,7 +34,7 @@
 /* ===== NAVBAR STYLING ===== */
 .navbar {
     background: var(--primary-color);
-    padding: 15px 0 0;
+    /* padding: 15px 0 0; */
     transition: var(--transition);
     border: none;
     box-shadow: var(--shadow-sm);
@@ -48,9 +48,9 @@
 }
 
 /* Logo styling */
-#logo {
+/* #logo {
     margin-bottom: 10px;
-}
+} */
 
 .logo {
     height: 50px;
@@ -69,13 +69,13 @@
     gap: 2px;
 }
 
-.logo-text .toi-i {
+/* .logo-text .toi-i {
     color: #f54291;
 }
 
 .logo-text .khoe-e {
     color: #28a745;
-}
+} */
 
 .navbar-brand {
     color: var(--white);

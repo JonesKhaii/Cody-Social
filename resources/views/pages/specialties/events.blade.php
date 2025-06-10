@@ -113,8 +113,9 @@
                             @endforeach
                         </div>
 
-                        <div class="d-flex justify-content-center">
-                            {{ $upcomingEvents->appends(request()->except('page'))->links() }}
+                       
+                        <div class="pagination-container">
+                            {{ $upcomingEvents->links('pagination::bootstrap-5') }}
                         </div>
                     @else
                         <div class="alert alert-info">
@@ -167,8 +168,11 @@
                             @endforeach
                         </div>
 
-                        <div class="d-flex justify-content-center">
+                        {{-- <div class="d-flex justify-content-center">
                             {{ $pastEvents->appends(request()->except('page'))->links() }}
+                        </div> --}}
+                        <div class="pagination-container">
+                            {{ $pastEvents->links('pagination::bootstrap-5') }}
                         </div>
                     @else
                         <div class="alert alert-info">

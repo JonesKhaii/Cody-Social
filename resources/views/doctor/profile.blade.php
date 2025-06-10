@@ -57,7 +57,7 @@
                         </a>
                     </li>
                     <li class="nav-item submenu-container">
-                        <a class="nav-link" href="#financial-stats" data-toggle="submenu">
+                        <a class="nav-link" href="#" data-toggle="submenu">
                             <i class="fas fa-chart-line"></i>
                             <p>Tài chính & Thống kê </p>
                             <i class="fas fa-chevron-right submenu-icon"></i>
@@ -255,12 +255,28 @@
                         @include('doctor.profile.affiliate')
 
                     </div>
-                    <div class="tab-pane" id="financial-stats">
-                        @include('doctor.profile.statistics')
+                    <!-- Tab Thu nhập -->
+                    <div class="tab-pane" id="income">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Báo cáo Thu nhập</h2>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted mt-5 text-center">Báo cáo thu nhập đang được phát triển...</p>
+                            </div>
+                        </div>
                     </div>
 
+                    <!-- Tab Thống kê -->
+                    {{-- <div class="tab-pane active" id="statistics"
+                        style="display: block !important; background: #f0f8ff; min-height: 400px;">
+                        @include('doctor.profile.statistics')
+                    </div> --}}
 
-
+                    <!-- Tab Thống kê -->
+                    <div class="tab-pane" id="statistics">
+                        @include('doctor.profile.statistics')
+                    </div>
 
                     <!-- Doanh thu -->
                     {{-- <div class="tab-pane" id="income">

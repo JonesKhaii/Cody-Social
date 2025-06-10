@@ -7,30 +7,41 @@
             <div class="article-card">
                 <a href="{{ route('post.detail', ['slug' => $post->slug]) }}" class="article-link">
                     <div class="article-image-container">
-                        <img src="{{ asset($post->photo) }}" alt="{{ $post->title }}" loading="lazy">
+                        <img src="{{ asset($post->photo) }}" alt="{{ $post->title }}"
+                            width="300" height="200" loading="lazy">
                         @if ($post->cat_info)
-                            <span class="category-badge">{{ $post->cat_info->title }}</span>
+                            <span class="category-badge">{{ $post->cat_info->name }}</span>
                         @endif
                     </div>
                     <div class="article-content">
                         <div class="article-meta">
                             <div class="author-info">
                                 <div class="author-avatar">
-                                    @php
-                                        // Sử dụng author đã được eager load thay vì author_info accessor
-                                        $author = $post->author_type == 'doctor' ? $post->doctor : $post->user;
-                                        $authorPhoto = $author->photo ?? asset('images/default-avatar.png');
-                                        $authorName = $author->name ?? 'N/A';
-                                    @endphp
-                                    <img src="{{ $authorPhoto }}"
-                                        alt="{{ $post->author_type == 'doctor' ? 'Doctor' : 'Author' }}"
-                                        loading="lazy">
+                                    {{-- FIX: Dùng $post->author thay vì $post->doctor/$post->user --}}
+                                    @if (isset($post->author))
+                                        {{-- Từ HomeController (có preloaded author) --}}
+                                        <img src="{{ asset($post->author->photo ?? 'images/default-avatar.png') }}"
+                                            alt="{{ $post->author_type == 'doctor' ? 'Doctor' : 'Author' }}"
+                                            width="30" height="30" loading="lazy">
+                                    @else
+                                        {{-- Fallback cho filterPosts (vẫn dùng relationships) --}}
+                                        @php
+                                            $author = $post->author_type == 'doctor' ? $post->doctor : $post->user;
+                                            $authorPhoto = $author->photo ?? asset('images/default-avatar.png');
+                                            $authorName = $author->name ?? 'N/A';
+                                        @endphp
+                                        <img src="{{ $authorPhoto }}"
+                                            alt="{{ $post->author_type == 'doctor' ? 'Doctor' : 'Author' }}"
+                                            width="30" height="30" loading="lazy">
+                                    @endif
                                 </div>
                                 <span class="author-name">
-                                    {{ $authorName }}
-                                    {{-- @if ($post->author_type == 'doctor')
-                                        <small>(Bác sĩ)</small>
-                                    @endif --}}
+                                    {{-- FIX: Dùng $post->author thay vì accessor --}}
+                                    @if (isset($post->author))
+                                        {{ $post->author->name ?? 'N/A' }}
+                                    @else
+                                        {{ $authorName ?? 'N/A' }}
+                                    @endif
                                 </span>
                             </div>
                             <div class="date-info">
@@ -52,11 +63,11 @@
     @endif
 </div>
 
-
-
-<div class="pagination-container">
+{{-- Pagination (uncomment nếu cần) --}}
+{{-- <div class="pagination-container">
     {{ $posts->links('pagination::bootstrap-5') }}
-</div>
+</div> --}}
+
 
 <style>
     /* Styling for articles grid */

@@ -5,13 +5,15 @@
                 <!-- Logo và thương hiệu -->
                 <div id="logo">
                     <a href="{{ route('home') }}" class="d-flex align-items-center text-decoration-none">
-                        <img src="{{ asset('asset/images/toikhoe_logo.jpg') }}" alt="CodyHealth Logo" class="logo me-2"
+                        <img src="{{ asset('asset/images/logo-new.png') }}" alt="CodyHealth Logo" class="logo me-2"
                             style="height: 50px; width: 50px; border-radius: 50%;" />
                         {{-- <span class="navbar-brand fs-4 fw-bold mb-0 text-white">CodyHealth</span> --}}
                         <div class="logo-text ms-2">
-                            <span class="toi">T</span><span class="plus-sign">O<span class="toi-i">I</span><span
+                            {{-- <span class="toi">T</span><span class="plus-sign">O<span class="toi-i">I</span><span
                                     class="khoe">KH</span><span class="plus-sign">O</span><span
-                                    class="khoe-e">E</span>
+                                    class="khoe-e">E</span> --}}
+
+                            <span>TOIKHOE</span>
                         </div>
                     </a>
                 </div>

@@ -30,7 +30,7 @@
             <div class="feature-shortcuts-wrapper">
                 <div class="container">
                     <div
-                        class="feature-shortcuts rounded-4 d-flex justify-content-between flex-wrap gap-4 bg-white px-3 py-4 shadow">
+                        class="feature-shortcuts rounded-4 d-flex justify-content-between gap-4 bg-white px-3 py-4 shadow">
                         <div class="shortcut-item text-center">
                             <div class="shortcut-icon bg-purple"><i class="fas fa-calendar-alt"></i></div>
                             <p class="shortcut-label">Đặt lịch khám</p>
@@ -120,7 +120,7 @@
                             </div>
                         </div>
                     </div>
-                    {{-- Mobile services section --}}
+
                     <div class="swiper service-swiper d-md-none">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
@@ -184,7 +184,7 @@
                         <div class="swiper-pagination mt-2"></div>
                     </div>
 
-                    <div class="mt-4 text-center">
+                    <div class="text-center-view-all">
                         <a href="#" class="btn btn-outline-primary service-view-all">Xem tất cả dịch vụ <i
                                 class="fas fa-arrow-right ms-2"></i></a>
                     </div>
@@ -210,7 +210,7 @@
                 </div>
             </section>
 
-            <!-- Trending Articles Section -->
+            <!-- Trending Articles Section - FIXED -->
             <div class="trending-articles-container">
                 <div class="container">
                     <div class="explore-header d-flex justify-content-between align-items-center mb-4 pb-2">
@@ -222,7 +222,8 @@
                             @if ($mainPost)
                                 <div class="trending-main">
                                     <div class="trending-main-image">
-                                        <img src="{{ asset($mainPost->photo) }}" alt="{{ $mainPost->title }}">
+                                        <img src="{{ asset($mainPost->photo) }}" alt="{{ $mainPost->title }}"
+                                            width="600" height="400" loading="eager" fetchpriority="high">
                                     </div>
                                     <div class="trending-main-overlay">
                                         <div class="trending-main-content">
@@ -233,33 +234,37 @@
                                                 </p>
                                             </a>
                                             <div class="trending-author-info d-flex align-items-center mt-3">
-                                                <img src="{{ asset($mainPost->author_info->photo ?? asset('images/default-avatar.png')) }}"
-                                                    alt="{{ $mainPost->author_info->name }}"
+                                                {{-- SỬA: Dùng $mainPost->author thay vì accessor --}}
+                                                <img src="{{ asset($mainPost->author->photo ?? 'images/default-avatar.png') }}"
+                                                    alt="{{ $mainPost->author->name ?? 'Ẩn danh' }}"
                                                     class="author-photo rounded-circle"
-                                                    style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;">
-                                                <span class="author-name">{{ $mainPost->author_info->name }}</span>
+                                                    style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px;"
+                                                    width="40" height="40" loading="lazy">
+                                                <span
+                                                    class="author-name">{{ $mainPost->author->name ?? 'Ẩn danh' }}</span>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             @endif
                         </div>
-
 
                         <div class="col-md-4">
                             <div class="trending-side">
                                 @foreach ($topViewedPosts->slice(1) as $post)
                                     <div class="trending-side-item">
                                         <div class="trending-side-image">
-                                            <img src="{{ asset($post->photo) }}" alt="{{ $post->title }}">
+                                            <img src="{{ asset($post->photo) }}" alt="{{ $post->title }}"
+                                                width="100" height="75" loading="lazy">
                                         </div>
                                         <div class="trending-side-content">
                                             <h3 class="trending-side-title">
                                                 <a href="{{ route('post.detail', $post->slug) }}">{{ $post->title }}</a>
                                             </h3>
                                             <p class="trending-side-excerpt">{{ Str::limit($post->summary, 60) }}</p>
-                                            <div class="trending-side-author">By {{ $post->author_info->name }}</div>
+                                            {{-- SỬA: Dùng $post->author thay vì accessor --}}
+                                            <div class="trending-side-author">By {{ $post->author->name ?? 'Ẩn danh' }}
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach
@@ -269,7 +274,7 @@
                 </div>
             </div>
 
-            <!-- Mobile: chỉ hiển thị dưới md -->
+            <!-- Mobile Posts Section - FIXED -->
             <div class="d-block d-md-none mt-4">
                 <div class="swiper post-swiper">
                     <div class="swiper-wrapper">
@@ -279,7 +284,7 @@
                                     <a href="{{ route('post.detail', ['slug' => $post->slug]) }}" class="article-link">
                                         <div class="article-image-container" style="height: 180px;">
                                             <img src="{{ asset($post->photo) }}" alt="{{ $post->title }}"
-                                                loading="lazy">
+                                                width="300" height="180" loading="lazy">
                                         </div>
                                         <div class="article-content" style="padding: 15px;">
                                             <h3 class="article-title" style="font-size: 1rem;">{{ $post->title }}</h3>
@@ -295,8 +300,7 @@
                 </div>
             </div>
 
-
-            <!-- Explore Categories -->
+            <!-- Explore Categories - FIXED -->
             <div class="explore-section mb-4 mt-5">
                 <div class="explore-header d-flex justify-content-between align-items-center mb-4 pb-2">
                     <h3 class="fw-bold mb-0">Khám phá theo danh mục</h3>
@@ -307,13 +311,13 @@
                 <div class="explore-categories d-flex flex-wrap gap-4">
                     @foreach ($popularCategories as $category)
                         <div class="explore-item-wrapper">
-                            <a href="{{ route('filter.posts', ['category' => $category->title]) }}"
+                            <a href="{{ route('category.show', ['slug' => $category->slug]) }}"
                                 class="explore-item text-decoration-none text-center">
                                 <div class="explore-icon">
-                                    {{-- <img src="{{ asset($category->photo ?? 'asset/images/category/category-default.png') }}"
-                                        alt="{{ $category->title }}" loading="lazy"> --}}
-                                    <img src="{{ asset('asset/images/category/' . $category->slug . '.png' ?? 'asset/images/category/category-default.png') }}"
-                                        class="img-fluid category-thumbnail" alt="{{ $category->title }}"
+                                    <img src="{{ asset('asset/images/category/' . $category->slug . '.webp') ?? asset('asset/images/category/category-default.webp') }}"
+                                        class="img-fluid category-thumbnail"
+                                        alt="{{ $category->title }}"
+                                        width="64" height="64"
                                         loading="lazy">
                                 </div>
                                 <div class="explore-label">{{ $category->title }}</div>
@@ -323,17 +327,19 @@
                 </div>
             </div>
 
-            <!-- Latest Posts Section -->
+            <!-- Latest Posts Section - FIXED -->
             <div class="d-none d-md-block">
-
                 <div class="explore-header d-flex justify-content-between align-items-center mb-4 pb-2">
                     <h3>Bài viết mới</h3>
+                    <a href="{{ route('categories.all') }}" class="view-all-link">
+                        Xem tất cả <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
                 <div class="container mt-3" id="postsContainer">
                     @include('partials.posts', ['posts' => $posts])
                 </div>
 
-                <!-- Swiper cho màn hình mobile -->
+                <!-- Swiper cho màn hình mobile - FIXED -->
                 <div class="d-block d-md-none mt-4">
                     <div class="swiper post-swiper">
                         <div class="swiper-wrapper">
@@ -344,7 +350,7 @@
                                             class="article-link">
                                             <div class="article-image-container" style="height: 180px;">
                                                 <img src="{{ asset($post->photo) }}" alt="{{ $post->title }}"
-                                                    loading="lazy">
+                                                    width="300" height="180" loading="lazy">
                                             </div>
                                             <div class="article-content" style="padding: 15px;">
                                                 <h3 class="article-title" style="font-size: 1rem;">{{ $post->title }}
@@ -360,10 +366,9 @@
                         <div class="swiper-pagination mt-2"></div>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Category Posts Sections - -->
+            <!-- Category Posts Sections --->
             @foreach ($popularCategories as $category)
                 @if (isset($category->loaded_posts) && $category->loaded_posts->isNotEmpty())
                     <div class="category-container">
@@ -386,7 +391,7 @@
                                     <a href="{{ route('post.detail', $firstPost->slug) }}" class="post-link">
                                         <div class="featured-image">
                                             <img src="{{ asset($firstPost->photo) }}" alt="{{ $firstPost->title }}"
-                                                loading="lazy" />
+                                                width="400" height="250" loading="lazy" />
                                         </div>
                                         <div class="text-content">
                                             <span class="badge">{{ $category->title }}</span>
@@ -411,7 +416,7 @@
                 @endif
             @endforeach
 
-            <!-- Top Doctors Section -->
+            <!-- Top Doctors Section - FIXED -->
             <div class="doctor-category container mt-5">
                 <h2 class="section-title mt-5 text-center">Bác Sĩ Nổi Bật</h2>
                 <div class="row mt-4">
@@ -421,8 +426,14 @@
                                 <div class="doctor-card p-4 text-center">
                                     <img src="{{ $doctor->photo ?? asset('asset/images/users/default-doctor.png') }}"
                                         class="doctor-photo mb-3"
-                                        alt="{{ $doctor->name }}" loading="lazy">
-                                    <h5 class="mb-2">{{ $doctor->name }}</h5>
+                                        alt="{{ $doctor->name }}"
+                                        width="120" height="120" loading="lazy">
+                                    {{-- <h5 class="mb-2">Bác sĩ {{ $doctor->name }}</h5> --}}
+                                    <h5 class="mb-2">
+                                        <span class="me-1">Bác sĩ</span>
+                                        <span>{{ $doctor->name }}</span>
+                                    </h5>
+
                                     @if ($doctor->specializations->isNotEmpty())
                                         <p class="text-muted mb-0">{{ $doctor->specializations->first()->name }}</p>
                                     @endif
@@ -623,7 +634,7 @@
         });
     </script>
 
-    <!-- CSS cho search dropdown navigation (thêm vào file CSS) -->
+
     <style>
         .search-result-item.highlighted,
         .view-all-results.highlighted {

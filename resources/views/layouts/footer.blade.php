@@ -1,8 +1,6 @@
-<!-- HTML Code - Logo bên trái, cùng dòng với contact info -->
 <footer class="footer text-white">
     <div class="container">
         <div class="row">
-            <!-- Giới thiệu và Logo -->
             <div class="col-md-5">
                 <div class="footer-info">
                     <div class="footer-header d-flex align-items-center mb-3">
@@ -24,7 +22,6 @@
                 </div>
             </div>
 
-            <!-- Links hữu ích -->
             <div class="col-md-3">
                 <h4 class="footer-title">Liên kết hữu ích</h4>
                 <ul class="footer-links">
@@ -37,7 +34,6 @@
                 </ul>
             </div>
 
-            <!-- Mạng xã hội -->
             <div class="col-md-4">
                 <h4 class="footer-title">Kết nối với chúng tôi</h4>
                 <div class="social-icons">
@@ -68,14 +64,15 @@
                     <p>© 2025 TOIKHOE. Tất cả quyền được bảo lưu.</p>
                 </div>
                 <div class="col-md-6 text-end">
-                    <p><a href="#">Chính sách bảo mật</a> | <a href="#">Điều khoản sử dụng</a></p>
+                    <p><a href="{{ route('privacy.policy') }}">Chính sách bảo mật</a> | <a
+                            href="{{ route('terms.service') }}">Điều khoản sử
+                            dụng</a></p>
                 </div>
             </div>
         </div>
     </div>
 </footer>
 
-<!-- CSS Code -->
 <style>
     .footer {
         background-color: #1565C0;

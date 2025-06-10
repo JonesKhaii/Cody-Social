@@ -149,8 +149,11 @@
         <!-- Cột thông tin bổ sung -->
         <div class="col-md-4">
             <div class="dropdown-image-container">
-                <img src="https://images.unsplash.com/photo-1651008376811-b90baee60c1f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="Chuyên môn bác sĩ" class="dropdown-image">
+                <img src="{{ asset('images/dropdown/doctor-specialties.jpg') }}"
+                    alt="Chuyên môn bác sĩ"
+                    class="dropdown-image"
+                    width="400" height="300"
+                    loading="lazy">
                 <div class="dropdown-cta">
                     <p>Khám phá và nâng cao kiến thức chuyên môn trong lĩnh vực y tế</p>
                     <a href="{{ route('specialties.index') }}" class="btn btn-primary btn-sm">Xem tất cả chuyên môn</a>
